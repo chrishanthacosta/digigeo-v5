@@ -19,9 +19,15 @@ import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
-import { setIsPropertiesSideNavOpen, setpropertySearchQuery,
-  setsearchParamPropertyName,setsearchParamCountry,setsearchParamStateProv,
-  setsearchParamMiningArea,setsearchParamAssetTypeList,setsearchParamCommodityList
+import {
+  setIsPropertiesSideNavOpen,
+  setpropertySearchQuery,
+  setsearchParamPropertyName,
+  setsearchParamCountry,
+  setsearchParamStateProv,
+  setsearchParamMiningArea,
+  setsearchParamAssetTypeList,
+  setsearchParamCommodityList,
 } from "../../../../store/properties-map/properties-map-slice";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
@@ -59,18 +65,18 @@ const PropertiesMapButton = ({ onClick }) => {
   const isPropertiesSideNavOpen = useSelector(
     (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
   );
- 
+
   const propertySearchQuery = useSelector(
-      (state) => state.propertiesMapReducer.propertySearchQuery
+    (state) => state.propertiesMapReducer.propertySearchQuery
   );
-  
+
   const [isOpenIn, setIsOpenIn] = useState();
 
   const closePopup = () => {
     setIsOpenIn(false);
   };
 
-   const resetFilters=()=>{
+  const resetFilters = () => {
     dispatch(setpropertySearchQuery(""));
     dispatch(setsearchParamPropertyName(""));
     dispatch(setsearchParamCountry(""));
@@ -78,23 +84,22 @@ const PropertiesMapButton = ({ onClick }) => {
     dispatch(setsearchParamMiningArea(""));
     dispatch(setsearchParamAssetTypeList([]));
     dispatch(setsearchParamCommodityList([]));
-  }
-
+  };
 
   const openPropertiesNav = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsPropertiesSideNavOpen(true));
   };
 
-  const onClickLocal=()=>{
-       if(!propertySearchQuery){
-       setIsOpenIn(true)
+  const onClickLocal = () => {
+    if (!propertySearchQuery) {
+      setIsOpenIn(true);
     }
-    onClick()
-  }
+    onClick();
+  };
 
   return (
     <div className="flex justify-center gap-1 w-full flex-col">
@@ -105,10 +110,12 @@ const PropertiesMapButton = ({ onClick }) => {
             selectedMap === "properties"
               ? "   bg-amber-300 w-10/12"
               : "   bg-amber-200 w-full"
-          } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
+          } text-sm sm:text-sm hover:bg-blue-900 text-black hover:text-white py-2 transition duration-150 ease-in`}
         >
-          <BsFillBuildingsFill className="h-6 w-6 ml-2" />
-          <span className="uppercase ml-2 font-semibold">Properties</span>
+          <BsFillBuildingsFill className="h-6 w-6 ml-2 " />
+          <span className="uppercase ml-2 font-semibold ">
+            Properties
+          </span>
         </button>
         {isOpenIn ? (
           <PropertiesFilter isOpenIn={isOpenIn} closePopup={closePopup} />
@@ -126,7 +133,9 @@ const PropertiesMapButton = ({ onClick }) => {
       </div>
       <div
         className={`${
-          selectedMap === "properties" && !isPropertiesSideNavOpen &&  propertySearchQuery
+          selectedMap === "properties" &&
+          !isPropertiesSideNavOpen &&
+          propertySearchQuery
             ? // &&
               // areaCountry != "" &&
               // areaState != ""
