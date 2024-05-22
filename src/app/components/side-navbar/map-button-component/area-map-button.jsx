@@ -13,7 +13,11 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setIsAreaSideNavOpen,setAreaCountry, setAreaMiningArea} from "../../../../store/area-map/area-map-slice";
+import {
+  setIsAreaSideNavOpen,
+  setAreaCountry,
+  setAreaMiningArea,
+} from "../../../../store/area-map/area-map-slice";
 import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
@@ -60,10 +64,10 @@ const AreaMapButton = ({ onClick }) => {
     setIsOpenIn(false);
   };
 
-  const resetFilters=()=>{
+  const resetFilters = () => {
     dispatch(setAreaCountry(""));
     dispatch(setAreaMiningArea(""));
-  }
+  };
 
   const openAreaNav = () => {
     let newUrl;
@@ -73,7 +77,7 @@ const AreaMapButton = ({ onClick }) => {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
     }
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(true));
   };
 
@@ -83,12 +87,12 @@ const AreaMapButton = ({ onClick }) => {
   //   }
   // },[]);
 
-  const onClickLocal=()=>{
-       if(!areaState){
-       setIsOpenIn(true)
+  const onClickLocal = () => {
+    if (!areaState) {
+      setIsOpenIn(true);
     }
-    onClick()
-  }
+    onClick();
+  };
 
   return (
     <div className="flex justify-center gap-1 w-full flex-col">
@@ -99,9 +103,9 @@ const AreaMapButton = ({ onClick }) => {
             selectedMap === "area"
               ? "  bg-amber-300 w-10/12 "
               : "  bg-amber-200 w-full"
-          } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
+          } text-sm sm:text-sm hover:bg-blue-900 text-black hover:text-white py-2 transition duration-150 ease-in`}
         >
-          <MdLocationOn className="h-6 w-6 ml-2" />
+          <MdLocationOn className="h-6 w-6 ml-2 " />
           <span className="uppercase ml-2 font-semibold ">
             Exploration areas
           </span>
@@ -130,7 +134,6 @@ const AreaMapButton = ({ onClick }) => {
             : "hidden"
         } `}
       >
-        
         <Chip
           color="default"
           variant="light"
@@ -140,7 +143,7 @@ const AreaMapButton = ({ onClick }) => {
         >
           Reset
         </Chip>
-       
+
         <Chip
           color="primary"
           variant="bordered"

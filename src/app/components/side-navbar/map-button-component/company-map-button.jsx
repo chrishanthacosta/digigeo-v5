@@ -24,7 +24,12 @@ import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
 import CompanyFilter from "../../filter-popups/company-filters";
-import { setIsCompanySideNavOpen,setcompanyId,setcompanyName, setcompanyStockcode} from "../../../../store/company-map/company-map-slice";
+import {
+  setIsCompanySideNavOpen,
+  setcompanyId,
+  setcompanyName,
+  setcompanyStockcode,
+} from "../../../../store/company-map/company-map-slice";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const CompanyMapButton = ({ onClick }) => {
@@ -61,9 +66,7 @@ const CompanyMapButton = ({ onClick }) => {
   const isCompanySideNavOpen = useSelector(
     (state) => state.companyMapReducer.isCompanySideNavOpen
   );
-  const companyId = useSelector(
-    (state) => state.companyMapReducer.companyId
-  );
+  const companyId = useSelector((state) => state.companyMapReducer.companyId);
 
   const [isOpenIn, setIsOpenIn] = useState();
 
@@ -71,26 +74,25 @@ const CompanyMapButton = ({ onClick }) => {
     setIsOpenIn(false);
   };
 
-    const resetFilters=()=>{
+  const resetFilters = () => {
     dispatch(setcompanyId(0));
     dispatch(setcompanyName(""));
     dispatch(setcompanyStockcode(""));
-  }
-
+  };
 
   const openCompanyNav = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsCompanySideNavOpen(true));
   };
-    const onClickLocal=()=>{
-       if(!companyId){
-       setIsOpenIn(true)
+  const onClickLocal = () => {
+    if (!companyId) {
+      setIsOpenIn(true);
     }
-    onClick()
-  }
+    onClick();
+  };
 
   return (
     <div className="flex justify-center gap-1 w-full flex-col">
@@ -101,10 +103,10 @@ const CompanyMapButton = ({ onClick }) => {
             selectedMap === "company"
               ? "  bg-amber-300 w-10/12"
               : "   bg-amber-200 w-full"
-          } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
+          } text-sm sm:text-sm hover:bg-blue-900 text-black hover:text-white py-2 transition duration-150 ease-in`}
         >
-          <AiTwotoneGold className="h-6 w-6 ml-2" />
-          <span className="uppercase ml-2 font-semibold">Companies</span>
+          <AiTwotoneGold className="h-6 w-6 ml-2 " />
+          <span className="uppercase ml-2 font-semibold  ">Companies</span>
         </button>
         {isOpenIn ? (
           <CompanyFilter isOpenIn={isOpenIn} closePopup={closePopup} />
