@@ -575,6 +575,16 @@ export const AreaMap = () => {
   const [mapUnits, setmapUnits] = useState("m");
   const [mapViewScales, setmapViewScales] = useState([]);
 
+
+  //init useeffect
+  useEffect(() => {
+
+    mouseScrollEvent();
+
+   // console.log("mapViewMode-amap", mapViewMode,)
+
+  }, []);
+
   // const pathname2 = usePathname()
   //highlight fprops
   useEffect(() => {
@@ -1090,14 +1100,7 @@ export const AreaMap = () => {
     }
   }, [amapNavigationExtent])
 
-  //init useeffect
-  useEffect(() => {
 
-    mouseScrollEvent();
-
-    console.log("mapViewMode-amap", mapViewMode,)
-
-  }, []);
 
   useEffect(() => {
     fPropVectorLayerRef?.current

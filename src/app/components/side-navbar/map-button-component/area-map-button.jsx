@@ -102,7 +102,7 @@ const AreaMapButton = ({ onClick }) => {
           } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
         >
           <MdLocationOn className="h-6 w-6 ml-2" />
-          <span className="uppercase ml-2 font-semibold">
+          <span className="uppercase ml-2 font-semibold ">
             Exploration areas
           </span>
         </button>
