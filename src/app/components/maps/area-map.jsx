@@ -24,7 +24,7 @@ import {
   setclickfPropertyObject,
   setclicksyncPropertyObject,
   setareaCurrentScale,
-  setareaMapViewScales
+  setareaMapViewScales,
 } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
@@ -57,17 +57,15 @@ import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { updateWindowsHistoryAmap } from "@/app/utils/helpers/window-history-replace";
 // import Image from 'next/image'
-import GetTopAds from './../advertisements/get-top-ads';
-import GetRightAds from './../advertisements/get-right-ads';
+import GetTopAds from "./../advertisements/get-top-ads";
+import GetRightAds from "./../advertisements/get-right-ads";
 import { MapViewMode, ZoomMode } from "@/store/types";
 import { Tooltip } from "@nextui-org/react";
-import { usePathname } from 'next/navigation'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { usePathname } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Draggable from "react-draggable";
 // import { Style, Icon, Stroke, Fill, Circle, Text } from "ol/style";
-
-
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -180,7 +178,7 @@ const svgOccurence = `<?xml version="1.0" encoding="utf-8"?>
             d="M2 1178 l-2 -1178 1223 2 c699 0 1162 4 1082 9 -468 25 -949 210 -1345 517 -117 91 -306 277 -401 395 -232 288 -391 602 -483 958 -24 94 -62 327 -69 424 -2 28 -4 -480 -5 -1127z" />
     </g>
 
-</svg>`
+</svg>`;
 
 const getText = function (feature, resolution) {
   // const type = dom.text.value;
@@ -213,7 +211,6 @@ const getText = function (feature, resolution) {
 const createTextStyle = function (feature, resolution) {
   // const font = 600 + " " + 65 + "/" + 65 + " " + "Sans Serif";
 
-
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
@@ -243,8 +240,6 @@ export const assetTypesColorMappings = [
     src: "svgicons/past_producer_black.svg",
   },
 ];
-
-
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -507,7 +502,7 @@ export const AreaMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
   //  useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -525,7 +520,6 @@ export const AreaMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
- 
 
   const dispatch = useDispatch();
 
@@ -556,9 +550,9 @@ export const AreaMap = () => {
     (state) => state.areaMapReducer.amapNavigationHighlightFProps
   );
 
-  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
-
-
+  const mapViewMode = useSelector(
+    (state) => state.mapSelectorReducer.mapViewMode
+  );
 
   //
   const [coordinates, setCoordinates] = useState(undefined);
@@ -582,29 +576,28 @@ export const AreaMap = () => {
       if (fPropSourceRef.current) {
         //set prev selected styles to null
         for (const fid of prevSelFeaturedProps) {
+          const fp = fPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("id") == fid);
 
-          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
-          
-          fp?.setStyle(undefined)
-          mapRef.current.render()
+          fp?.setStyle(undefined);
+          mapRef.current.render();
         }
-        setprevSelFeaturedProps([])
-
+        setprevSelFeaturedProps([]);
 
         //highlight
-        const fp = fPropSourceRef.current.getFeatures().find(
-          (f) => f.get("id") == navigatedFPropId
-        );
+        const fp = fPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("id") == navigatedFPropId);
         if (fp) {
-         // setunselectFProps((p) => p + 1)
-         
+          // setunselectFProps((p) => p + 1)
+
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp.setStyle(selectStyle);
-          mapRef.current.render()
-          setprevSelFeaturedProps([navigatedFPropId])
-
+          mapRef.current.render();
+          setprevSelFeaturedProps([navigatedFPropId]);
         }
       }
     }
@@ -613,29 +606,28 @@ export const AreaMap = () => {
   useEffect(() => {
     //unselect prev styles
     for (const fid of prevSelFeaturedProps) {
+      const fp = fPropSourceRef?.current
+        ?.getFeatures()
+        .find((f) => f.get("id") == fid);
 
-      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
-      
-      fp?.setStyle(undefined)
+      fp?.setStyle(undefined);
     }
     mapRef.current.render();
-    setprevSelFeaturedProps([])
+    setprevSelFeaturedProps([]);
 
     if (amapNavigationHighlightFProps.length > 0) {
-     
       for (const fpid of amapNavigationHighlightFProps) {
-        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        const fp = fPropSourceRef?.current
+          ?.getFeatures()
+          .find((f) => f.get("id") == fpid);
         if (fp) {
-         
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp?.setStyle(selectStyle);
         }
-
       }
-      setprevSelFeaturedProps(amapNavigationHighlightFProps)
-
+      setprevSelFeaturedProps(amapNavigationHighlightFProps);
     }
   }, [amapNavigationHighlightFProps]);
 
@@ -652,7 +644,6 @@ export const AreaMap = () => {
   //     setprevSelFeaturedProps([])
   //   }
   // }, [unselectFProps])
-
 
   useEffect(() => {
     dispatch(setclickassetObject(assetObject));
@@ -874,13 +865,12 @@ export const AreaMap = () => {
     if (mapViewRef.current) {
       const scale = mapRatioScale({ map: mapRef.current });
       setmapScale(scale.toLocaleString());
-
     }
   }, [mapViewRef.current]);
 
   useEffect(() => {
     if (areaFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, areaFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, areaFlyToLocation, () => {});
   }, [areaFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -956,8 +946,7 @@ export const AreaMap = () => {
     if (amapFpropLableVisible) {
       style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
       fPropVectorLayerLabelRef.current?.setStyle(style);
-    }
-    else {
+    } else {
       fPropVectorLayerLabelRef.current?.setStyle(style);
     }
   }, [fPropVectorLayerLabelRef.current, amapFpropLableVisible]);
@@ -984,7 +973,6 @@ export const AreaMap = () => {
     }
 
     if (syncPropSourceRef.current) {
-
       if (areaZoomMode == ZoomMode.ExTENT) {
         const p1 = syncPropSourceRef.current.getExtent();
         if (p1[0] != Infinity) {
@@ -994,12 +982,11 @@ export const AreaMap = () => {
               duration: 3000,
             });
           }
-
         }
-      } else { //fixed zoom
+      } else {
+        //fixed zoom
 
         mapRef.current?.getView()?.setZoom(areaZoomLevel);
-
       }
     }
   }, [syncPropertyFeatures]);
@@ -1008,21 +995,19 @@ export const AreaMap = () => {
     fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-    
+
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
 
       if (!syncPropSourceRef?.current?.getFeatures().length) {
-        const p2 = fPropSourceRef.current?.getExtent()
+        const p2 = fPropSourceRef.current?.getExtent();
         if (p2[0] != Infinity) {
           mapRef.current?.getView()?.fit(p2, {
             padding: [100, 100, 100, 100],
             duration: 3000,
           });
-
         }
       }
-
     }
 
     //  if (fPropSourceRef.current) {
@@ -1076,27 +1061,20 @@ export const AreaMap = () => {
     // }
   }, [assetFeatures]);
 
-
   useEffect(() => {
-
     if (amapNavigationExtent.length > 0) {
-
       mapRef.current?.getView()?.fit(amapNavigationExtent, {
         padding: [100, 100, 100, 100],
         duration: 3000,
       });
-
-
     }
-  }, [amapNavigationExtent])
+  }, [amapNavigationExtent]);
 
   //init useeffect
   useEffect(() => {
-
     mouseScrollEvent();
 
-    console.log("mapViewMode-amap", mapViewMode,)
-
+    console.log("mapViewMode-amap", mapViewMode);
   }, []);
 
   useEffect(() => {
@@ -1120,7 +1098,15 @@ export const AreaMap = () => {
 
     if (areaSelectedAreaId) {
       // console.log("yy-yy")
-      updateWindowsHistoryAmap({ isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel: zoom, areaInitialCenter: center, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+      updateWindowsHistoryAmap({
+        isSideNavOpen,
+        areaLyrs: mapLyrs,
+        areaZoomLevel: zoom,
+        areaInitialCenter: center,
+        country: areaCountry,
+        miningArea: areaName,
+        areaId: areaSelectedAreaId,
+      });
     } else {
       //console.log("yy-xx")
     }
@@ -1144,17 +1130,12 @@ export const AreaMap = () => {
     setCenter(tmpinitialCenter);
 
     // let newUrl;
-
-
-
-  }, [])
-
+  }, []);
 
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
     // console.log("yy-yy1")
     // console.log("mapRef", mapRef.current?.getZoom());
-
 
     map?.on("moveend", handleMoveEnd);
 
@@ -1186,7 +1167,16 @@ export const AreaMap = () => {
     //     window.location.pathname
     //   }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     // }
-    updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+    updateWindowsHistoryAmap({
+      isAreaSideNavOpen,
+      isSideNavOpen,
+      areaLyrs: mapLyrs,
+      areaZoomLevel,
+      areaInitialCenter,
+      country: areaCountry,
+      miningArea: areaName,
+      areaId: areaSelectedAreaId,
+    });
 
     // window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
@@ -1195,23 +1185,38 @@ export const AreaMap = () => {
   const notify = () => toast.success("Copied Url to Clipboard");
 
   const copyMapUrl = () => {
-
     //alert("ppp" + pathname)
     navigator.clipboard.writeText(pathname + "&mvm=HEADLESS");
-    notify()
-  }
+    notify();
+  };
 
   const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     if (areaName == "") {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-      updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: lyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
-
+      updateWindowsHistoryAmap({
+        isAreaSideNavOpen,
+        isSideNavOpen,
+        areaLyrs: lyrs,
+        areaZoomLevel,
+        areaInitialCenter,
+        country: areaCountry,
+        miningArea: areaName,
+        areaId: areaSelectedAreaId,
+      });
     } else {
       //newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
-      updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: lyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
-
+      updateWindowsHistoryAmap({
+        isAreaSideNavOpen,
+        isSideNavOpen,
+        areaLyrs: lyrs,
+        areaZoomLevel,
+        areaInitialCenter,
+        country: areaCountry,
+        miningArea: areaName,
+        areaId: areaSelectedAreaId,
+      });
     }
     window.history.replaceState({}, "", newUrl);
   };
@@ -1219,7 +1224,15 @@ export const AreaMap = () => {
     //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     //updateWindowsHistory(newUrl);
-    updateWindowsHistoryAmap({ isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+    updateWindowsHistoryAmap({
+      isSideNavOpen,
+      areaLyrs: mapLyrs,
+      areaZoomLevel,
+      areaInitialCenter,
+      country: areaCountry,
+      miningArea: areaName,
+      areaId: areaSelectedAreaId,
+    });
 
     dispatch(setIsAreaSideNavOpen(true));
   };
@@ -1260,7 +1273,7 @@ export const AreaMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1324,7 +1337,6 @@ export const AreaMap = () => {
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible);
     fPropVectorLayerLabelRef?.current?.setVisible(areaFpropLayerVisible);
-
   }, [areaFpropLayerVisible]);
   useEffect(() => {
     claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible);
@@ -1473,10 +1485,7 @@ export const AreaMap = () => {
   // }
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-
-
-
-    let txtObjAreaName
+    let txtObjAreaName;
     if (resolution < 3000) {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
@@ -1491,11 +1500,8 @@ export const AreaMap = () => {
         // maxAngle: maxAngle,
         overflow: true,
         // rotation: rotation,
-      })
+      });
     }
-
-
-
 
     const s = new Style({
       stroke: new Stroke({
@@ -1639,7 +1645,7 @@ export const AreaMap = () => {
 
   //single click -
   useEffect(() => {
-    console.log("aaaaa",)
+    console.log("aaaaa");
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
       let extentDim;
@@ -1795,9 +1801,8 @@ export const AreaMap = () => {
         };
         setsyncPropertyObject(syncPropertyObject1);
       } else {
-
         //if sync_prop  is not selected try claimlink prop outline
-        // 
+        //
         const getClinkData = async (propid) => {
           const url =
             "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
@@ -1829,15 +1834,16 @@ export const AreaMap = () => {
         };
 
         const selPropertyOutlineFeatures =
-          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
+          [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures);
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
-          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
 
-          const clinkDetails = await getClinkData(propId)
+          const clinkDetails = await getClinkData(propId);
 
-          console.log("clinkDetails", clinkDetails, propId)
+          console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
@@ -1855,16 +1861,12 @@ export const AreaMap = () => {
             country,
             area,
           };
-          console.log("syncPropertyObject1", syncPropertyObject1,)
+          console.log("syncPropertyObject1", syncPropertyObject1);
           setsyncPropertyObject(syncPropertyObject1);
         } else {
           setsyncPropertyObject(undefined);
           dispatch(setclicksyncPropertyObject(undefined));
         }
-
-
-
-
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1912,33 +1914,34 @@ export const AreaMap = () => {
   };
 
   useEffect(() => {
-
     if (mapViewScaleReducer?.mapViewScales?.length > 0) {
-      setmapViewScales(mapViewScaleReducer.mapViewScales)
+      setmapViewScales(mapViewScaleReducer.mapViewScales);
     }
-  }, [mapViewScaleReducer.mapViewScales])
-
+  }, [mapViewScaleReducer.mapViewScales]);
 
   useEffect(() => {
     // console.log("xx-0- ue-areaSelectedAreaId-setareaMapViewScales ",areaSelectedAreaId)
     if (areaSelectedAreaId != undefined && areaSelectedAreaId != 0) {
-      const mapViewScale1 = mapViewScales.find(a => a.area_id == areaSelectedAreaId)
+      const mapViewScale1 = mapViewScales.find(
+        (a) => a.area_id == areaSelectedAreaId
+      );
 
       if (mapViewScale1) {
         // console.log("xx-88if-amap- setareaMapViewScales ",mapViewScale1)
         dispatch(setareaMapViewScales(mapViewScale1));
-      }
-      else {
+      } else {
         // console.log("xx-crit- no aid yy-else",mapViewScales)
-        dispatch(setareaMapViewScales(mapViewScales[0]))
+        dispatch(setareaMapViewScales(mapViewScales[0]));
       }
 
       //console.log("xx-99mapViewScale1-set",mapViewScale1)
 
       //set style of selected area
       const afs = areaBoundaryImgSourceRef.current?.getFeatures();
-      console.log("ww1-afs", afs)
-      const selAreaF = afs?.find(af => af.get("area_id") == areaSelectedAreaId)
+      console.log("ww1-afs", afs);
+      const selAreaF = afs?.find(
+        (af) => af.get("area_id") == areaSelectedAreaId
+      );
 
       if (selAreaF) {
         // const geometry = selAreaF.getGeometry()
@@ -1946,8 +1949,6 @@ export const AreaMap = () => {
         // const center  = getCenter(extent)
         // const topcenterxOffset = (extent[0] + extent[2]) / 2 - center[0]
         // const topcenteryOffset = extent[4]  - center[1]
-
-
 
         const s = new Style({
           stroke: new Stroke({
@@ -1973,30 +1974,23 @@ export const AreaMap = () => {
 
         //clear prev style
         if (prevSelAreaFeature) {
-          prevSelAreaFeature.setStyle(undefined)
+          prevSelAreaFeature.setStyle(undefined);
         }
-        setprevSelAreaFeature(selAreaF)
+        setprevSelAreaFeature(selAreaF);
         selAreaF.setStyle(s);
-
       }
-
     } else {
-      console.log("xx-xxnotmapViewScale1-set", areaSelectedAreaId)
+      console.log("xx-xxnotmapViewScale1-set", areaSelectedAreaId);
     }
+  }, [areaSelectedAreaId, mapViewScales]);
 
-  }, [areaSelectedAreaId, mapViewScales])
-
-
-
-  const copyRight = `©2024 The Northern Miner`
+  const copyRight = `©2024 The Northern Miner`;
 
   const amapAssetLableVisible = useSelector(
     (state) => state.areaMapReducer.amapAssetLableVisible
   );
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
-
-
     const colour = feature.values_.colour;
 
     const fill = new Fill({
@@ -2039,14 +2033,12 @@ export const AreaMap = () => {
     } else if (resolution > 125) {
       svgScale = 1.375;
       radius = 5;
-
     } else {
       svgScale = 1.5;
       radius = 10;
     }
     let image;
     let text;
-
 
     if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
       image = new Icon({
@@ -2074,7 +2066,6 @@ export const AreaMap = () => {
         scale: svgScale,
       });
     }
-
 
     //set text Style
 
@@ -2107,15 +2098,24 @@ export const AreaMap = () => {
         pauseOnHover
         theme="light"
       />
-      <AreaSideNavbar className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"}`} />
+      <AreaSideNavbar
+        className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"}`}
+      />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`}>
+            <Button
+              isIconOnly
+              variant="bordered"
+              className={`bg-blue-900 ${
+                mapViewMode == "HEADED" ? "flex" : "hidden"
+              }`}
+            >
               <BsFillArrowLeftSquareFill
                 // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
-                  }`}
+                className={`cursor-pointer text-white h-6 w-6 ${
+                  isSideNavOpen ? "" : "rotate-180"
+                }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -2166,7 +2166,7 @@ export const AreaMap = () => {
             ) : null} */}
           </div>
         </div>
-        <div className="flex items-end fixed   bottom-1 z-50  " >
+        <div className="flex items-end fixed   bottom-1 z-50  ">
           <ButtonGroup
             variant="faded"
             // className="fixed  bottom-1 z-50  "
@@ -2174,28 +2174,31 @@ export const AreaMap = () => {
           >
             <Button
               onClick={() => setLyrs("m")}
-              className={`${mapLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
+              className={`${
+                mapLyrs == "m"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+              }  w-22`}
             >
               Map
             </Button>
             <Button
               onClick={() => setLyrs("s")}
-              className={`${mapLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
+              className={`${
+                mapLyrs == "s"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+              }  w-22`}
             >
               Satellite
             </Button>
             <Button
               onClick={() => setLyrs("p")}
-              className={`${mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
+              className={`${
+                mapLyrs == "p"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+              }  w-22`}
             >
               Terrain
             </Button>
@@ -2210,7 +2213,9 @@ export const AreaMap = () => {
             {areaSelectedAreaId}
           </Button> */}
           </ButtonGroup>
-          <div><p>{copyRight}</p></div>
+          <div>
+            <p>{copyRight}</p>
+          </div>
         </div>
         <ButtonGroup
           variant="faded"
@@ -2281,13 +2286,18 @@ export const AreaMap = () => {
         {GetRightAds()}
          
         </div> */}
+        {/**calc(100vw - 320px) */}
         <Map
           ref={mapRef}
           style={{
             width: isSideNavOpen
               ? isAreaSideNavOpen
-                ? mapViewMode == "HEADED" ? "65vw" : "100vw"
-                : mapViewMode == "HEADED" ? "83vw" : "100vw"
+                ? mapViewMode == "HEADED"
+                  ? "65vw"
+                  : "100vw"
+                : mapViewMode == "HEADED"
+                ? "calc(100vw - 320px)"
+                : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2348,7 +2358,7 @@ export const AreaMap = () => {
             {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>
@@ -2356,7 +2366,12 @@ export const AreaMap = () => {
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
             minResolution={0}
-            maxResolution={getMapResolution(areaMapViewScales?.claimscale ?? 350000, mapUnits) ?? 150}
+            maxResolution={
+              getMapResolution(
+                areaMapViewScales?.claimscale ?? 350000,
+                mapUnits
+              ) ?? 150
+            }
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
@@ -2376,7 +2391,14 @@ export const AreaMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales?.assetscale ?? 450000, mapUnits) ?? 150}
+            maxResolution={
+              areaAssetLayerAlwaysVisible
+                ? 40075016
+                : getMapResolution(
+                    areaMapViewScales?.assetscale ?? 450000,
+                    mapUnits
+                  ) ?? 150
+            }
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
@@ -2384,7 +2406,14 @@ export const AreaMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales?.proplayerscale ?? 950000, mapUnits) ?? 150}
+            maxResolution={
+              areaSyncPropLayerAlwaysVisible
+                ? 40075016
+                : getMapResolution(
+                    areaMapViewScales?.proplayerscale ?? 950000,
+                    mapUnits
+                  ) ?? 150
+            }
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
