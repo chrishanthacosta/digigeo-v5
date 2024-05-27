@@ -94,8 +94,8 @@ const HomeNavbar = () => {
   }
 
   return (
-    <div className="flex bg-black justify-between items-center w-full relative p-1 border-b-8  border-navbar-border ">
-      <div id="left-tnm-logo flex items-center ">
+    <div className="flex bg-black justify-between items-center w-screen relative p-1 border-b-8  border-navbar-border ">
+      <div id="left-tnm-logo">
         <Link href="https://northernminer.com" target="_blank" className="flex items-center hidden md:block ml-2">
           <Image
             src="/TNM_logo_large.webp"

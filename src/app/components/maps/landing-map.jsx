@@ -73,6 +73,7 @@ import GetTopAds from "../advertisements/get-top-ads";
 import GetRightAds from "../advertisements/get-right-ads";
 import Draggable from "react-draggable";
 import { SlLayers } from "react-icons/sl";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -1255,7 +1256,9 @@ export const LandingMap = () => {
     // }
   }, [syncClaimLinkPropertyFeatures]);
 
+  //init useeffect
   useEffect(() => {
+    console.log("mapViewMode",mapViewMode,)
     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
       const e = new GeoJSON().readFeatures(assetFeatures);
@@ -2356,13 +2359,71 @@ export const LandingMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <SlLayers
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewMinusZoom}
-              />
-            </Button>
-           
+
+            <Popover placement="right-start" showArrow offset={10}>
+              <PopoverTrigger>
+                <Button isIconOnly variant="bordered" className="bg-blue-900">
+                  <SlLayers
+                    className={`text-white cursor-pointer h-6 w-6`}
+                  // onClick={onClickViewMinusZoom}
+                  />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className=" ">
+                {(titleProps) => (
+                  <div className="px-1 py-2 w-full">
+                    <p className="text-small font-bold text-foreground" {...titleProps}>
+                      Layers
+                    </p>
+                    <div className="mt-2 flex   gap-2 w-full">
+                      <ButtonGroup
+                        variant="faded"
+
+                        color="primary"
+                      >
+                        <Button
+                          onClick={() => setLyrs("m")}
+                          className={`${mapLyrs == "m"
+                            ? "bg-blue-900 text-white"
+                            : "bg-blue-700 text-white"
+                            }  w-22`}
+                        >
+                          Map
+                        </Button>
+                        <Button
+                          onClick={() => setLyrs("s")}
+                          className={`${mapLyrs == "s"
+                            ? "bg-blue-900 text-white"
+                            : "bg-blue-700 text-white"
+                            }  w-22`}
+                        >
+                          Satellite
+                        </Button>
+                        <Button
+                          onClick={() => setLyrs("p")}
+                          className={`${mapLyrs == "p"
+                            ? "bg-blue-900 text-white"
+                            : "bg-blue-700 text-white"
+                            }  w-22`}
+                        >
+                          Terrain
+                        </Button>
+                        {/* <Button
+            className={`${
+              mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+            }  w-22`}
+          >
+            {curcenteredareaid}
+          </Button> */}
+                      </ButtonGroup>
+                    </div>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
+
             {/* {!isLandingMapSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
@@ -2375,6 +2436,7 @@ export const LandingMap = () => {
           </div>
         </div>
         <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full " >
+          <div className="hidden md:block">
           <ButtonGroup
             variant="faded"
 
@@ -2417,10 +2479,11 @@ export const LandingMap = () => {
             {curcenteredareaid}
           </Button> */}
           </ButtonGroup>
+          </div>
           <div><p>{copyRight}</p></div>
           <ButtonGroup
             variant="faded"
-            className="    hidden md:block "
+            // className="    hidden md:block "
             // className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
             color="primary"
           >

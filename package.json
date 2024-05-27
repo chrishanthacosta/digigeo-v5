@@ -10,6 +10,7 @@
     "export": "npm run build && next export"
   },
   "dependencies": {
+    "@nextui-org/popover": "^2.1.21",
     "@nextui-org/react": "^2.2.2",
     "@react-ol/fiber": "^1.0.0-beta.1",
     "@reduxjs/toolkit": "^1.9.7",
