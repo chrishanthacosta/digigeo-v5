@@ -1080,16 +1080,6 @@ export const AreaMap = () => {
     }
   }, [amapNavigationExtent]);
 
-<<<<<<< HEAD
-  //init useeffect
-  useEffect(() => {
-    mouseScrollEvent();
-
-    console.log("mapViewMode-amap", mapViewMode);
-  }, []);
-=======
-
->>>>>>> 7ad3ca506b5be167901f14c2b8c003ee5fd52c93
 
   useEffect(() => {
     fPropVectorLayerRef?.current
