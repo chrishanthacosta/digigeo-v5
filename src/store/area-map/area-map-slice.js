@@ -34,7 +34,7 @@ const initialState = {
   areaSelectedAreaId: 0,
   areaMapViewScales: {},
   amapsyncPropLableVisible: true,
-  amapFpropLableVisible: true,
+  amapFpropLableVisible: false,
   amapAssetLableVisible: true,
   amapClaimLableVisible: true,
   amapAreaLableVisible: true,

@@ -501,7 +501,7 @@ export const CompanyMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -848,7 +848,7 @@ export const CompanyMap = () => {
 
   useEffect(() => {
     if (companyFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, companyFlyToLocation, () => {});
+      flyTo(mapViewRef?.current, companyFlyToLocation, () => { });
   }, [companyFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -1154,9 +1154,8 @@ export const CompanyMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${
-      window.location.pathname
-    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    newUrl = `${window.location.pathname
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     // updateWindowsHistory(newUrl);
     updateWindowsHistoryCmap({
@@ -1213,7 +1212,7 @@ export const CompanyMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1627,7 +1626,7 @@ export const CompanyMap = () => {
         let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
         let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
         let area = selAssetFeatures?.[0]?.get("area") ?? "";
-        let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+        let state_prov = selAssetFeatures?.[0]?.get("state_prov") ?? "";
         let country = selAssetFeatures?.[0]?.get("country") ?? "";
         let region = selAssetFeatures?.[0]?.get("region") ?? "";
         assetObject = {
@@ -1636,7 +1635,7 @@ export const CompanyMap = () => {
           asset_type,
           commodities,
           area,
-          stateProv,
+          state_prov,
           country,
           region,
         };
@@ -1729,7 +1728,7 @@ export const CompanyMap = () => {
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
         let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
-        const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+        const state_prov = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
         const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
         const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
         // const selSynClaimLinkFeatures =
@@ -1738,7 +1737,7 @@ export const CompanyMap = () => {
           prop_name,
           owners,
           name: name1,
-          stateProv,
+          state_prov,
           country,
           area,
         };
@@ -1792,7 +1791,7 @@ export const CompanyMap = () => {
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
           let name1 = clinkDetails?.[0]?.name ?? "";
-          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
           const area = clinkDetails?.[0]?.area ?? "";
           // const selSynClaimLinkFeatures =
@@ -1801,7 +1800,7 @@ export const CompanyMap = () => {
             prop_name,
             owners,
             name: name1,
-            stateProv,
+            state_prov,
             country,
             area,
           };
@@ -1974,9 +1973,8 @@ export const CompanyMap = () => {
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
                 // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${
-                  isSideNavOpen ? "" : "rotate-180"
-                }`}
+                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                  }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -2004,7 +2002,7 @@ export const CompanyMap = () => {
                   <Button isIconOnly variant="bordered" className="bg-blue-900">
                     <SlLayers
                       className={`text-white cursor-pointer h-6 w-6`}
-                      // onClick={onClickViewMinusZoom}
+                    // onClick={onClickViewMinusZoom}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -2021,31 +2019,28 @@ export const CompanyMap = () => {
                         <ButtonGroup variant="faded" color="primary">
                           <Button
                             onClick={() => setLyrs("m")}
-                            className={`${
-                              companyLyrs == "m"
-                                ? "bg-blue-900 text-white"
-                                : "bg-blue-700 text-white"
-                            }  w-22`}
+                            className={`${companyLyrs == "m"
+                              ? "bg-blue-900 text-white"
+                              : "bg-blue-700 text-white"
+                              }  w-22`}
                           >
                             Map
                           </Button>
                           <Button
                             onClick={() => setLyrs("s")}
-                            className={`${
-                              companyLyrs == "s"
-                                ? "bg-blue-900 text-white"
-                                : "bg-blue-700 text-white"
-                            }  w-22`}
+                            className={`${companyLyrs == "s"
+                              ? "bg-blue-900 text-white"
+                              : "bg-blue-700 text-white"
+                              }  w-22`}
                           >
                             Satellite
                           </Button>
                           <Button
                             onClick={() => setLyrs("p")}
-                            className={`${
-                              companyLyrs == "p"
-                                ? "bg-blue-900 text-white"
-                                : "bg-blue-700 text-white"
-                            }  w-22`}
+                            className={`${companyLyrs == "p"
+                              ? "bg-blue-900 text-white"
+                              : "bg-blue-700 text-white"
+                              }  w-22`}
                           >
                             Terrain
                           </Button>
@@ -2076,31 +2071,28 @@ export const CompanyMap = () => {
             >
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${
-                  companyLyrs == "m"
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-700 text-white"
-                } w-22`}
+                className={`${companyLyrs == "m"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  } w-22`}
               >
                 Map
               </Button>
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${
-                  companyLyrs == "s"
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-700 text-white"
-                }  w-22 `}
+                className={`${companyLyrs == "s"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  }  w-22 `}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${
-                  companyLyrs == "p"
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-700 text-white"
-                }  w-22 `}
+                className={`${companyLyrs == "p"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  }  w-22 `}
               >
                 Terrain
               </Button>
@@ -2115,13 +2107,13 @@ export const CompanyMap = () => {
             // className="fixed right-0 bottom-1 z-50 "
             color="primary"
           >
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Scale:${mapScale}`}
             </Button>
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Lat:${lat}`}
             </Button>
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Long:${long}`}
             </Button>
           </ButtonGroup>
@@ -2190,10 +2182,10 @@ export const CompanyMap = () => {
                     : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                ? isTabletOrMobile
-                  ? "calc(100vw - 208px)"
-                  : "calc(100vw - 288px)"
-                : "100vw"
+                  ? isTabletOrMobile
+                    ? "calc(100vw - 208px)"
+                    : "calc(100vw - 288px)"
+                  : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2247,7 +2239,7 @@ export const CompanyMap = () => {
                 ref={claimLinkSourceRef}
                 minResolution={0}
                 maxResolution={maxResolutionSyncOutlines}
-                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>

@@ -17,7 +17,7 @@ import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import {
-   
+
   setclickassetObject,
   setclickclaimObject,
   setclickfPropertyObject,
@@ -1033,7 +1033,7 @@ export const LandingMap = () => {
   const onViewChange = useCallback((e) => {
     //setviewChangeCount((p)=> p+1)
     const scale = mapRatioScale({ map: mapRef.current });
-    
+
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
@@ -1067,9 +1067,9 @@ export const LandingMap = () => {
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0 && !isTabletOrMobile) {
-          dispatch(setIsLandingMapSideNavOpen(true));
+        dispatch(setIsLandingMapSideNavOpen(true));
       } else {
-       
+
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
@@ -1261,7 +1261,7 @@ export const LandingMap = () => {
 
   //init useeffect
   useEffect(() => {
-    console.log("mapViewMode",mapViewMode,)
+    console.log("mapViewMode", mapViewMode,)
     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
       const e = new GeoJSON().readFeatures(assetFeatures);
@@ -1887,7 +1887,7 @@ export const LandingMap = () => {
         let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
         let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
         let area = selAssetFeatures?.[0]?.get("area") ?? "";
-        let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+        let state_prov = selAssetFeatures?.[0]?.get("state_prov") ?? "";
         let country = selAssetFeatures?.[0]?.get("country") ?? "";
         let region = selAssetFeatures?.[0]?.get("region") ?? "";
         const assetObject1 = {
@@ -1896,7 +1896,7 @@ export const LandingMap = () => {
           asset_type,
           commodities,
           area,
-          stateProv,
+          state_prov,
           country,
           region,
         };
@@ -1994,7 +1994,7 @@ export const LandingMap = () => {
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
         let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
-        const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+        const state_prov = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
         const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
         const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
         // const selSynClaimLinkFeatures =
@@ -2003,7 +2003,7 @@ export const LandingMap = () => {
           prop_name,
           owners,
           name: name1,
-          stateProv,
+          state_prov,
           country,
           area,
         };
@@ -2053,7 +2053,7 @@ export const LandingMap = () => {
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
           let name1 = clinkDetails?.[0]?.name ?? "";
-          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
           const area = clinkDetails?.[0]?.area ?? "";
           // const selSynClaimLinkFeatures =
@@ -2062,7 +2062,7 @@ export const LandingMap = () => {
             prop_name,
             owners,
             name: name1,
-            stateProv,
+            state_prov,
             country,
             area,
           };
@@ -2438,43 +2438,43 @@ export const LandingMap = () => {
             ) : null} */}
           </div>
         </div>
-        
+
         <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap " >
           <div className="hidden sm:block">
-          <ButtonGroup
-            variant="faded"
+            <ButtonGroup
+              variant="faded"
 
-            color="primary"
-          >
-            <Button
-              onClick={() => setLyrs("m")}
-              className={`${mapLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
+              color="primary"
             >
-              Map
-            </Button>
-            <Button
-              onClick={() => setLyrs("s")}
-              className={`${mapLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
-            >
-              Satellite
-            </Button>
-            <Button
-              onClick={() => setLyrs("p")}
-              className={`${mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
-            >
-              Terrain
-            </Button>
-           
-          </ButtonGroup>
+              <Button
+                onClick={() => setLyrs("m")}
+                className={`${mapLyrs == "m"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  }  w-22`}
+              >
+                Map
+              </Button>
+              <Button
+                onClick={() => setLyrs("s")}
+                className={`${mapLyrs == "s"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  }  w-22`}
+              >
+                Satellite
+              </Button>
+              <Button
+                onClick={() => setLyrs("p")}
+                className={`${mapLyrs == "p"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                  }  w-22`}
+              >
+                Terrain
+              </Button>
+
+            </ButtonGroup>
           </div>
           <div><p>{copyRight}</p></div>
           <ButtonGroup
@@ -2483,13 +2483,13 @@ export const LandingMap = () => {
             // className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
             color="primary"
           >
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Scale:${mapScale}`}
             </Button>
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Lat:${lat}`}
             </Button>
-            <Button className={`w-28 bg-blue-700 text-white`}>
+            <Button className={`w-32 bg-blue-700 text-white`}>
               {`Long:${long}`}
             </Button>
           </ButtonGroup>

@@ -33,7 +33,7 @@ const initialState = {
   landingCurrentScale: 5,
   landingMapViewScales: {},
   lmapsyncPropLableVisible: true,
-  lmapFpropLableVisible: true,
+  lmapFpropLableVisible: false,
   lmapAssetLableVisible: true,
   lmapClaimLableVisible: true,
   lmapAreaLableVisible: true,

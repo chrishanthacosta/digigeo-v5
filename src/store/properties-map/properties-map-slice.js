@@ -39,7 +39,7 @@ const initialState = {
   propertyCurrentScale: 5,
   propertyMapViewScales: {},
   pmapsyncPropLableVisible: true,
-  pmapFpropLableVisible: true,
+  pmapFpropLableVisible: false,
   pmapAssetLableVisible: true,
   pmapClaimLableVisible: true,
   pmapAreaLableVisible: true,

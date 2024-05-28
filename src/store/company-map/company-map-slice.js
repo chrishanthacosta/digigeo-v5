@@ -32,7 +32,7 @@ const initialState = {
   companyCurrentScale: 5,
   companyMapViewScales: {},
   cmapsyncPropLableVisible: true,
-  cmapFpropLableVisible: true,
+  cmapFpropLableVisible: false,
   cmapAssetLableVisible: true,
   cmapClaimLableVisible: true,
   cmapAreaLableVisible: true,
