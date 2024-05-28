@@ -14,16 +14,17 @@ import {
   setAreaZoomMode,
   setIsAreaSideNavOpen,
   setareaSelectedAreaId,
-
 } from "../../../store/area-map/area-map-slice";
+import { setIsSideNavOpen } from "../../../store/map-selector/map-selector-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import AreaFilterAreaListItemBrowser from "./area-filter-arealist-item-browser";
 import { updateWindowsHistoryAmap } from "@/app/utils/helpers/window-history-replace";
+import { useMediaQuery } from "react-responsive";
 
 const AreaFilter = ({ isOpenIn, closePopup }) => {
   const dispatch = useDispatch();
- 
+
   const [isOpen, setIsOpen] = useState(false);
   // const [country, setCountry] = useState("");
   const [country, setCountry] = useState("");
@@ -41,7 +42,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [mapViewScale, setmapViewScale] = useState({});
   const [areaId, setareaId] = useState(0);
 
-  const areaInputRef = useRef(null)
+  const areaInputRef = useRef(null);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -61,26 +62,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
- //const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
-  const customStyles = {
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
-      zIndex: 50,
-    },
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "transparent",
-      border: "none",
-      width:"40vw",
-      
-    },
-  };
+  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+
+  //const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
   //  useEffect(() => {
 
@@ -118,7 +103,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   useEffect(() => {
     setCountry(areaCountry);
-  }, [areaCountry]);   
+  }, [areaCountry]);
 
   const getSearchQuery = (country = "", areaName = "") => {
     let s = "";
@@ -234,14 +219,28 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   // }, [miningArea])
 
   const searchAction = async () => {
-     
     if (country && miningArea) {
       dispatch(setAreaZoomMode("extent"));
       //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${country}&ma=${miningArea}&aid=${areaId}`;
-    
+
       // window.history.replaceState({}, "", newUrl);
-      updateWindowsHistoryAmap(  {isSideNavOpen,areaLyrs,areaZoomLevel,areaInitialCenter,country,miningArea,areaId});
-      dispatch(setIsAreaSideNavOpen(true));
+      updateWindowsHistoryAmap({
+        isSideNavOpen,
+        areaLyrs,
+        areaZoomLevel,
+        areaInitialCenter,
+        country,
+        miningArea,
+        areaId,
+      });
+
+      if (isTabletOrMobile) {
+        dispatch(setIsAreaSideNavOpen(false));
+        dispatch(setIsSideNavOpen(false));
+      } else {
+        dispatch(setIsAreaSideNavOpen(true)); //pls add that logic here
+      }
+
       // dispatch(setAreaCountry("Canada"));
       // dispatch(setAreaMiningArea("Timmins"));
       dispatch(setAreaCountry(country));
@@ -253,9 +252,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //const animals = [{value:"qqq", label:"q1"},{value:"qqq2", label:"q2"},{value:"qqq3", label:"q3"}]
   //init use effect
   useEffect(() => {
-
     areaInputRef.current?.focus();
-    
+
     // const f = async () => {
     //   const res = await fetch(
     //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
@@ -317,9 +315,9 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   };
 
   const areaIdHandler = (areaid) => {
-    console.log("yy-areaIdHandler-filter",areaid)
+    console.log("yy-areaIdHandler-filter", areaid);
     dispatch(setareaSelectedAreaId(areaid));
-    setareaId(areaid)
+    setareaId(areaid);
     // const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaid)
     // if(mapViewScale1){
     //    console.log("yy-if")
@@ -330,8 +328,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     // }
 
     // console.log("yy-mapViewScale1",mapViewScale1)
-
-  }
+  };
 
   // useEffect(()=>{
   //   dispatch(setareaMapViewScales(mapViewScale));
@@ -339,11 +336,71 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   // },[mapViewScale])
 
   const customClassNames = {
-    base: ' text-black',  // Class for the overall container
-     
-   // inputWrapper: 'dark:text-white text-black', // Class for the input field wrapper
+    base: " text-black", // Class for the overall container
+
+    // inputWrapper: 'dark:text-white text-black', // Class for the input field wrapper
     // ... other elements you want to customize
   };
+
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+
+  const [customStyles, setcustomStyles] = useState({
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      zIndex: 50,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      border: "none",
+      width: "40vw",
+    },
+  });
+
+  // let customStyles = {
+  //   overlay: {
+  //     backgroundColor: "rgba(0, 0, 0, 0.6)",
+  //     zIndex: 50,
+  //   },
+  //   content: {
+  //     top: "50%",
+  //     left: "50%",
+  //     right: "auto",
+  //     bottom: "auto",
+  //     marginRight: "-50%",
+  //     transform: "translate(-50%, -50%)",
+  //     backgroundColor: "transparent",
+  //     border: "none",
+  //     width: "40vw",
+  //   },
+  // };
+
+  useEffect(() => {
+    if (isTabletOrMobile) {
+      setcustomStyles({
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          zIndex: 50,
+        },
+        content: {
+          top: "0",
+          left: "0",
+          right: "0",
+          bottom: "auto",
+          // marginRight: "-50%",
+          // transform: "translate(-50%, -50%)",
+          backgroundColor: "transparent",
+          border: "none",
+          width: "70%",
+        },
+      });
+    }
+  }, [isTabletOrMobile]);
 
   return (
     <div>
@@ -353,22 +410,22 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         // shouldCloseOnOverlayClick={false}
         style={customStyles}
         ariaHideApp={false}
+        // className="fixed inset-0  bg-gray-900 top-[50%] left-[50%] right-auto bottom-auto mr-[50%]"
       >
         <div className="flex-col gap-2  bg-white rounded-lg overflow-y-hidden min-h-[60vh] px-4 pb-4">
           <div className="flex items-center justify-center mb-4">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-               Filters
+              Filters
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
-              className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
+              className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6  text-black"
             />
           </div>
-           <div className="flex items-center justify-start mb-4">
+          <div className="flex items-center justify-start mb-4">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-               Exploration Areas
+              Exploration Areas
             </span>
-           
           </div>
           {/* <div className="flex items-center justify-center pl-8   overflow-x-hidden"> */}
           {/* <div className="mx-auto w-full max-w-[950px] min-w-[400px] min-h-[350px]"> */}
@@ -378,7 +435,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     Exploration Areas
                   </span> */}
           {/* <div className="flex-col gap-2   w-[16vw]"> */}
-          <div className="flex    justify-around  dark:text-white text-black">
+          <div className="flex    justify-around  dark:text-white text-black flex-wrap sm:flex-nowrap max-w-[300px] ">
             <div>
               <span className="block">Country</span>
               <Autocomplete
@@ -407,8 +464,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 inputValue={country}
                 defaultSelectedKey={country}
                 classNames={customClassNames}
-                inputProps={{ className: "dark:text-black text-black", ref:areaInputRef }}
-                
+                inputProps={{
+                  className: "dark:text-black text-black",
+                  ref: areaInputRef,
+                }}
               >
                 {countryList.map((countryObj) => (
                   <AutocompleteItem
@@ -455,7 +514,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                           >
                             {areaObj.area_name}
                           </AutocompleteItem>
-                        ))} */} 
+                        ))} */}
               </Autocomplete>
             </div>
           </div>

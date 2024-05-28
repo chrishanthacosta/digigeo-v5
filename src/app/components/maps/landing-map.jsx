@@ -17,7 +17,7 @@ import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import {
-  setIsAreaSideNavOpen,
+   
   setclickassetObject,
   setclickclaimObject,
   setclickfPropertyObject,
@@ -74,6 +74,8 @@ import GetRightAds from "../advertisements/get-right-ads";
 import Draggable from "react-draggable";
 import { SlLayers } from "react-icons/sl";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { useMediaQuery } from "react-responsive";
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -609,6 +611,9 @@ export const LandingMap = () => {
     (state) => state.landingMapReducer.lmapNavigationExtent
   );
 
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+
+
   useEffect(() => {
 
     if (lmapNavigationExtent.length > 0) {
@@ -1028,7 +1033,7 @@ export const LandingMap = () => {
   const onViewChange = useCallback((e) => {
     //setviewChangeCount((p)=> p+1)
     const scale = mapRatioScale({ map: mapRef.current });
-    console.log("qq2-0lmap-scale", scale)
+    
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
@@ -1061,12 +1066,10 @@ export const LandingMap = () => {
       console.log("qq2-1lmap-", vfObjs.length,)
       dispatch(setFPropertyFeatures(vfObjs));
 
-      if (vfObjs?.length > 0) {
-        // console.log("setIsLandingMapSideNavOpen(true",)
-        console.log("qq2-1.1-lmap-dispatch-sn",)
-        dispatch(setIsLandingMapSideNavOpen(true));
+      if (vfObjs?.length > 0 && !isTabletOrMobile) {
+          dispatch(setIsLandingMapSideNavOpen(true));
       } else {
-        console.log("qq2-1.2-lmap-dispatch-sn",)
+       
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
@@ -2360,7 +2363,7 @@ export const LandingMap = () => {
               />
             </Button>
 
-            <Popover placement="right-start" showArrow offset={10}>
+            {isTabletOrMobile && <Popover placement="right-start" showArrow offset={10}>
               <PopoverTrigger>
                 <Button isIconOnly variant="bordered" className="bg-blue-900">
                   <SlLayers
@@ -2422,7 +2425,7 @@ export const LandingMap = () => {
                   </div>
                 )}
               </PopoverContent>
-            </Popover>
+            </Popover>}
 
             {/* {!isLandingMapSideNavOpen && isSideNavOpen ? (
               <Button
@@ -2435,8 +2438,9 @@ export const LandingMap = () => {
             ) : null} */}
           </div>
         </div>
-        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full " >
-          <div className="hidden md:block">
+        
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap " >
+          <div className="hidden sm:block">
           <ButtonGroup
             variant="faded"
 
@@ -2469,15 +2473,7 @@ export const LandingMap = () => {
             >
               Terrain
             </Button>
-            {/* <Button
-            className={`${
-              mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
-          >
-            {curcenteredareaid}
-          </Button> */}
+           
           </ButtonGroup>
           </div>
           <div><p>{copyRight}</p></div>
@@ -2487,13 +2483,13 @@ export const LandingMap = () => {
             // className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
             color="primary"
           >
-            <Button className={`w-36 bg-blue-700 text-white`}>
+            <Button className={`w-28 bg-blue-700 text-white`}>
               {`Scale:${mapScale}`}
             </Button>
-            <Button className={`w-36 bg-blue-700 text-white`}>
+            <Button className={`w-28 bg-blue-700 text-white`}>
               {`Lat:${lat}`}
             </Button>
-            <Button className={`w-36 bg-blue-700 text-white`}>
+            <Button className={`w-28 bg-blue-700 text-white`}>
               {`Long:${long}`}
             </Button>
           </ButtonGroup>

@@ -131,7 +131,7 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
   return (
     // <TreeView data={treeViewData} />
 
-    <div className={`bg-white overflow-y-auto max-h-[${treeViewHeight}vh]`}>
+    <div className={`bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black`}>
       {/* <div className="max-h-[150px]"> */}
       {treeViewData?.map((node) => (
 

@@ -17,10 +17,10 @@ export const WorkspanSelector = () => {
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
-   console.log("call 2 selectedMap",selectedMap);
+ 
 
   return (
-    <div className="h-90">
+    <div className="h-full">
       <div
         style={{
           display:

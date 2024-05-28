@@ -6,10 +6,15 @@ import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import {
+  Button,
+  ButtonGroup,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react";
 import {
   setIsSideNavOpen,
-
   setCompanyZoomLevel,
   setCompanyInitialCenter,
   setCompanyLyrs,
@@ -57,7 +62,8 @@ import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import Draggable from "react-draggable";
-
+import { SlLayers } from "react-icons/sl";
+import { useMediaQuery } from "react-responsive";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -170,7 +176,7 @@ const svgOccurence = `<?xml version="1.0" encoding="utf-8"?>
             d="M2 1178 l-2 -1178 1223 2 c699 0 1162 4 1082 9 -468 25 -949 210 -1345 517 -117 91 -306 277 -401 395 -232 288 -391 602 -483 958 -24 94 -62 327 -69 424 -2 28 -4 -480 -5 -1127z" />
     </g>
 
-</svg>`
+</svg>`;
 
 const getText = function (feature, resolution) {
   // const type = dom.text.value;
@@ -203,7 +209,6 @@ const getText = function (feature, resolution) {
 const createTextStyle = function (feature, resolution) {
   // const font = 600 + " " + 65 + "/" + 65 + " " + "Sans Serif";
 
-
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
@@ -233,8 +238,6 @@ export const assetTypesColorMappings = [
     src: "svgicons/past_producer_black.svg",
   },
 ];
-
-
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -498,7 +501,7 @@ export const CompanyMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -509,7 +512,8 @@ export const CompanyMap = () => {
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
   const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
-  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] = useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
+    useState(300);
   const [maxResolutionPropPoints, setmaxResolutionPropPoints] = useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
@@ -530,7 +534,7 @@ export const CompanyMap = () => {
   const navigatedFPropertyRef = useRef();
 
   const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
-
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
   const dispatch = useDispatch();
 
@@ -571,7 +575,6 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.cmapNavigationExtent
   );
 
-
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
 
@@ -580,18 +583,19 @@ export const CompanyMap = () => {
       if (fPropSourceRef.current) {
         //set prev selected styles to null
         for (const fid of prevSelFeaturedProps) {
+          const fp = fPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("id") == fid);
 
-          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
-
-          fp?.setStyle(undefined)
-          mapRef.current.render()
+          fp?.setStyle(undefined);
+          mapRef.current.render();
         }
-        setprevSelFeaturedProps([])
+        setprevSelFeaturedProps([]);
 
         //highlight
-        const fp = fPropSourceRef.current.getFeatures().find(
-          (f) => f.get("id") == navigatedFPropId
-        );
+        const fp = fPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("id") == navigatedFPropId);
 
         if (fp) {
           // setunselectFProps((p) => p + 1)
@@ -600,9 +604,8 @@ export const CompanyMap = () => {
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp.setStyle(selectStyle);
-          mapRef.current.render()
-          setprevSelFeaturedProps([navigatedFPropId])
-
+          mapRef.current.render();
+          setprevSelFeaturedProps([navigatedFPropId]);
         }
       }
     }
@@ -611,45 +614,39 @@ export const CompanyMap = () => {
   useEffect(() => {
     //unselect prev styles
     for (const fid of prevSelFeaturedProps) {
+      const fp = fPropSourceRef?.current
+        ?.getFeatures()
+        .find((f) => f.get("id") == fid);
 
-      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
-
-      fp?.setStyle(undefined)
+      fp?.setStyle(undefined);
     }
     mapRef.current.render();
-    setprevSelFeaturedProps([])
+    setprevSelFeaturedProps([]);
 
     if (cmapNavigationHighlightFProps.length > 0) {
-
       for (const fpid of cmapNavigationHighlightFProps) {
-        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        const fp = fPropSourceRef?.current
+          ?.getFeatures()
+          .find((f) => f.get("id") == fpid);
         if (fp) {
-
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp?.setStyle(selectStyle);
         }
-
       }
-      setprevSelFeaturedProps(cmapNavigationHighlightFProps)
-
+      setprevSelFeaturedProps(cmapNavigationHighlightFProps);
     }
   }, [cmapNavigationHighlightFProps]);
 
   useEffect(() => {
-
     if (cmapNavigationExtent.length > 0) {
-
       mapRef.current?.getView()?.fit(cmapNavigationExtent, {
         padding: [100, 100, 100, 100],
         duration: 3000,
       });
-
-
     }
-  }, [cmapNavigationExtent])
-
+  }, [cmapNavigationExtent]);
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -851,7 +848,7 @@ export const CompanyMap = () => {
 
   useEffect(() => {
     if (companyFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, companyFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, companyFlyToLocation, () => {});
   }, [companyFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -1015,8 +1012,6 @@ export const CompanyMap = () => {
   }, [assetFeatures]);
 
   useEffect(() => {
-
-
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
 
@@ -1036,20 +1031,15 @@ export const CompanyMap = () => {
       });
   }, [fPropVectorLayerRef?.current]);
 
-
   useEffect(() => {
-
     const style = new Style({});
 
     if (cmapFpropLableVisible) {
       style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
       fPropVectorLayerLabelRef.current?.setStyle(style);
-    }
-    else {
+    } else {
       fPropVectorLayerLabelRef.current?.setStyle(style);
     }
-
-
   }, [fPropVectorLayerLabelRef.current, cmapFpropLableVisible]);
 
   // useEffect(() => {
@@ -1059,107 +1049,125 @@ export const CompanyMap = () => {
   //    updateWindowsHistory(newUrl);
   // }, [zoom, center]);
 
-  const mouseScrollEvent = useCallback((event) => {
-    const map = mapRef.current;
+  const mouseScrollEvent = useCallback(
+    (event) => {
+      const map = mapRef.current;
 
-    const setCenteredAreaViewScales = (center) => {
-      let closestArea = { d: 9999999999999999 };
-      console.log("qq-mapViewScaleReducer.mapViewScales", center)
-      mapViewScaleReducer.mapViewScales.forEach((a) => {
-        const dx = a.centroid_x - center[0];
-        const dy = a.centroid_y - center[1];
+      const setCenteredAreaViewScales = (center) => {
+        let closestArea = { d: 9999999999999999 };
+        console.log("qq-mapViewScaleReducer.mapViewScales", center);
+        mapViewScaleReducer.mapViewScales.forEach((a) => {
+          const dx = a.centroid_x - center[0];
+          const dy = a.centroid_y - center[1];
 
-        const d = Math.sqrt(dx * dx + dy * dy);
+          const d = Math.sqrt(dx * dx + dy * dy);
 
-        if (closestArea.d > d) {
-          closestArea = { area: a, d };
-        }
-      });
+          if (closestArea.d > d) {
+            closestArea = { area: a, d };
+          }
+        });
 
-      dispatch(setcompanyMapViewScales(closestArea.area));
-      if (!closestArea.area) {
-        // alert(`no area found `)
-        return
-      } else {
         dispatch(setcompanyMapViewScales(closestArea.area));
-        setcurcenteredareaid(closestArea.area.area_id);
+        if (!closestArea.area) {
+          // alert(`no area found `)
+          return;
+        } else {
+          dispatch(setcompanyMapViewScales(closestArea.area));
+          setcurcenteredareaid(closestArea.area.area_id);
+        }
+        // console.log("aa-curAreaId",closestArea.area.area_id)
+        const r = getMapResolution(
+          closestArea.area.featuredpropscale,
+          mapUnits
+        );
+        // console.log("rrr",r,closestArea.area  )
+
+        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+        //featured prop max-scale
+        setmaxResolutionFProp(r);
+
+        const r1 = getMapResolution(
+          closestArea.area.propoutlinescale,
+          mapUnits
+        );
+        // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+        //prop outline max-res
+        setmaxResolutionSyncOutlines(r1);
+
+        //asset max-res
+        // console.log("aa-assetscale",closestArea.area.assetscale)
+        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+        setmaxResolutionAssets(r2);
+        //asset max-res
+        // console.log("aa-claimscale",closestArea.area.claimscale)
+        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+        setmaxResolutionClaims(r3);
+        const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
+        setmaxResolutionPropPoints(r4);
+        //
+      };
+
+      // console.log("mapRef", mapRef.current?.getZoom());
+      const handleMoveEnd = () => {
+        // console.log("map", map);
+        const tmpZoomLevel = map.getView().getZoom();
+        const tmpinitialCenter = map.getView().getCenter();
+        dispatch(setCompanyZoomLevel(tmpZoomLevel));
+        dispatch(setCompanyInitialCenter(tmpinitialCenter));
+        setZoom(tmpZoomLevel);
+        setCenter(tmpinitialCenter);
+
+        setCenteredAreaViewScales(tmpinitialCenter);
+
+        //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+        updateWindowsHistoryCmap({
+          isSideNavOpen,
+          lyrs: companyLyrs,
+          zoom: tmpZoomLevel,
+          center: tmpinitialCenter,
+          sidenav2: isCompanySideNavOpen,
+          companyId: companyId,
+        });
+
+        // window.history.replaceState({}, "", newUrl);
+
+        // router.push(
+        //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+        // );
+        // console.log("tmpinitialCenter", tmpinitialCenter);
+        // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        // window.history.replaceState({}, "", newUrl);
+      };
+      if (mapViewScaleReducer.mapViewScales.length > 0) {
+        map?.on("moveend", handleMoveEnd);
       }
-      // console.log("aa-curAreaId",closestArea.area.area_id)
-      const r = getMapResolution(
-        closestArea.area.featuredpropscale,
-        mapUnits
-      );
-      // console.log("rrr",r,closestArea.area  )
 
-      // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
-      //featured prop max-scale
-      setmaxResolutionFProp(r);
-
-      const r1 = getMapResolution(
-        closestArea.area.propoutlinescale,
-        mapUnits
-      );
-      // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
-      //prop outline max-res
-      setmaxResolutionSyncOutlines(r1);
-
-      //asset max-res
-      // console.log("aa-assetscale",closestArea.area.assetscale)
-      const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-      setmaxResolutionAssets(r2);
-      //asset max-res
-      // console.log("aa-claimscale",closestArea.area.claimscale)
-      const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
-      setmaxResolutionClaims(r3);
-      const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
-      setmaxResolutionPropPoints(r4);
-      //
-    };
-
-    // console.log("mapRef", mapRef.current?.getZoom());
-    const handleMoveEnd = () => {
-      // console.log("map", map);
-      const tmpZoomLevel = map.getView().getZoom();
-      const tmpinitialCenter = map.getView().getCenter();
-      dispatch(setCompanyZoomLevel(tmpZoomLevel));
-      dispatch(setCompanyInitialCenter(tmpinitialCenter));
-      setZoom(tmpZoomLevel);
-      setCenter(tmpinitialCenter);
-
-      setCenteredAreaViewScales(tmpinitialCenter);
-
-      //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-
-      updateWindowsHistoryCmap({ isSideNavOpen, lyrs: companyLyrs, zoom: tmpZoomLevel, center: tmpinitialCenter, sidenav2: isCompanySideNavOpen, companyId: companyId });
-
-
-
-      // window.history.replaceState({}, "", newUrl);
-
-      // router.push(
-      //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
-      // );
-      // console.log("tmpinitialCenter", tmpinitialCenter);
-      // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-      // window.history.replaceState({}, "", newUrl);
-    };
-    if (mapViewScaleReducer.mapViewScales.length > 0) {
-      map?.on("moveend", handleMoveEnd);
-    }
-
-    return () => {
-      map?.un("moveend", handleMoveEnd);
-    };
-  }, [mapViewScaleReducer.mapViewScales]);
+      return () => {
+        map?.un("moveend", handleMoveEnd);
+      };
+    },
+    [mapViewScaleReducer.mapViewScales]
+  );
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    // updateWindowsHistory(newUrl);
+    updateWindowsHistoryCmap({
+      isSideNavOpen,
+      lyrs: companyLyrs,
+      zoom: companyZoomLevel,
+      center: companyInitialCenter,
+      sidenav2: isCompanySideNavOpen,
+      companyId: companyId,
+    });
+
     // dispatch(setUrlUpdate());
   };
 
@@ -1168,7 +1176,14 @@ export const CompanyMap = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${lyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    updateWindowsHistoryCmap({
+      isSideNavOpen,
+      lyrs: lyrs,
+      zoom: companyZoomLevel,
+      center: companyInitialCenter,
+      sidenav2: isCompanySideNavOpen,
+      companyId: companyId,
+    });
   };
 
   const image = new Icon({
@@ -1198,7 +1213,7 @@ export const CompanyMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1264,7 +1279,9 @@ export const CompanyMap = () => {
   const companyAssetOccurrenceVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetOccurrenceVisible
   );
-
+  const mapViewMode = useSelector(
+    (state) => state.mapSelectorReducer.mapViewMode
+  );
   //layer visibility useEffects
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(companyFpropLayerVisible);
@@ -1420,10 +1437,7 @@ export const CompanyMap = () => {
   // }
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-
-
-
-    let txtObjAreaName
+    let txtObjAreaName;
     if (resolution < 3000) {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
@@ -1438,11 +1452,8 @@ export const CompanyMap = () => {
         // maxAngle: maxAngle,
         overflow: true,
         // rotation: rotation,
-      })
+      });
     }
-
-
-
 
     const s = new Style({
       stroke: new Stroke({
@@ -1734,9 +1745,8 @@ export const CompanyMap = () => {
 
         dispatch(setclicksyncPropertyObject(syncPropertyObject));
       } else {
-
         //if sync_prop  is not selected try claimlink prop outline
-        // 
+        //
         const getClinkData = async (propid) => {
           const url =
             "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
@@ -1768,15 +1778,16 @@ export const CompanyMap = () => {
         };
 
         const selPropertyOutlineFeatures =
-          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
+          [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures);
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
-          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
 
-          const clinkDetails = await getClinkData(propId)
+          const clinkDetails = await getClinkData(propId);
 
-          console.log("clinkDetails", clinkDetails, propId)
+          console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
@@ -1795,17 +1806,10 @@ export const CompanyMap = () => {
             area,
           };
 
-
           dispatch(setclicksyncPropertyObject(syncPropertyObject1));
-
         } else {
-
           dispatch(setclicksyncPropertyObject(undefined));
         }
-
-
-
-
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1865,11 +1869,9 @@ export const CompanyMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 The Northern Miner`
+  const copyRight = `©2024 The Northern Miner`;
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
-
-
     const colour = feature.values_.colour;
 
     const fill = new Fill({
@@ -1912,14 +1914,12 @@ export const CompanyMap = () => {
     } else if (resolution > 125) {
       svgScale = 1.375;
       radius = 5;
-
     } else {
       svgScale = 1.5;
       radius = 10;
     }
     let image;
     let text;
-
 
     if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
       image = new Icon({
@@ -1948,7 +1948,6 @@ export const CompanyMap = () => {
       });
     }
 
-
     //set text Style
 
     text = createTextStyle(feature, resolution);
@@ -1970,13 +1969,14 @@ export const CompanyMap = () => {
     <div className="flex">
       <CompanySideNavbar />
       <div className="relative">
-        <div className="w-12 absolute left-0 top-0 z-50 ml-2">
+        <div className="w-12 absolute left-0 top-0 z-50">
           <div className="flex flex-col gap-4 mt-2">
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
                 // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
-                  }`}
+                className={`cursor-pointer text-white h-6 w-6 ${
+                  isSideNavOpen ? "" : "rotate-180"
+                }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -1998,61 +1998,134 @@ export const CompanyMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
+            {isTabletOrMobile && (
+              <Popover placement="right-start" showArrow offset={10}>
+                <PopoverTrigger>
+                  <Button isIconOnly variant="bordered" className="bg-blue-900">
+                    <SlLayers
+                      className={`text-white cursor-pointer h-6 w-6`}
+                      // onClick={onClickViewMinusZoom}
+                    />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className=" ">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p
+                        className="text-small font-bold text-foreground"
+                        {...titleProps}
+                      >
+                        Layers
+                      </p>
+                      <div className="mt-2 flex   gap-2 w-full">
+                        <ButtonGroup variant="faded" color="primary">
+                          <Button
+                            onClick={() => setLyrs("m")}
+                            className={`${
+                              companyLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Map
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("s")}
+                            className={`${
+                              companyLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Satellite
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("p")}
+                            className={`${
+                              companyLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Terrain
+                          </Button>
+                          {/* <Button
+            className={`${
+              mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+            }  w-22`}
+          >
+            {curcenteredareaid}
+          </Button> */}
+                        </ButtonGroup>
+                      </div>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
-        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap ">
+          <div className="hidden sm:flex">
+            <ButtonGroup
+              variant="faded"
+              // className="absolute left-0 bottom-1 z-50"
+              color="primary"
+            >
+              <Button
+                onClick={() => setLyrs("m")}
+                className={`${
+                  companyLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                } w-22`}
+              >
+                Map
+              </Button>
+              <Button
+                onClick={() => setLyrs("s")}
+                className={`${
+                  companyLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22 `}
+              >
+                Satellite
+              </Button>
+              <Button
+                onClick={() => setLyrs("p")}
+                className={`${
+                  companyLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22 `}
+              >
+                Terrain
+              </Button>
+            </ButtonGroup>
+          </div>
+          <div>
+            <p>{copyRight}</p>
+          </div>
 
           <ButtonGroup
             variant="faded"
-            // className="absolute left-0 bottom-1 z-50"
+            // className="fixed right-0 bottom-1 z-50 "
             color="primary"
           >
-            <Button
-              onClick={() => setLyrs("m")}
-              className={`${companyLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                } w-22`}
-            >
-              Map
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Scale:${mapScale}`}
             </Button>
-            <Button
-              onClick={() => setLyrs("s")}
-              className={`${companyLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22 `}
-            >
-              Satellite
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Lat:${lat}`}
             </Button>
-            <Button
-              onClick={() => setLyrs("p")}
-              className={`${companyLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22 `}
-            >
-              Terrain
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Long:${long}`}
             </Button>
           </ButtonGroup>
-          <div><p>{copyRight}</p></div>
         </div>
-
-        <ButtonGroup
-          variant="faded"
-          className="fixed right-0 bottom-1 z-50 "
-          color="primary"
-        >
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Scale:${mapScale}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Lat:${lat}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Long:${long}`}
-          </Button>
-        </ButtonGroup>
         <Draggable>
           <div
             ref={setPopup}
@@ -2102,13 +2175,28 @@ export const CompanyMap = () => {
         <Map
           ref={mapRef}
           style={{
+            // width: isSideNavOpen
+            //   ? isCompanySideNavOpen
+            //     ? "65vw"
+            //     : "83vw"
+            //   : "100vw",
+            // // width: isSideNavOpen ? (isLandingMapSideNavOpen ? "65vw" : "83vw") : "100vw", isCompanySideNavOpen
+            // height: "90vh",
             width: isSideNavOpen
               ? isCompanySideNavOpen
-                ? "65vw"
-                : "83vw"
+                ? mapViewMode == "HEADED"
+                  ? isTabletOrMobile
+                    ? "calc(100vw - 208px)"
+                    : "calc(100vw - 576px)"
+                  : "100vw"
+                : mapViewMode == "HEADED"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
+                : "100vw"
               : "100vw",
-            // width: isSideNavOpen ? (isLandingMapSideNavOpen ? "65vw" : "83vw") : "100vw", isCompanySideNavOpen
-            height: "90vh",
+
+            height: mapViewMode == "HEADED" ? "90vh" : "100vh",
           }}
           controls={[]}
           onSingleclick={onSingleclick}
@@ -2159,7 +2247,7 @@ export const CompanyMap = () => {
                 ref={claimLinkSourceRef}
                 minResolution={0}
                 maxResolution={maxResolutionSyncOutlines}
-              //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction} 
+                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>
@@ -2187,8 +2275,9 @@ export const CompanyMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={companyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
-
+            maxResolution={
+              companyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets
+            }
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
@@ -2196,7 +2285,11 @@ export const CompanyMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={companySyncPropLayerAlwaysVisible ? 40075016 : maxResolutionPropPoints}
+            maxResolution={
+              companySyncPropLayerAlwaysVisible
+                ? 40075016
+                : maxResolutionPropPoints
+            }
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>

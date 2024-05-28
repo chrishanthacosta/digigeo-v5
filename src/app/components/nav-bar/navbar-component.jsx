@@ -94,7 +94,7 @@ const HomeNavbar = () => {
   }
 
   return (
-    <div className="flex bg-black justify-between items-center w-screen relative p-1 border-b-8  border-navbar-border ">
+    <div className="flex bg-black justify-between items-center w-screen relative p-1 border-b-8  border-navbar-border h-[10vh]">
       <div id="left-tnm-logo">
         <Link href="https://northernminer.com" target="_blank" className="flex items-center hidden md:block ml-2">
           <Image
@@ -131,7 +131,7 @@ const HomeNavbar = () => {
                md:flex-row
                flex gap-6
                z-40
-               ${isMenuOpen ? "flex-col absolute top-8 left-1 w-full text-center bg-black gap-2" : "hidden"}`}
+               ${isMenuOpen ? "flex-col absolute top-20 left-0 w-full text-center bg-black gap-2" : "hidden"}`}
         >
           <li className="hover:bg-gray-600">
             <Button

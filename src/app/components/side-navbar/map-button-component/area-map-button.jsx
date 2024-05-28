@@ -101,7 +101,8 @@ const AreaMapButton = ({ onClick }) => {
           onClick={onClickLocal}
           className={`relative flex items-center  border rounded-lg border-amber-800 focus:outline-none ${
             selectedMap === "area"
-              ? "  bg-amber-300 w-10/12 "
+              ?  "  bg-amber-300 w-10/12 "
+                // "bg-amber-300 w-[200px]"
               : "  bg-amber-200 w-full"
           } text-sm sm:text-sm hover:bg-blue-900 text-black hover:text-white py-2 transition duration-150 ease-in`}
         >

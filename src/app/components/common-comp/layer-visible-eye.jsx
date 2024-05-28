@@ -9,22 +9,26 @@ import { TbEyeOff } from "react-icons/tb";
 const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
   return (
     <div>
-      <div
-        className="relative items-center bg-white flex pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm  w-full transition duration-150 ease-in"
-      >
+      <div className="relative items-center bg-white flex pl-0 sm:pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm  w-full transition duration-150 ease-in">
         <span className="mr-2">{children}</span>
-        <h3 className="  text-black m-0 mr-[10px]">{title}</h3>
-        <div className="flex absolute right-0 mr-4 gap-4">
+        <h3 className="  text-black m-0 mr-[10px] w-10">{title}</h3>
+        <div className="flex absolute right-0 mr-2 sm:mr-4 gap-4">
           {/* <span onClick={toggleAccordion} className="cursor-pointer"> 
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
-       
+
           <span className="">
             {eyeState && (
-              <TbEye className=" cursor-pointer hover:scale-125" onClick={onClick} />
+              <TbEye
+                className=" cursor-pointer hover:scale-125"
+                onClick={onClick}
+              />
             )}
             {!eyeState && (
-              <TbEyeOff className=" cursor-pointer hover:scale-125" onClick={onClick} />
+              <TbEyeOff
+                className=" cursor-pointer hover:scale-125"
+                onClick={onClick}
+              />
             )}
           </span>
         </div>

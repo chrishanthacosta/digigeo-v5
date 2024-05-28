@@ -17,7 +17,7 @@ import {
   setPropertiesLyrs,
   setPropertiesZoomLevel,
   setSelectedMap,
-  setmapViewMode
+  setmapViewMode,
 } from "../../../store/map-selector/map-selector-slice";
 import {
   setAreaCountry,
@@ -31,16 +31,13 @@ import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/proper
 import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
 import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
 // import { MapViewMode } from "@/store/types";
-import { useMediaQuery } from 'react-responsive'
-
-
-
+import { useMediaQuery } from "react-responsive";
 
 export const LandingPage = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
@@ -61,26 +58,23 @@ export const LandingPage = () => {
   // const mapViewMode = searchParams.get("mvm") ?? MapViewMode.HEADLESS;
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
-  })
-  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
-  const isTabletOrMobile =  useMediaQuery({ query: '(max-width: 480px)' })
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
-  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
-  
-  console.log("isTabletOrMobile",isTabletOrMobile,)
+    query: "(min-width: 1224px)",
+  });
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
+
+  console.log("isTabletOrMobile", isTabletOrMobile);
 
   useEffect(() => {
     dispatch(fetchmapViewScales());
     updateMapSelectorStore();
-    
-
   }, []);
 
   const updateMapSelectorStore = async () => {
-   // console.log("mapType",mapType,)
+    // console.log("mapType",mapType,)
     if (mapType) {
-
       dispatch(setareaSelectedAreaId(areaid));
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
@@ -88,14 +82,27 @@ export const LandingPage = () => {
 
       switch (mapType) {
         case "area":
-          dispatch(
-            setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
-          );
-          dispatch(
-            setIsAreaSideNavOpen(
-              String(isSecondNavOpen).toLowerCase() === "true"
-            )
-          );
+        
+          if (isTabletOrMobile) {
+              dispatch(
+                setIsAreaSideNavOpen(
+                  false
+                )
+              );
+                dispatch(
+                  setIsSideNavOpen(false)
+                );
+          } else {
+            dispatch(
+              setIsAreaSideNavOpen(
+                String(isSecondNavOpen).toLowerCase() === "true"
+              )
+            );
+              dispatch(
+                setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+              );
+          }
+
           dispatch(setAreaLyrs(mapLyrs));
           dispatch(setAreaZoomLevel(mapZoom));
           const tmpMapCenter1 = mapCenter.split(",").map(Number);
@@ -135,12 +142,8 @@ export const LandingPage = () => {
           break;
 
         default:
-         
           if (isTabletOrMobile) {
-            
-            dispatch(
-              setIsSideNavOpen(false)
-            );
+            dispatch(setIsSideNavOpen(false));
             // dispatch(
             //   setIsPropertiesSideNavOpen(
             //     String(isSecondNavOpen).toLowerCase() === "false"
@@ -156,7 +159,7 @@ export const LandingPage = () => {
             //   )
             // );
           }
-          
+
           dispatch(setPropertiesLyrs(mapLyrs));
           dispatch(setPropertiesZoomLevel(mapZoom));
           const tmpMapCenter4 = mapCenter.split(",").map(Number);
@@ -167,9 +170,7 @@ export const LandingPage = () => {
       // window.history.replaceState({}, "", newUrl);
     } else {
       if (isTabletOrMobile) {
-        dispatch(
-          setIsSideNavOpen(String(isNavOpen).toLowerCase() === "false")
-        );
+        dispatch(setIsSideNavOpen(String(isNavOpen).toLowerCase() === "false"));
         // dispatch(
         //   setIsPropertiesSideNavOpen(
         //     String(isSecondNavOpen).toLowerCase() === "false"
@@ -180,11 +181,15 @@ export const LandingPage = () => {
   };
 
   return (
-    <div className="w-full flex bg-white   h-[90vh]">
-      <div className={`${isSideNavOpen ? "z-10 h-full" : "fixed top-15 left-0 z-10"}    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}>
+    <div className="w-screen flex bg-white   h-[90vh] ">
+      <div
+        className={`${
+          isSideNavOpen ? "z-10 h-full" : "fixed top-15 left-0 z-10"
+        }    ${mapViewMode == "HEADED" ? "block" : "hidden"} grow-0`}
+      >
         <SideNavbar />
       </div>
-      <div className="z-0">
+      <div className="z-0 grow">
         <WorkspanSelector />
       </div>
     </div>

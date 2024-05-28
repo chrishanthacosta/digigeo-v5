@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} overflow-hidden h-full`}>
+      <body className={`${inter.className} overflow-hidden h-screen`}>
         {/* <body className={inter.className}> */}
         <LayoutClientComponent>
           <HomeNavbar />

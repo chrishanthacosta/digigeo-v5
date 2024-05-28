@@ -6,7 +6,13 @@ import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import {
+  Button,
+  ButtonGroup,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react";
 import {
   setAreaInitialCenter,
   setAreaLyrs,
@@ -65,7 +71,8 @@ import { usePathname } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Draggable from "react-draggable";
-// import { Style, Icon, Stroke, Fill, Circle, Text } from "ol/style";
+import { useMediaQuery } from "react-responsive";
+import { SlLayers } from "react-icons/sl";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -568,15 +575,17 @@ export const AreaMap = () => {
   const [claimObject, setclaimObject] = useState();
   const [mapUnits, setmapUnits] = useState("m");
   const [mapViewScales, setmapViewScales] = useState([]);
-
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
   //init useeffect
   useEffect(() => {
-
     mouseScrollEvent();
+    // if(isTabletOrMobile){
+    //   console.log("amap-dispatch")
+    // dispatch(setIsAreaSideNavOpen(false));
 
-   // console.log("mapViewMode-amap", mapViewMode,)
-
+    // }
+    // console.log("mapViewMode-amap", mapViewMode,)
   }, []);
 
   // const pathname2 = usePathname()
@@ -1080,7 +1089,6 @@ export const AreaMap = () => {
     }
   }, [amapNavigationExtent]);
 
-
   useEffect(() => {
     fPropVectorLayerRef?.current
       ?.getSource()
@@ -1224,22 +1232,22 @@ export const AreaMap = () => {
     }
     window.history.replaceState({}, "", newUrl);
   };
-  const openAreaNav = () => {
-    //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-    // window.history.replaceState({}, "", newUrl);
-    //updateWindowsHistory(newUrl);
-    updateWindowsHistoryAmap({
-      isSideNavOpen,
-      areaLyrs: mapLyrs,
-      areaZoomLevel,
-      areaInitialCenter,
-      country: areaCountry,
-      miningArea: areaName,
-      areaId: areaSelectedAreaId,
-    });
+  // const openAreaNav = () => {
+  //   //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+  //   // window.history.replaceState({}, "", newUrl);
+  //   //updateWindowsHistory(newUrl);
+  //   updateWindowsHistoryAmap({
+  //     isSideNavOpen,
+  //     areaLyrs: mapLyrs,
+  //     areaZoomLevel,
+  //     areaInitialCenter,
+  //     country: areaCountry,
+  //     miningArea: areaName,
+  //     areaId: areaSelectedAreaId,
+  //   });
 
-    dispatch(setIsAreaSideNavOpen(true));
-  };
+  //   dispatch(setIsAreaSideNavOpen(true));
+  // };
 
   const image = new Icon({
     src: "./sync-prop.svg",
@@ -2088,8 +2096,10 @@ export const AreaMap = () => {
     return st;
   };
 
+  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+
   return (
-    <div className="flex">
+    <div className="flex ">
       <ToastContainer
         position="top-center"
         autoClose={1000}
@@ -2105,8 +2115,8 @@ export const AreaMap = () => {
       <AreaSideNavbar
         className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"}`}
       />
-      <div className="relative">
-        <div className="w-12 absolute left-0 top-0 z-50 ml-2">
+      <div className="relative ">
+        <div className="w-12 absolute left-0 top-0 z-50 ">
           <div className="flex flex-col gap-4 mt-2">
             <Button
               isIconOnly
@@ -2141,6 +2151,73 @@ export const AreaMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
+            {isTabletOrMobile && (
+              <Popover placement="right-start" showArrow offset={10}>
+                <PopoverTrigger>
+                  <Button isIconOnly variant="bordered" className="bg-blue-900">
+                    <SlLayers
+                      className={`text-white cursor-pointer h-6 w-6`}
+                      // onClick={onClickViewMinusZoom}
+                    />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className=" ">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p
+                        className="text-small font-bold text-foreground"
+                        {...titleProps}
+                      >
+                        Layers
+                      </p>
+                      <div className="mt-2 flex   gap-2 w-full">
+                        <ButtonGroup variant="faded" color="primary">
+                          <Button
+                            onClick={() => setLyrs("m")}
+                            className={`${
+                              mapLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Map
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("s")}
+                            className={`${
+                              mapLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Satellite
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("p")}
+                            className={`${
+                              mapLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Terrain
+                          </Button>
+                          {/* <Button
+            className={`${
+              mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+            }  w-22`}
+          >
+            {curcenteredareaid}
+          </Button> */}
+                        </ButtonGroup>
+                      </div>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
             {/* <Tooltip
               content={
                 <div className="px-1 py-2">
@@ -2170,72 +2247,69 @@ export const AreaMap = () => {
             ) : null} */}
           </div>
         </div>
-        <div className="flex items-end fixed   bottom-1 z-50  ">
-          <ButtonGroup
-            variant="faded"
-            // className="fixed  bottom-1 z-50  "
-            color="primary"
-          >
-            <Button
-              onClick={() => setLyrs("m")}
-              className={`${
-                mapLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-              }  w-22`}
+        {/* <div className="flex items-end fixed   bottom-1 z-50  "> */}
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap ">
+          <div className="hidden sm:flex">
+            <ButtonGroup
+              variant="faded"
+              // className="fixed  bottom-1 z-50  "
+              color="primary"
             >
-              Map
-            </Button>
-            <Button
-              onClick={() => setLyrs("s")}
-              className={`${
-                mapLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-              }  w-22`}
-            >
-              Satellite
-            </Button>
-            <Button
-              onClick={() => setLyrs("p")}
-              className={`${
-                mapLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-              }  w-22`}
-            >
-              Terrain
-            </Button>
-            {/* <Button
-            onClick={() => setLyrs("p")}
-            className={`${
-              mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
-          >
-            {areaSelectedAreaId}
-          </Button> */}
-          </ButtonGroup>
+              <Button
+                onClick={() => setLyrs("m")}
+                className={`${
+                  mapLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Map
+              </Button>
+              <Button
+                onClick={() => setLyrs("s")}
+                className={`${
+                  mapLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Satellite
+              </Button>
+              <Button
+                onClick={() => setLyrs("p")}
+                className={`${
+                  mapLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Terrain
+              </Button>
+            </ButtonGroup>
+          </div>
+
           <div>
             <p>{copyRight}</p>
           </div>
+
+          <ButtonGroup
+            variant="faded"
+            // className="fixed right-[85px] bottom-1 z-50 "
+            
+            color="primary"
+          >
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Scale:${mapScale}`}
+            </Button>
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Lat:${lat}`}
+            </Button>
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Long:${long}`}
+            </Button>
+          </ButtonGroup>
+
         </div>
-        <ButtonGroup
-          variant="faded"
-          className="fixed right-[85px] bottom-1 z-50 "
-          color="primary"
-        >
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Scale:${mapScale}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Lat:${lat}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Long:${long}`}
-          </Button>
-        </ButtonGroup>
         <Draggable>
           <div
             ref={setPopup}
@@ -2269,7 +2343,7 @@ export const AreaMap = () => {
             >
               ✖
             </button>
-            <div id="popup-contenta">
+            <div id="popup-contenta" className="z-0">
               {/* <p>Info:</p> */}
               {clickDataLoaded && (
                 <AreaMapClickPopup
@@ -2297,10 +2371,14 @@ export const AreaMap = () => {
             width: isSideNavOpen
               ? isAreaSideNavOpen
                 ? mapViewMode == "HEADED"
-                  ? "65vw"
+                  ? isTabletOrMobile
+                    ? "calc(100vw - 208px)"
+                    : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                ? "calc(100vw - 320px)"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
                 : "100vw"
               : "100vw",
 

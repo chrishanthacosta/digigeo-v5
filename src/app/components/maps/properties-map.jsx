@@ -6,7 +6,13 @@ import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import {
+  Button,
+  ButtonGroup,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react";
 import {
   setPropertiesInitialCenter,
   setPropertiesZoomLevel,
@@ -21,7 +27,7 @@ import {
   setclickfPropertyObject,
   setclicksyncPropertyObject,
   setpropertyCurrentScale,
-  setpropertyMapViewScales
+  setpropertyMapViewScales,
 } from "../../../store/properties-map/properties-map-slice";
 
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
@@ -60,9 +66,8 @@ import { METERS_PER_UNIT } from "ol/proj/Units";
 // import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import Draggable from "react-draggable";
-
-
-
+import { useMediaQuery } from "react-responsive";
+import { SlLayers } from "react-icons/sl";
 
 const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -175,7 +180,7 @@ const svgOccurence = `<?xml version="1.0" encoding="utf-8"?>
             d="M2 1178 l-2 -1178 1223 2 c699 0 1162 4 1082 9 -468 25 -949 210 -1345 517 -117 91 -306 277 -401 395 -232 288 -391 602 -483 958 -24 94 -62 327 -69 424 -2 28 -4 -480 -5 -1127z" />
     </g>
 
-</svg>`
+</svg>`;
 
 const getText = function (feature, resolution) {
   // const type = dom.text.value;
@@ -208,7 +213,6 @@ const getText = function (feature, resolution) {
 const createTextStyle = function (feature, resolution) {
   // const font = 600 + " " + 65 + "/" + 65 + " " + "Sans Serif";
 
-
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
@@ -239,17 +243,11 @@ export const assetTypesColorMappings = [
   },
 ];
 
-
-
-
 const fill = new Fill();
 const stroke = new Stroke({
   color: "rgba(0,0,0,0.8)",
   width: 2,
 });
-
-
-
 
 const propertyMApFPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   const context = state.context;
@@ -314,7 +312,6 @@ const getMapResolution = (scale, unit) => {
   return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
 };
 
-
 //clustring - sync prop
 // export const coordinates = (() => {
 //   const count = 20000;
@@ -342,14 +339,13 @@ export const PropertiesMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
   const [claimObject, setclaimObject] = useState(undefined);
   const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
-
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
@@ -373,8 +369,6 @@ export const PropertiesMap = () => {
 
   const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
-
-
   const propertyFlyToLocation = useSelector(
     (state) => state.propertiesMapReducer.propertyMapFlyToLocation
   );
@@ -387,13 +381,10 @@ export const PropertiesMap = () => {
     (state) => state.propertiesMapReducer.pmapNavigationExtent
   );
 
-
-
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
   const [distance, setDistance] = useState(40);
   const [minDistance, setMinDistance] = useState(20);
-
 
   const [mapUnits, setmapUnits] = useState("m");
 
@@ -403,27 +394,26 @@ export const PropertiesMap = () => {
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
     useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
-
-
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
   useEffect(() => {
     if (navigatedFPropId != 0) {
       if (fPropSourceRef.current) {
-
         //set prev selected styles to null
         for (const fid of prevSelFeaturedProps) {
+          const fp = fPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("id") == fid);
 
-          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
-
-          fp?.setStyle(undefined)
-          mapRef.current.render()
+          fp?.setStyle(undefined);
+          mapRef.current.render();
         }
-        setprevSelFeaturedProps([])
+        setprevSelFeaturedProps([]);
 
         //highlight
-        const fp = fPropSourceRef.current.getFeatures().find(
-          (f) => f.get("id") == navigatedFPropId
-        );
+        const fp = fPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("id") == navigatedFPropId);
         if (fp) {
           // setunselectFProps((p) => p + 1)
 
@@ -431,11 +421,9 @@ export const PropertiesMap = () => {
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp.setStyle(selectStyle);
-          mapRef.current.render()
-          setprevSelFeaturedProps([navigatedFPropId])
-
+          mapRef.current.render();
+          setprevSelFeaturedProps([navigatedFPropId]);
         }
-
 
         // const fp = navigatedFPropertyRef.current.find(
         //   (f) => f.get("id") == navigatedFPropId
@@ -453,45 +441,39 @@ export const PropertiesMap = () => {
   useEffect(() => {
     //unselect prev styles
     for (const fid of prevSelFeaturedProps) {
+      const fp = fPropSourceRef?.current
+        ?.getFeatures()
+        .find((f) => f.get("id") == fid);
 
-      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
-
-      fp?.setStyle(undefined)
+      fp?.setStyle(undefined);
     }
     mapRef.current.render();
-    setprevSelFeaturedProps([])
+    setprevSelFeaturedProps([]);
 
     if (pmapNavigationHighlightFProps.length > 0) {
-
       for (const fpid of pmapNavigationHighlightFProps) {
-        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        const fp = fPropSourceRef?.current
+          ?.getFeatures()
+          .find((f) => f.get("id") == fpid);
         if (fp) {
-
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp?.setStyle(selectStyle);
         }
-
       }
-      setprevSelFeaturedProps(pmapNavigationHighlightFProps)
-
+      setprevSelFeaturedProps(pmapNavigationHighlightFProps);
     }
   }, [pmapNavigationHighlightFProps]);
 
   useEffect(() => {
-
     if (pmapNavigationExtent.length > 0) {
-
       mapRef.current?.getView()?.fit(pmapNavigationExtent, {
         padding: [100, 100, 100, 100],
         duration: 3000,
       });
-
-
     }
-  }, [pmapNavigationExtent])
-
+  }, [pmapNavigationExtent]);
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -692,7 +674,7 @@ export const PropertiesMap = () => {
 
   useEffect(() => {
     if (propertyFlyToLocation?.length > 0) {
-      flyTo(mapViewRef?.current, propertyFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, propertyFlyToLocation, () => {});
     }
   }, [propertyFlyToLocation]);
 
@@ -771,7 +753,6 @@ export const PropertiesMap = () => {
     (state) => state.propertiesMapReducer.pmapAreaLableVisible
   );
 
-
   useEffect(() => {
     //set style
     const style = new Style({});
@@ -786,11 +767,9 @@ export const PropertiesMap = () => {
     if (pmapFpropLableVisible) {
       style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
       fPropVectorLayerLabelRef.current?.setStyle(style);
-    }
-    else {
+    } else {
       fPropVectorLayerLabelRef.current?.setStyle(style);
     }
-
   }, [fPropVectorLayerLabelRef.current, pmapFpropLableVisible]);
 
   useEffect(() => {
@@ -875,8 +854,6 @@ export const PropertiesMap = () => {
 
   //init useeffect
   useEffect(() => {
-
-
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
 
@@ -910,99 +887,107 @@ export const PropertiesMap = () => {
   //    updateWindowsHistory(newUrl);
   // }, [zoom, center]);
 
-  const mouseScrollEvent = useCallback((event) => {
-    const map = mapRef.current;
+  const mouseScrollEvent = useCallback(
+    (event) => {
+      const map = mapRef.current;
 
-    const setCenteredAreaViewScales = (center) => {
-      // console.log("popl2", mapViewScaleReducer.mapViewScales )
-      let closestArea = { d: 999999999999 };
-      mapViewScaleReducer.mapViewScales.forEach((a) => {
-        //console.log("popl2-q1")
-        const dx = a.centroid_x - center[0];
-        const dy = a.centroid_y - center[1];
+      const setCenteredAreaViewScales = (center) => {
+        // console.log("popl2", mapViewScaleReducer.mapViewScales )
+        let closestArea = { d: 999999999999 };
+        mapViewScaleReducer.mapViewScales.forEach((a) => {
+          //console.log("popl2-q1")
+          const dx = a.centroid_x - center[0];
+          const dy = a.centroid_y - center[1];
 
-        const d = Math.sqrt(dx * dx + dy * dy);
+          const d = Math.sqrt(dx * dx + dy * dy);
 
-        if (closestArea.d > d) {
-          //console.log("popl2-q2")
-          closestArea = { area: a, d };
-        }
-      });
-      console.log("popl23-closestArea.area", closestArea.area)
-      dispatch(setpropertyMapViewScales(closestArea.area));
+          if (closestArea.d > d) {
+            //console.log("popl2-q2")
+            closestArea = { area: a, d };
+          }
+        });
+        console.log("popl23-closestArea.area", closestArea.area);
+        dispatch(setpropertyMapViewScales(closestArea.area));
 
-      setcurcenteredareaid(closestArea.area.area_id);
-      // console.log("aa-curAreaId",closestArea.area.area_id)
-      const r = getMapResolution(
-        closestArea.area.featuredpropscale,
-        mapUnits
-      );
-      // console.log("rrr",r,closestArea.area  )
+        setcurcenteredareaid(closestArea.area.area_id);
+        // console.log("aa-curAreaId",closestArea.area.area_id)
+        const r = getMapResolution(
+          closestArea.area.featuredpropscale,
+          mapUnits
+        );
+        // console.log("rrr",r,closestArea.area  )
 
-      // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
-      //featured prop max-scale
-      setmaxResolutionFProp(r);
+        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+        //featured prop max-scale
+        setmaxResolutionFProp(r);
 
-      const r1 = getMapResolution(
-        closestArea.area.propoutlinescale,
-        mapUnits
-      );
-      // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
-      //prop outline max-res
-      setmaxResolutionSyncOutlines(r1);
+        const r1 = getMapResolution(
+          closestArea.area.propoutlinescale,
+          mapUnits
+        );
+        // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+        //prop outline max-res
+        setmaxResolutionSyncOutlines(r1);
 
-      //asset max-res
-      // console.log("aa-assetscale",closestArea.area.assetscale)
-      const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-      setmaxResolutionAssets(r2);
-      //asset max-res
-      // console.log("aa-claimscale",closestArea.area.claimscale)
-      const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
-      setmaxResolutionClaims(r3);
-      //
-    };
+        //asset max-res
+        // console.log("aa-assetscale",closestArea.area.assetscale)
+        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+        setmaxResolutionAssets(r2);
+        //asset max-res
+        // console.log("aa-claimscale",closestArea.area.claimscale)
+        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+        setmaxResolutionClaims(r3);
+        //
+      };
 
-    // console.log("mapRef", mapRef.current?.getZoom());
-    const handleMoveEnd = () => {
-      // console.log("map", map);
-      const tmpZoomLevel = map.getView().getZoom();
-      const tmpinitialCenter = map.getView().getCenter();
-      dispatch(setPropertiesZoomLevel(tmpZoomLevel));
-      dispatch(setPropertiesInitialCenter(tmpinitialCenter));
-      setZoom(tmpZoomLevel);
-      setCenter(tmpinitialCenter);
+      // console.log("mapRef", mapRef.current?.getZoom());
+      const handleMoveEnd = () => {
+        // console.log("map", map);
+        const tmpZoomLevel = map.getView().getZoom();
+        const tmpinitialCenter = map.getView().getCenter();
+        dispatch(setPropertiesZoomLevel(tmpZoomLevel));
+        dispatch(setPropertiesInitialCenter(tmpinitialCenter));
+        setZoom(tmpZoomLevel);
+        setCenter(tmpinitialCenter);
 
-      setCenteredAreaViewScales(tmpinitialCenter);
+        setCenteredAreaViewScales(tmpinitialCenter);
 
-      //       let newUrl;
-      // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        //       let newUrl;
+        // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
-      updateWindowsHistoryCmap({ isSideNavOpen, lyrs: propertiesLyrs, zoom: tmpZoomLevel, center: tmpinitialCenter, sidenav2: isPropertiesSideNavOpen });
+        updateWindowsHistoryCmap({
+          isSideNavOpen,
+          lyrs: propertiesLyrs,
+          zoom: tmpZoomLevel,
+          center: tmpinitialCenter,
+          sidenav2: isPropertiesSideNavOpen,
+        });
 
+        // router.push(
+        //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+        // );
+        // console.log("tmpinitialCenter", tmpinitialCenter);
+        // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        // window.history.replaceState({}, "", newUrl);
+      };
 
-      // router.push(
-      //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
-      // );
-      // console.log("tmpinitialCenter", tmpinitialCenter);
-      // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-      // window.history.replaceState({}, "", newUrl);
-    };
-
-    if (mapViewScaleReducer.mapViewScales.length > 0) {
-
-      map?.on("moveend", handleMoveEnd);
-    }
-    return () => {
-      map?.un("moveend", handleMoveEnd);
-    };
-  }, [mapViewScaleReducer.mapViewScales]);
+      if (mapViewScaleReducer.mapViewScales.length > 0) {
+        map?.on("moveend", handleMoveEnd);
+      }
+      return () => {
+        map?.un("moveend", handleMoveEnd);
+      };
+    },
+    [mapViewScaleReducer.mapViewScales]
+  );
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
@@ -1030,7 +1015,7 @@ export const PropertiesMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1452,10 +1437,7 @@ export const PropertiesMap = () => {
   }, [propertyMapAssetOccurrenceVisible]);
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-
-
-
-    let txtObjAreaName
+    let txtObjAreaName;
     if (resolution < 3000) {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
@@ -1470,11 +1452,8 @@ export const PropertiesMap = () => {
         // maxAngle: maxAngle,
         overflow: true,
         // rotation: rotation,
-      })
+      });
     }
-
-
-
 
     const s = new Style({
       stroke: new Stroke({
@@ -1605,6 +1584,10 @@ export const PropertiesMap = () => {
 
     return style;
   };
+
+  const mapViewMode = useSelector(
+    (state) => state.mapSelectorReducer.mapViewMode
+  );
 
   //single click
   useEffect(() => {
@@ -1765,9 +1748,8 @@ export const PropertiesMap = () => {
 
         dispatch(setclicksyncPropertyObject(syncPropertyObject));
       } else {
-
         //if sync_prop  is not selected try claimlink prop outline
-        // 
+        //
         const getClinkData = async (propid) => {
           const url =
             "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
@@ -1799,15 +1781,16 @@ export const PropertiesMap = () => {
         };
 
         const selPropertyOutlineFeatures =
-          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
+          [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures);
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
-          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
 
-          const clinkDetails = await getClinkData(propId)
+          const clinkDetails = await getClinkData(propId);
 
-          console.log("clinkDetails", clinkDetails, propId)
+          console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
@@ -1826,15 +1809,10 @@ export const PropertiesMap = () => {
             area,
           };
 
-
           dispatch(setclicksyncPropertyObject(syncPropertyObject1));
         } else {
-
           dispatch(setclicksyncPropertyObject(undefined));
         }
-
-
-
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1869,6 +1847,7 @@ export const PropertiesMap = () => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
   };
+
   const onClickViewMinusZoom = () => {
     const curZoom = mapViewRef.current.getZoom();
     mapViewRef.current.setZoom(curZoom - 1);
@@ -1890,255 +1869,253 @@ export const PropertiesMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 The Northern Miner`
+  const copyRight = `©2024 The Northern Miner`;
 
-  const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
-    (feature, resolution) => {
+  const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction = (
+    feature,
+    resolution
+  ) => {
+    //console.log("feature:", feature);
+    //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
+    //  spanClaim1.textContent = "visibility";
+    // const r = Math.random() * 255;
+    // const g = Math.random() * 255;
+    // const b = Math.random() * 255;
+    //console.log("fill", feature.values_.hatch);
+    const colour = "#e8b52a"; //feature.values_.colour;
+    //console.log("colour", colour);
+    // const fill = new Fill({
+    //   color: `rgba(${r},${g},${b},1)`,
+    //   opacity:1,
+    // });
+    // const fill = new Fill({
+    //   // color: `rgba(${r},${g},${b},1)`,
 
-      //console.log("feature:", feature);
-      //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
-      //  spanClaim1.textContent = "visibility";
-      // const r = Math.random() * 255;
-      // const g = Math.random() * 255;
-      // const b = Math.random() * 255;
-      //console.log("fill", feature.values_.hatch);
-      const colour = "#e8b52a"; //feature.values_.colour;
-      //console.log("colour", colour);
-      // const fill = new Fill({
-      //   color: `rgba(${r},${g},${b},1)`,
-      //   opacity:1,
-      // });
-      // const fill = new Fill({
-      //   // color: `rgba(${r},${g},${b},1)`,
+    //   color:colour,
+    //   opacity: 1,
+    // });
+    let fill = new Fill({
+      // color: `rgba(${r},${g},${b},1)`,
 
-      //   color:colour,
-      //   opacity: 1,
-      // });
-      let fill = new Fill({
-        // color: `rgba(${r},${g},${b},1)`,
+      color: colour,
+      opacity: 1,
+    });
 
-        color: colour,
-        opacity: 1,
+    const stroke = new Stroke({
+      color: "#8B4513",
+      width: 1.25,
+    });
+    //console.log("res22", resolution);
+
+    // let svgScale = 0;
+    // let radius = 0;
+    //  const spanClaim = document.getElementById("spanClaimsLayerVisibility");
+    //  spanClaim.textContent = "visibility_off";
+    // if (resolution > 1000) {
+    //   svgScale = 0.5;
+    //   radius = 2;
+    // } else if (resolution > 937.5) {
+    //   svgScale = 0.562;
+    //   radius = 5;
+    // } else if (resolution > 875) {
+    //   svgScale = 0.625;
+    //   radius = 5;
+    // } else if (resolution > 750) {
+    //   svgScale = 0.75;
+    //   radius = 5;
+    // } else if (resolution > 625) {
+    //   svgScale = 0.875;
+    //   radius = 5;
+    // } else if (resolution > 500) {
+    //   svgScale = 1;
+    //   radius = 5;
+    // } else if (resolution > 375) {
+    //   svgScale = 1.125;
+    //   radius = 5;
+    // } else if (resolution > 250) {
+    //   svgScale = 1.25;
+    //   radius = 5;
+    // } else if (resolution > 125) {
+    //   svgScale = 1.375;
+    //   radius = 5;
+    //   // const spanClaim = document.getElementById("spanClaimsLayerVisibility");
+    //   // spanClaim.textContent = "visibility";
+    // } else {
+    //   svgScale = 1.5;
+    //   radius = 10;
+    // }
+    let image;
+    let text;
+
+    // if (feature.values_.asset_type == assetTypesColorMappings[0].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[0].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[0].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgZone),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[2].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[2].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[2].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[3].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[3].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[3].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[4].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgDeposit),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[5].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[5].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[5].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[6].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[6].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[6].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[7].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[7].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[7].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
+    //     scale: svgScale,
+    //   });
+    // } else if (feature.values_.asset_type == assetTypesColorMappings[9].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgHisMine),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: "pink" }),
+    //     stroke: new Stroke({ color: "pink", width: 3 }),
+    //   });
+    // }
+
+    //set text Style
+
+    // text = createTextStyle(feature, resolution);
+    image = new Circle({
+      radius: 9,
+      fill: new Fill({ color: colour }),
+      // stroke: new Stroke({ color: "#8B4513", width: 3 }),
+    });
+
+    let textObj;
+    const size = feature.get("features").length;
+    if (size == 1 && resolution < 5000) {
+      const propName = feature.get("features")[0].get("prop_name");
+      textObj = new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font: "bold 16px serif",
+        text: pmapsyncPropLableVisible ? propName : "",
+        // fill: new Fill({ color: fillColor }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 2,
+        offsetY: -19,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        // overflow: overflow,
+        // rotation: rotation,
       });
+    } else {
+      textObj = new Text({
+        text: size.toString(),
 
-      const stroke = new Stroke({
-        color: "#8B4513",
-        width: 1.25,
+        fill: new Fill({
+          color: "#fff",
+        }),
       });
-      //console.log("res22", resolution);
+    }
+    //  if (resolution < 700) {
+    //     propNameTextObj = new Text({
+    //       // textAlign: align == "" ? undefined : align,
+    //       // textBaseline: baseline,
+    //       font: "bold 16px serif",
+    //       text: propName,
+    //       // fill: new Fill({ color: fillColor }),
+    //       // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+    //       offsetX: 2,
+    //       offsetY: -10,
+    //       // placement: placement,
+    //       // maxAngle: maxAngle,
+    //       // overflow: overflow,
+    //       // rotation: rotation,
+    //     });
+    //   }
 
-      // let svgScale = 0;
-      // let radius = 0;
-      //  const spanClaim = document.getElementById("spanClaimsLayerVisibility");
-      //  spanClaim.textContent = "visibility_off";
-      // if (resolution > 1000) {
-      //   svgScale = 0.5;
-      //   radius = 2;
-      // } else if (resolution > 937.5) {
-      //   svgScale = 0.562;
-      //   radius = 5;
-      // } else if (resolution > 875) {
-      //   svgScale = 0.625;
-      //   radius = 5;
-      // } else if (resolution > 750) {
-      //   svgScale = 0.75;
-      //   radius = 5;
-      // } else if (resolution > 625) {
-      //   svgScale = 0.875;
-      //   radius = 5;
-      // } else if (resolution > 500) {
-      //   svgScale = 1;
-      //   radius = 5;
-      // } else if (resolution > 375) {
-      //   svgScale = 1.125;
-      //   radius = 5;
-      // } else if (resolution > 250) {
-      //   svgScale = 1.25;
-      //   radius = 5;
-      // } else if (resolution > 125) {
-      //   svgScale = 1.375;
-      //   radius = 5;
-      //   // const spanClaim = document.getElementById("spanClaimsLayerVisibility");
-      //   // spanClaim.textContent = "visibility";
-      // } else {
-      //   svgScale = 1.5;
-      //   radius = 10;
-      // }
-      let image;
-      let text;
+    // if (resolution > 500) {
+    //    image = null;
+    // }
+    // console.log("featuresqqqq",feature)
 
-      // if (feature.values_.asset_type == assetTypesColorMappings[0].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[0].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[0].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
-      //   image = new Icon({
-      //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgZone),
-      //     scale: svgScale,
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[2].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[2].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[2].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[3].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[3].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[3].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[4].type) {
-      //   image = new Icon({
-      //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgDeposit),
-      //     scale: svgScale,
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[5].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[5].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[5].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[6].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[6].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[6].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[7].type) {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: assetTypesColorMappings[7].color }),
-      //     stroke: new Stroke({
-      //       color: assetTypesColorMappings[7].color,
-      //       width: 3,
-      //     }),
-      //   });
-      // }
-      // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
-      //   image = new Icon({
-      //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
-      //     scale: svgScale,
-      //   });
-      // } else if (feature.values_.asset_type == assetTypesColorMappings[9].type) {
-      //   image = new Icon({
-      //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgHisMine),
-      //     scale: svgScale,
-      //   });
-      // }
-      // else {
-      //   image = new Circle({
-      //     radius: 10,
-      //     fill: new Fill({ color: "pink" }),
-      //     stroke: new Stroke({ color: "pink", width: 3 }),
-      //   });
-      // }
+    //console.log("size",size)
+    // let style = styleCache[size];
+    // if (!style) {
 
-      //set text Style
-
-      // text = createTextStyle(feature, resolution);
-      image = new Circle({
-        radius: 9,
-        fill: new Fill({ color: colour }),
-        // stroke: new Stroke({ color: "#8B4513", width: 3 }),
-      });
-
-      let textObj;
-      const size = feature.get("features").length;
-      if (size == 1 && resolution < 5000) {
-        const propName = feature.get("features")[0].get("prop_name");
-        textObj = new Text({
-          //       // textAlign: align == "" ? undefined : align,
-          //       // textBaseline: baseline,
-          font: "bold 16px serif",
-          text: pmapsyncPropLableVisible ? propName : "",
-          // fill: new Fill({ color: fillColor }),
-          // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-          offsetX: 2,
-          offsetY: -19,
-          // placement: placement,
-          // maxAngle: maxAngle,
-          // overflow: overflow,
-          // rotation: rotation,
-        });
-      } else {
-        textObj = new Text({
-          text: size.toString(),
-
-          fill: new Fill({
-            color: "#fff",
-          }),
-        });
-      }
-      //  if (resolution < 700) {
-      //     propNameTextObj = new Text({
-      //       // textAlign: align == "" ? undefined : align,
-      //       // textBaseline: baseline,
-      //       font: "bold 16px serif",
-      //       text: propName,
-      //       // fill: new Fill({ color: fillColor }),
-      //       // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-      //       offsetX: 2,
-      //       offsetY: -10,
-      //       // placement: placement,
-      //       // maxAngle: maxAngle,
-      //       // overflow: overflow,
-      //       // rotation: rotation,
-      //     });
-      //   }
-
-      // if (resolution > 500) {
-      //    image = null;
-      // }
-      // console.log("featuresqqqq",feature)
-
-      //console.log("size",size)
-      // let style = styleCache[size];
-      // if (!style) {
-
-      const style = new Style({
-        //  stroke: new Stroke({
-        //    color: "#021691",
-        //    width: 2,
-        //  }),
-        image,
-        //  text: propNameTextObj,
-        text: textObj,
-        fill,
-      });
-      // styleCache[size] = style;
-      // }// console.log("st", st);
-      return style;
-    };
-
+    const style = new Style({
+      //  stroke: new Stroke({
+      //    color: "#021691",
+      //    width: 2,
+      //  }),
+      image,
+      //  text: propNameTextObj,
+      text: textObj,
+      fill,
+    });
+    // styleCache[size] = style;
+    // }// console.log("st", st);
+    return style;
+  };
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
-
-
     const colour = feature.values_.colour;
 
     const fill = new Fill({
@@ -2181,14 +2158,12 @@ export const PropertiesMap = () => {
     } else if (resolution > 125) {
       svgScale = 1.375;
       radius = 5;
-
     } else {
       svgScale = 1.5;
       radius = 10;
     }
     let image;
     let text;
-
 
     if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
       image = new Icon({
@@ -2217,7 +2192,6 @@ export const PropertiesMap = () => {
       });
     }
 
-
     //set text Style
 
     text = createTextStyle(feature, resolution);
@@ -2236,16 +2210,19 @@ export const PropertiesMap = () => {
     return st;
   };
 
+  const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
       <div className="relative">
-        <div className="w-12 absolute left-0 top-0 z-50 ml-2">
+        <div className="w-12 absolute left-0 top-0 z-50 ">
           <div className="flex flex-col gap-4 mt-2">
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
-                  }`}
+                className={`cursor-pointer text-white h-6 w-6 ${
+                  isSideNavOpen ? "" : "rotate-180"
+                }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -2267,60 +2244,134 @@ export const PropertiesMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
+            {isTabletOrMobile && (
+              <Popover placement="right-start" showArrow offset={10}>
+                <PopoverTrigger>
+                  <Button isIconOnly variant="bordered" className="bg-blue-900">
+                    <SlLayers
+                      className={`text-white cursor-pointer h-6 w-6`}
+                      // onClick={onClickViewMinusZoom}
+                    />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className=" ">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p
+                        className="text-small font-bold text-foreground"
+                        {...titleProps}
+                      >
+                        Layers
+                      </p>
+                      <div className="mt-2 flex   gap-2 w-full">
+                        <ButtonGroup variant="faded" color="primary">
+                          <Button
+                            onClick={() => setLyrs("m")}
+                            className={`${
+                              propertiesLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Map
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("s")}
+                            className={`${
+                              propertiesLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Satellite
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("p")}
+                            className={`${
+                              propertiesLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
+                          >
+                            Terrain
+                          </Button>
+                          {/* <Button
+            className={`${
+              mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+            }  w-22`}
+          >
+            {curcenteredareaid}
+          </Button> */}
+                        </ButtonGroup>
+                      </div>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
-        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
-
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap">
+          <div className="hidden sm:flex">
+            <ButtonGroup
+              variant="faded"
+              // className="absolute left-0 bottom-1 z-50 "
+              color="primary"
+            >
+              <Button
+                onClick={() => setLyrs("m")}
+                className={`${
+                  propertiesLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Map
+              </Button>
+              <Button
+                onClick={() => setLyrs("s")}
+                className={`${
+                  propertiesLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Satellite
+              </Button>
+              <Button
+                onClick={() => setLyrs("p")}
+                className={`${
+                  propertiesLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
+              >
+                Terrain
+              </Button>
+            </ButtonGroup>
+          </div>
+          <div>
+            <p>{copyRight}</p>
+          </div>
           <ButtonGroup
             variant="faded"
-            // className="absolute left-0 bottom-1 z-50 "
+            // className="fixed right-0 bottom-1 z-50 "
             color="primary"
           >
-            <Button
-              onClick={() => setLyrs("m")}
-              className={`${propertiesLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
-            >
-              Map
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Scale:${mapScale}`}
             </Button>
-            <Button
-              onClick={() => setLyrs("s")}
-              className={`${propertiesLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
-            >
-              Satellite
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Lat:${lat}`}
             </Button>
-            <Button
-              onClick={() => setLyrs("p")}
-              className={`${propertiesLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-                }  w-22`}
-            >
-              Terrain
+            <Button className={`w-28 bg-blue-700 text-white`}>
+              {`Long:${long}`}
             </Button>
           </ButtonGroup>
-          <div><p>{copyRight}</p></div>
         </div>
-        <ButtonGroup
-          variant="faded"
-          className="fixed right-0 bottom-1 z-50 "
-          color="primary"
-        >
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Scale:${mapScale}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Lat:${lat}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Long:${long}`}
-          </Button>
-        </ButtonGroup>
+
         <Draggable>
           <div
             ref={setPopup}
@@ -2371,13 +2422,28 @@ export const PropertiesMap = () => {
         <Map
           ref={mapRef}
           style={{
+            // width: isSideNavOpen
+            //   ? isPropertiesSideNavOpen
+            //     ? "65vw"
+            //     : "83vw"
+            //   : "100vw",
+            //  width: isSideNavOpen ? (isCompanySideNavOpen ? "65vw" : "83vw") : "100vw",
+            // height: "90vh",
             width: isSideNavOpen
               ? isPropertiesSideNavOpen
-                ? "65vw"
-                : "83vw"
+                ? mapViewMode == "HEADED"
+                  ? isTabletOrMobile
+                    ? "calc(100vw - 208px)"
+                    : "calc(100vw - 576px)"
+                  : "100vw"
+                : mapViewMode == "HEADED"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
+                : "100vw"
               : "100vw",
-            //  width: isSideNavOpen ? (isCompanySideNavOpen ? "65vw" : "83vw") : "100vw",
-            height: "90vh",
+
+            height: mapViewMode == "HEADED" ? "90vh" : "100vh",
           }}
           controls={[]}
           onSingleclick={onSingleclick}
@@ -2450,7 +2516,9 @@ export const PropertiesMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={propertyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
+            maxResolution={
+              propertyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets
+            }
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>

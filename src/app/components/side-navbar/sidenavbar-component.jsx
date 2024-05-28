@@ -197,13 +197,13 @@ const SideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-             h-full 
-        ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
+             h-[90vh] 
+        ${isSideNavOpen ? "w-[200px] sm:w-72 mr-2" : "w-0"} 
         duration-500`}
     >
       <div
         className={`${
-          isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"
+          isSideNavOpen ? " flex flex-col justify-between  h-[90vh]" : "hidden"
         }`}
       >
         <div>

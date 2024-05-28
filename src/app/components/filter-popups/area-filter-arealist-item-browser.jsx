@@ -115,8 +115,8 @@ const getTableBodyV1 =()=>{
           groupedAreaList?.map((a) => {
             return (
               <TableRow key={a.gid}>
-                <TableCell className=" cursor-pointer hover:scale-125  dark:text-white text-black" >{`${a.country}`}</TableCell>
-                <TableCell className=" cursor-pointer hover:scale-125  dark:text-white text-black" >{`${a.area_name}`}</TableCell>
+                <TableCell className=" cursor-pointer hover:scale-110 dark:text-white text-black" >{`${a.country}`}</TableCell>
+                <TableCell className=" cursor-pointer hover:scale-110  dark:text-white text-black" >{`${a.area_name}`}</TableCell>
                 <TableCell> <Image
                   src="./navigation.svg"
                   width={15}
@@ -165,7 +165,7 @@ const getTableBodyV0 =()=>{
 }
     
     return (
-      <div className="flex flex-col overflow-y-scroll min-h-[40vh] max-h-[40vh]">
+      <div className="flex flex-col overflow-y-scroll min-h-[40vh] max-h-[40vh] ">
         {/* <div className="overflow-y-auto max-h-[455px] min-h-[455px]"> */}
         <Table
           color={"primary"}

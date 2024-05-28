@@ -32,13 +32,20 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLo
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
           <span>
-            {labelState && (<MdOutlineLabel className=" cursor-pointer hover:scale-125" />)}
-            {!labelState && <MdOutlineLabelOff className=" cursor-pointer hover:scale-125" />}
+            {labelState && (
+              <MdOutlineLabel className=" cursor-pointer hover:scale-125" />
+            )}
+            {!labelState && (
+              <MdOutlineLabelOff className=" cursor-pointer hover:scale-125" />
+            )}
           </span>
 
-            <span className="">
+          <span className="">
             {eyeState && (
-              <TbEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+              <TbEye
+                className="cursor-pointer hover:scale-125"
+                onClick={eyeClickHandler}
+              />
             )}
             {!eyeState && (
               <TbEyeOff
@@ -48,8 +55,11 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLo
             )}
           </span>
           <span>
-             {lockState && (
-              <FaLock className=" cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+            {lockState && (
+              <FaLock
+                className=" cursor-pointer hover:scale-125"
+                onClick={eyeClickHandler}
+              />
             )}
             {!lockState && (
               <FaLockOpen
@@ -58,8 +68,6 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLo
               />
             )}
           </span>
-
-        
         </div>
       </div>
       {isOpen && <div className="mt-2">{children}</div>}
