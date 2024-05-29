@@ -35,9 +35,9 @@ import {
   setamapsyncPropLableVisible,
 } from "@/store/area-map/area-map-slice";
 import Image from "next/image";
-import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
-import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
-import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import LayerVisibleVisibilityStateDiv from "./../../common-comp/layer-visible-eye-visibility-state";
+import LayerVisibleLockVisibilityDiv from "./../../common-comp/layer-visible-eye-with-lock-with-visibility";
+import AccordionItemWithEyeWithLockVisibility from "./../../common-comp/accordion-eye-with-lock-with-visibilty";
 import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
 import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
 import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
@@ -47,12 +47,12 @@ const AreaBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
-  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =  useState(true);
-  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
-  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
-  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =
+    useState(true);
+  const [claimsVisibilityState, setclaimsVisibilityState] = useState(true);
+  const [propertyVisibilityState, setpropertyVisibilityState] = useState(true);
+  const [assetVisibilityState, setassetVisibilityState] = useState(true);
 
- 
   try {
     pathname = window.location.href;
   } catch (error) {}
@@ -121,10 +121,11 @@ const AreaBottomSideComp = () => {
     dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
   };
   const setareaSyncPropLayerAlwaysVisibility = (e) => {
-
-    dispatch(setareaSyncPropLayerAlwaysVisible(!areaSyncPropLayerAlwaysVisible));
-    if(!areaSyncPropLayerAlwaysVisible){
-       dispatch(setareaSyncPropLayerVisible(true));
+    dispatch(
+      setareaSyncPropLayerAlwaysVisible(!areaSyncPropLayerAlwaysVisible)
+    );
+    if (!areaSyncPropLayerAlwaysVisible) {
+      dispatch(setareaSyncPropLayerVisible(true));
     }
   };
   const setareaSyncClaimLinkLayerVisibility = (e) => {
@@ -136,8 +137,6 @@ const AreaBottomSideComp = () => {
   const setareaAreaBoundaryLayerVisibility = (e) => {
     dispatch(setareaAreaBoundaryLayerVisible(!areaAreaBoundaryLayerVisible));
   };
-
-  
 
   //asset visibility redux states
   const areaAssetOpMineVisible = useSelector(
@@ -177,7 +176,7 @@ const AreaBottomSideComp = () => {
 
   // mapViewScaleReducer.mapViewScales
   // const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
-  
+
   const areaCurrentScale = useSelector(
     (state) => state.areaMapReducer.areaCurrentScale
   );
@@ -185,19 +184,24 @@ const AreaBottomSideComp = () => {
     (state) => state.areaMapReducer.areaMapViewScales
   );
 
-  useEffect(()=>{
-    console.log("xx1-areaCurrentScale",areaCurrentScale,areaMapViewScales)
+  useEffect(() => {
+    console.log("xx1-areaCurrentScale", areaCurrentScale, areaMapViewScales);
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (areaMapViewScales) {
-      console.log("xx-if bot-compo-areaMapViewScales")
-      areaMapViewScales.claimscale > areaCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
-      areaMapViewScales.proplayerscale > areaCurrentScale ? setpropertyVisibilityState(true) : setpropertyVisibilityState(false)
-      areaMapViewScales.assetscale > areaCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+      console.log("xx-if bot-compo-areaMapViewScales");
+      areaMapViewScales.claimscale > areaCurrentScale
+        ? setclaimsVisibilityState(true)
+        : setclaimsVisibilityState(false);
+      areaMapViewScales.proplayerscale > areaCurrentScale
+        ? setpropertyVisibilityState(true)
+        : setpropertyVisibilityState(false);
+      areaMapViewScales.assetscale > areaCurrentScale
+        ? setassetVisibilityState(true)
+        : setassetVisibilityState(false);
     }
-    
-   // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
 
-  },[areaCurrentScale,areaMapViewScales])
+    // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+  }, [areaCurrentScale, areaMapViewScales]);
 
   useEffect(() => {
     if (areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible) {
@@ -241,7 +245,6 @@ const AreaBottomSideComp = () => {
     }
   };
 
-
   const setClaimLabelVisibility = (state) => {
     dispatch(setamapClaimLableVisible(state));
   };
@@ -270,12 +273,39 @@ const AreaBottomSideComp = () => {
     (state) => state.areaMapReducer.amapAssetLableVisible
   );
 
+  const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
+
+  const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  const areaState = useSelector((state) => state.areaMapReducer.areaMiningArea);
+
   return (
     <div className="flex flex-col w-full h-full grow">
       <div className="ml-2 mr-2 flex items-center justify-center border-b-2 dark:text-white text-black">
         <span className="font-bold">Map Layers</span>
       </div>
-      <div className="overflow-y-auto max-h-[53vh]">
+      {/**
+       *  className={`${
+          selectedMap === "area" &&
+          !isAreaSideNavOpen &&
+          areaCountry != "" &&
+          areaState != ""
+            ? "flex justify-between"
+            : "hidden"
+        } `}
+       */}
+      <div
+        // className="overflow-y-auto max-h-[53vh]"
+        className={`${
+          selectedMap === "area" &&
+          !isAreaSideNavOpen &&
+          areaCountry != "" &&
+          areaState != ""
+            ? "overflow-y-auto max-h-[50vh]"
+            : "overflow-y-auto max-h-[53vh]"
+        } `}
+      >
         <Accordion>
           <div className="flex flex-col gap-1">
             <AccordionItemWithEyeWithLockVisibilityLabel
@@ -293,7 +323,7 @@ const AreaBottomSideComp = () => {
                   title="Operating Mines"
                   onClick={setareaAssetOpMineVisibility}
                   eyeState={areaAssetOpMineVisible}
-                   visibilityState={assetVisibilityState}
+                  visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-opmine.svg"
@@ -306,7 +336,7 @@ const AreaBottomSideComp = () => {
                   title="Deposits"
                   onClick={setareaAssetDepositVisibility}
                   eyeState={areaAssetDepositsVisible}
-                   visibilityState={assetVisibilityState}
+                  visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-deposit.svg"
@@ -319,7 +349,7 @@ const AreaBottomSideComp = () => {
                   title="Zone"
                   onClick={setareaAssetZoneVisibility}
                   eyeState={areaAssetZoneVisible}
-                   visibilityState={assetVisibilityState}
+                  visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-zone.svg"
@@ -332,7 +362,7 @@ const AreaBottomSideComp = () => {
                   title="Historical Mines"
                   onClick={setareaAssetHistoricalVisibility}
                   eyeState={areaAssetHistoricalVisible}
-                   visibilityState={assetVisibilityState}
+                  visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-historical.svg"
@@ -345,7 +375,7 @@ const AreaBottomSideComp = () => {
                   title="Occurrences"
                   onClick={setareaAssetOccurrenceVisibility}
                   eyeState={areaAssetOccurrenceVisible}
-                   visibilityState={assetVisibilityState}
+                  visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-occurrence.svg"

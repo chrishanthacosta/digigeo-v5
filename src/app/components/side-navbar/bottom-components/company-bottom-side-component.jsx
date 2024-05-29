@@ -34,23 +34,25 @@ import {
 } from "@/store/company-map/company-map-slice";
 import Image from "next/image";
 
-import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
-import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
-import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import LayerVisibleVisibilityStateDiv from "./../../common-comp/layer-visible-eye-visibility-state";
+import LayerVisibleLockVisibilityDiv from "./../../common-comp/layer-visible-eye-with-lock-with-visibility";
+import AccordionItemWithEyeWithLockVisibility from "./../../common-comp/accordion-eye-with-lock-with-visibilty";
 import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
 import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
 import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
 import LayerVisibleLockVisibilityLabelDiv from "../../common-comp/layer-visible-eye-with-lock-with-visibility-label";
-
-
 
 const CompanyBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
   const [claimsVisibilityState, setclaimsVisibilityState] = useState(true);
-  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] = useState(false);
-  const [propertyPointLineVisibilityState, setpropertyPointLineVisibilityState] = useState(false);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =
+    useState(false);
+  const [
+    propertyPointLineVisibilityState,
+    setpropertyPointLineVisibilityState,
+  ] = useState(false);
   const [assetVisibilityState, setassetVisibilityState] = useState(true);
 
   const [company_claimLinkGroupVisible, setcompany_claimLinkGroupVisible] =
@@ -58,7 +60,7 @@ const CompanyBottomSideComp = () => {
 
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -66,7 +68,6 @@ const CompanyBottomSideComp = () => {
       pathname = pathname.substring(0, r);
     }
   }
-
 
   const isAreaSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isAreaSideNavOpen
@@ -87,7 +88,7 @@ const CompanyBottomSideComp = () => {
     },
   ];
 
-  //layer visibility redux states 
+  //layer visibility redux states
   const companyFpropLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyFpropLayerVisible
   );
@@ -113,24 +114,27 @@ const CompanyBottomSideComp = () => {
   //layer visibility functions
   const setcompanyFpropLayerVisibility = (e) => {
     dispatch(setcompanyFpropLayerVisible(!companyFpropLayerVisible));
-  }
+  };
   const setcompanyAssetLayerVisibility = (e) => {
     dispatch(setcompanyAssetLayerVisible(!companyAssetLayerVisible));
-
-  }
+  };
   const setcompanySyncPropLayerVisibility = (e) => {
     dispatch(setcompanySyncPropLayerVisible(!companySyncPropLayerVisible));
-  }
+  };
   const setcompanySyncClaimLinkLayerVisibility = (e) => {
-    dispatch(setcompanySyncClaimLinkLayerVisible(!companySyncClaimLinkLayerVisible));
-  }
+    dispatch(
+      setcompanySyncClaimLinkLayerVisible(!companySyncClaimLinkLayerVisible)
+    );
+  };
   const setcompanyClaimLayerVisibility = (e) => {
     dispatch(setcompanyClaimLayerVisible(!companyClaimLayerVisible));
-  }
+  };
   const setcompanyAreaBoundaryLayerVisibility = (e) => {
-    dispatch(setcompanyAreaBoundaryLayerVisible(!companyAreaBoundaryLayerVisible));
-  }
-  //asset visibility redux states 
+    dispatch(
+      setcompanyAreaBoundaryLayerVisible(!companyAreaBoundaryLayerVisible)
+    );
+  };
+  //asset visibility redux states
   const companyAssetOpMineVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetOpMineVisible
   );
@@ -154,56 +158,53 @@ const CompanyBottomSideComp = () => {
   //asset type visibility functions
   const setcompanyAssetOpMineVisibility = (e) => {
     dispatch(setcompanyAssetOpMineVisible(!companyAssetOpMineVisible));
-  }
+  };
   const setcompanyAssetDepositVisibility = (e) => {
     dispatch(setcompanyAssetDepositsVisible(!companyAssetDepositsVisible));
-  }
+  };
   const setcompanyAssetZoneVisibility = (e) => {
     dispatch(setcompanyAssetZoneVisible(!companyAssetZoneVisible));
-  }
+  };
   const setcompanyAssetHistoricalVisibility = (e) => {
     dispatch(setcompanyAssetHistoricalVisible(!companyAssetHistoricalVisible));
-  }
+  };
   const setcompanyAssetOccurrenceVisibility = (e) => {
     dispatch(setcompanyAssetOccurrenceVisible(!companyAssetOccurrenceVisible));
-  }
+  };
   const setcompanyAssetLayerAlwaysVisibility = (e) => {
-    dispatch(setcompanyAssetLayerAlwaysVisible(!companyAssetLayerAlwaysVisible));
+    dispatch(
+      setcompanyAssetLayerAlwaysVisible(!companyAssetLayerAlwaysVisible)
+    );
   };
 
-
   useEffect(() => {
-
     if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
-      setcompany_claimLinkGroupVisible(true)
+      setcompany_claimLinkGroupVisible(true);
     } else {
-      setcompany_claimLinkGroupVisible(false)
+      setcompany_claimLinkGroupVisible(false);
     }
-
-
-
-  }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible])
-
+  }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible]);
 
   //handle Properties Group Eye
   const setPropertiesGroupEye = () => {
-
     if (companySyncPropLayerVisible || companySyncClaimLinkLayerVisible) {
-
       dispatch(setcompanySyncPropLayerVisible(false));
       dispatch(setcompanySyncClaimLinkLayerVisible(false));
     } else {
       dispatch(setcompanySyncPropLayerVisible(true));
       dispatch(setcompanySyncClaimLinkLayerVisible(true));
     }
-  }
-
+  };
 
   //handle Asset Group Eye
   const setAssetGroupEye = () => {
-
-    if (companyAssetOpMineVisible || companyAssetDepositsVisible || companyAssetZoneVisible || companyAssetHistoricalVisible || companyAssetOccurrenceVisible) {
-
+    if (
+      companyAssetOpMineVisible ||
+      companyAssetDepositsVisible ||
+      companyAssetZoneVisible ||
+      companyAssetHistoricalVisible ||
+      companyAssetOccurrenceVisible
+    ) {
       dispatch(setcompanyAssetOpMineVisible(false));
       dispatch(setcompanyAssetDepositsVisible(false));
       dispatch(setcompanyAssetZoneVisible(false));
@@ -216,7 +217,7 @@ const CompanyBottomSideComp = () => {
       dispatch(setcompanyAssetHistoricalVisible(true));
       dispatch(setcompanyAssetOccurrenceVisible(true));
     }
-  }
+  };
 
   useEffect(() => {
     if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
@@ -226,7 +227,6 @@ const CompanyBottomSideComp = () => {
     }
   }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible]);
 
-
   const companyCurrentScale = useSelector(
     (state) => state.companyMapReducer.companyCurrentScale
   );
@@ -235,20 +235,30 @@ const CompanyBottomSideComp = () => {
   );
 
   useEffect(() => {
-    console.log("qq-landingCurrentScale", companyCurrentScale, companyMapViewScales)
+    console.log(
+      "qq-landingCurrentScale",
+      companyCurrentScale,
+      companyMapViewScales
+    );
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (companyMapViewScales) {
       //console.log("xx-if bot-compo-landingMapViewScales")
-      companyMapViewScales.claimscale > companyCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
-      companyMapViewScales.propoutlinescale > companyCurrentScale ? setpropertyOutLineVisibilityState(true) : setpropertyOutLineVisibilityState(false)
-      companyMapViewScales.proplayerscale > companyCurrentScale ? setpropertyPointLineVisibilityState(true) : setpropertyPointLineVisibilityState(false)
-      companyMapViewScales.assetscale > companyCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+      companyMapViewScales.claimscale > companyCurrentScale
+        ? setclaimsVisibilityState(true)
+        : setclaimsVisibilityState(false);
+      companyMapViewScales.propoutlinescale > companyCurrentScale
+        ? setpropertyOutLineVisibilityState(true)
+        : setpropertyOutLineVisibilityState(false);
+      companyMapViewScales.proplayerscale > companyCurrentScale
+        ? setpropertyPointLineVisibilityState(true)
+        : setpropertyPointLineVisibilityState(false);
+      companyMapViewScales.assetscale > companyCurrentScale
+        ? setassetVisibilityState(true)
+        : setassetVisibilityState(false);
     }
 
     // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
-
-  }, [companyCurrentScale, companyMapViewScales])
-
+  }, [companyCurrentScale, companyMapViewScales]);
 
   const setClaimLabelVisibility = (state) => {
     dispatch(setcmapClaimLableVisible(state));
@@ -279,8 +289,9 @@ const CompanyBottomSideComp = () => {
   );
 
   const setcompanySyncPropLayerAlwaysVisibility = (e) => {
-
-    dispatch(setcompanySyncPropLayerAlwaysVisible(!companySyncPropLayerAlwaysVisible));
+    dispatch(
+      setcompanySyncPropLayerAlwaysVisible(!companySyncPropLayerAlwaysVisible)
+    );
     if (!companySyncPropLayerAlwaysVisible) {
       dispatch(setcompanySyncPropLayerVisible(true));
     }
@@ -289,13 +300,29 @@ const CompanyBottomSideComp = () => {
   const companySyncPropLayerAlwaysVisible = useSelector(
     (state) => state.companyMapReducer.companySyncPropLayerAlwaysVisible
   );
-
+  const isCompanySideNavOpen = useSelector(
+    (state) => state.companyMapReducer.isCompanySideNavOpen
+  );
+  const companyId = useSelector((state) => state.companyMapReducer.companyId);
+  const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
   return (
     <div className="flex flex-col w-full  h-full grow">
       <div className="ml-2 mr-2  flex items-center justify-center border-b-2 dark:text-white text-black">
         <span className="font-bold">Map Layers</span>
       </div>
-      <div className="overflow-y-auto max-h-[52vh]">
+      <div
+        //  className="overflow-y-auto max-h-[52vh]"
+        className={`${
+          selectedMap === "company" && !isCompanySideNavOpen && companyId
+            ? // &&
+              // areaCountry != "" &&
+              // areaState != ""
+              "overflow-y-auto max-h-[50vh]"
+            : "overflow-y-auto max-h-[52vh]"
+        } `}
+      >
         <Accordion>
           <div className="flex flex-col gap-1">
             <AccordionItemWithEyeWithLockVisibilityLabel
@@ -391,7 +418,6 @@ const CompanyBottomSideComp = () => {
                   setLabelState={setsyncPropLableVisibility}
                   onLockClick={setcompanySyncPropLayerAlwaysVisibility}
                   lockState={companySyncPropLayerAlwaysVisible}
-
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -442,7 +468,6 @@ const CompanyBottomSideComp = () => {
                   eyeState={companyAreaBoundaryLayerVisible}
                   labelState={cmapAreaLableVisible}
                   setLabelState={setAreaLableVisibility}
-
                 >
                   <Image
                     src="./minning-areas-layer.svg"
@@ -475,7 +500,6 @@ const CompanyBottomSideComp = () => {
       </Accordion> */}
     </div>
   );
-
-}
+};
 
 export default CompanyBottomSideComp;

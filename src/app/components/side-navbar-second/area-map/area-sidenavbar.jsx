@@ -48,7 +48,7 @@ const AreaSideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -57,13 +57,14 @@ const AreaSideNavbar = () => {
     }
   }
   const defFcHeight = 40;
-  const defTreeHeight = 30
+  const defTreeHeight = 30;
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
   const [fcCount, setfcCount] = useState(0);
   const [fcHeight, setfcHeight] = useState(defFcHeight);
   const [treeViewCount, settreeViewCount] = useState(0);
   const [treeViewHeight, settreeViewHeight] = useState(defTreeHeight);
+  // const [isOpen, setIsOpen] = useState(true);
 
   const fullSideBarHeight = 80;
 
@@ -83,14 +84,12 @@ const AreaSideNavbar = () => {
     (state) => state.mapSelectorReducer.areaZoomLevel
   );
 
-
   const areaInitialCenter = useSelector(
     (state) => state.mapSelectorReducer.areaInitialCenter
   );
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
-
 
   const syncPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncPropertyFeatures
@@ -105,8 +104,7 @@ const AreaSideNavbar = () => {
       getFeaturedCompanyGeometry();
       getClaimLinkPropertiesGeometry();
       getAssetsGeometry();
-    }
-    else {
+    } else {
       setFeaturedCompanies([]);
       dispatch(setSyncPropertyFeatures({}));
       dispatch(setFPropertyFeatures({}));
@@ -129,14 +127,13 @@ const AreaSideNavbar = () => {
   };
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
-      console.log("areaName", areaName,)
+      console.log("areaName", areaName);
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       // console.log("fps", d);
-
 
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
@@ -148,29 +145,30 @@ const AreaSideNavbar = () => {
   };
 
   useEffect(() => {
-
     if (featuredCompanies && syncPropertyFeatures?.features) {
-      console.log("defFcHeight11", featuredCompanies?.length, syncPropertyFeatures?.features?.length)
+      console.log(
+        "defFcHeight11",
+        featuredCompanies?.length,
+        syncPropertyFeatures?.features?.length
+      );
       if (featuredCompanies.length == 0) {
         if (syncPropertyFeatures.features.length > 0) {
-          settreeViewHeight(defFcHeight + defTreeHeight)
-         
+          settreeViewHeight(defFcHeight + defTreeHeight);
         } else {
-          settreeViewHeight(defTreeHeight)
-          setfcHeight(defFcHeight)
+          settreeViewHeight(defTreeHeight);
+          setfcHeight(defFcHeight);
         }
-
       } else {
         if (syncPropertyFeatures.features.length == 0) {
-          setfcHeight(defFcHeight + defTreeHeight)
-          settreeViewHeight(0)
+          setfcHeight(defFcHeight + defTreeHeight);
+          settreeViewHeight(0);
         } else {
-          settreeViewHeight(defTreeHeight)
-          setfcHeight(defFcHeight)
+          settreeViewHeight(defTreeHeight);
+          setfcHeight(defFcHeight);
         }
       }
     }
-  }, [featuredCompanies, syncPropertyFeatures])
+  }, [featuredCompanies, syncPropertyFeatures]);
 
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
@@ -215,7 +213,6 @@ const AreaSideNavbar = () => {
         },
         features: d.data[0].json_build_object.features,
       };
-
 
       // const e =   new GeoJSON().readFeatures(gj)
 
@@ -290,14 +287,13 @@ const AreaSideNavbar = () => {
   );
 
   const setareaFpropLayerVisibility = (e) => {
-    console.log("setareaFpropLayerVisibility")
+    console.log("setareaFpropLayerVisibility");
     dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
-  }
+  };
 
   const popupFcompanyId = useSelector(
     (state) => state.areaMapReducer.popupFcompanyId
   );
-
 
   const setFpropLableVisibility = (state) => {
     dispatch(setamapFpropLableVisible(state));
@@ -306,24 +302,28 @@ const AreaSideNavbar = () => {
     (state) => state.areaMapReducer.amapFpropLableVisible
   );
 
+  // console.log(amapFpropLableVisible, "amapFpropLableVisible");
+
   return (
     <>
       <div className={` flex `}>
         <div
           className={`
-          ${isAreaSideNavOpen && isSideNavOpen
+          ${
+            isAreaSideNavOpen && isSideNavOpen
               ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
               : ""
-            } 
+          } 
             
           ${isAreaSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
           duration-500`}
         >
           <div
-            className={`${isAreaSideNavOpen && isSideNavOpen
-              ? "py-0.1 flex flex-col  "
-              : "hidden"
-              }`}
+            className={`${
+              isAreaSideNavOpen && isSideNavOpen
+                ? "py-0.1 flex flex-col  "
+                : "hidden"
+            }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative dark:text-white text-black">
               <div className="flex flex-col">
@@ -344,7 +344,9 @@ const AreaSideNavbar = () => {
           {/* <TreeView data={treeData} /> */}
 
           {/* <Accordion> */}
-          <div className={`flex flex-col gap-2 overflow-y-hidden  justify-between max-h-[${fullSideBarHeight}vh]`}>
+          <div
+            className={`flex flex-col gap-2 overflow-y-hidden  justify-between max-h-[${fullSideBarHeight}vh]`}
+          >
             <div className="grow">
               <AccordionItemWithEyeLabel
                 title="Featured Companies"
@@ -352,16 +354,20 @@ const AreaSideNavbar = () => {
                 eyeState={areaFpropLayerVisible}
                 labelState={amapFpropLableVisible}
                 setLabelState={setFpropLableVisibility}
+                // setIsOpen={setIsOpen}
+                // isOpen={isOpen}
               >
                 {/* <div className={`flex flex-col gap-1 overflow-y-auto max-h-[30vh]`}> */}
-                <div className={`flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh]`}>
+                <div
+                  className={`flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh]`}
+                >
                   {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
                   {featuredCompanies?.map((i) => (
                     <FeaturedCompanyDetailDiv
                       key={i.colour}
                       title={i.company2}
                       companyid={i.companyid}
-                    // onClick={() => console.log(featuredCompanies)}
+                      // onClick={() => console.log(featuredCompanies)}
                     >
                       <div
                         className={`w-4 h-4`}
@@ -374,21 +380,21 @@ const AreaSideNavbar = () => {
             </div>
             <div className={`grow`}>
               <AccordionItemWithOutEye title="All Companies">
-
                 {/* <div className="overflow-y-auto max-h-[25vh]"> */}
-                <AreaTreeView syncPropFeatues={syncPropertyFeatures} treeViewHeight={treeViewHeight} />
-
+                <AreaTreeView
+                  syncPropFeatues={syncPropertyFeatures}
+                  treeViewHeight={treeViewHeight}
+                  // isOpen={isOpen}
+                />
               </AccordionItemWithOutEye>
             </div>
           </div>
           {/* </Accordion> */}
           {/* </div> */}
         </div>
-      </div >
+      </div>
 
-      {popupFcompanyId > 0 && <AreaFCompanyPopup />
-      }
-
+      {popupFcompanyId > 0 && <AreaFCompanyPopup />}
     </>
   );
 };
