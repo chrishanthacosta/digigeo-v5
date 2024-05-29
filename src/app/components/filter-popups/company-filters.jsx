@@ -8,7 +8,7 @@ import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
- 
+
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import {
@@ -124,7 +124,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
           // transform: "translate(-50%, -50%)",
           backgroundColor: "transparent",
           border: "none",
-          width:"70%"
+          width: "70%"
         },
       });
     }
@@ -172,6 +172,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
 
   const searchAction = async () => {
     // if (company && miningArea) {
+    console.log("companyidLocal", companyidLocal,)
     dispatch(setcompanyId(companyidLocal));
     dispatch(setcompanyName(company));
     dispatch(setcompanyZoomMode("extent"));
@@ -270,8 +271,8 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
             <div className="mx-auto w-full max-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap mt-8">
                 <div className="w-full px-3 flex flex-col gap-3">
-                 
-                 
+
+
                   <div className="flex-col gap-2">
                     <span className="block">Filter By Company Name</span>
                     <Autocomplete
