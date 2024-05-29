@@ -5,6 +5,7 @@ import CompanyMapClickPopupRow from './company-map-click-popup-row';
 import { useSelector } from 'react-redux';
 import { Arimo } from "next/font/google";
 import { Tabs, Tab } from "@nextui-org/react";
+import LandingMapClickPopupRowMultiValue from '../landing-map-popup/landing-map-click-popup-row-multiValue';
 
 const arimo = Arimo({
   subsets: ['latin'],
@@ -51,14 +52,19 @@ const CompanyMapClickPopup = ({}) => {
          <Tab key="fprop" title="Featured Property">
               <CompanyMapClickPopupHeaderRow label="Featured Property Info" />
               <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-                    <CompanyMapClickPopupRow label={"Sponsored owners:"} value={fpropObj.sponsoredowners} url={fpropObj.profile }/>
+            {/* <CompanyMapClickPopupRow label={"Sponsored owners:"} value={fpropObj.sponsoredowners} url={fpropObj.profile }/> */}
+            <LandingMapClickPopupRowMultiValue
+              label={"Sponsored owners:"}
+              value={fpropObj.sponsoredowners}
+              url={fpropObj.profile}
+            />
                     <CompanyMapClickPopupRow label={"Property Name:"} value={fpropObj.prop_name}/>
                     <CompanyMapClickPopupRow label={"Commodity:"} value={fpropObj.commo_ref}/>
                     <CompanyMapClickPopupRow label={"Asset List:"} value={fpropObj.assets}/>
                     <CompanyMapClickPopupRow label={"Resources:"} value={fpropObj.resources}/>
                     <CompanyMapClickPopupRow label={"Map Area:"} value={fpropObj.map_area}/>
                     <CompanyMapClickPopupRow label={"Map Event:"} value={fpropObj.sale_name} /> 
-                    <CompanyMapClickPopupRow label={"Ownership:"} value={fpropObj.owners} /> 
+            <LandingMapClickPopupRowMultiValue label={"Ownership:"} value={fpropObj.owners} /> 
                     <CompanyMapClickPopupRow label={"External Property Page:"} value={fpropObj.prop_exturl} url={fpropObj.prop_exturl } /> 
 
               </div> 

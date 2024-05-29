@@ -31,6 +31,7 @@ import {
   setcompanyStockcode,
 } from "../../../../store/company-map/company-map-slice";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { setSelectedMap } from "@/store/map-selector/map-selector-slice";
 
 const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
@@ -72,6 +73,8 @@ const CompanyMapButton = ({ onClick }) => {
 
   const closePopup = () => {
     setIsOpenIn(false);
+   // dispatch(setSelectedMap("landing"));
+
   };
 
   const resetFilters = () => {

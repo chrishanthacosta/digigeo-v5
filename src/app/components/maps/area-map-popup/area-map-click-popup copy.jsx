@@ -144,7 +144,8 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
             />
               <AreaMapClickPopupRow
               label={"External Property Page:"}
-              value={fpropObj.prop_exturl ? "Open Url" : ""}
+              // value={fpropObj.prop_exturl ? "Open Url" : ""}
+              value={fpropObj.prop_exturl ?? "" }
               url={fpropObj.prop_exturl}
             />
           </div>

@@ -21,7 +21,7 @@ import {
 import useDebounce from "./useDebounce";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import { useMediaQuery } from "react-responsive";
-import { setIsSideNavOpen } from "@/store/map-selector/map-selector-slice";
+import { setIsSideNavOpen, setSelectedMap } from "@/store/map-selector/map-selector-slice";
 import { ToastContainer, toast } from "react-toastify";
 const CompanyFilter = ({ isOpenIn, closePopup }) => {
   const [search, setSearch] = useState("");
@@ -197,7 +197,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     dispatch(setcompanyStockcode(stockcode));
     closePopup();
     // }
-  }else{
+      } else {
+        dispatch(setSelectedMap("landing"));
+        dispatch(setcompanyId(null));
+        dispatch(setcompanyName(null));
     toast.error("Company Not Found")
   }
   };

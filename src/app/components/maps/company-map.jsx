@@ -1693,12 +1693,14 @@ export const CompanyMap = () => {
         //console.log("dd",dd)
         const d = dd?.[0];
 
-        const sponsoredowners = d?.sponsor ?? "";
+        const sponsoredowners = dd?.map(d => d.sponsor ?? "");
+
+        // const sponsoredowners = d?.sponsor ?? "";
         let commo_ref = d?.commo_ref ?? "";
         let assets = d?.assets ?? "";
         let resources = d?.resources ?? "";
         let map_area = d?.map_area ?? "";
-        let owners = d?.owners ?? "";
+        let owners = d?.owners?.split(",") ?? [];
         let prop_exturl = d?.prop_exturl ?? "";
         let sale_name = d?.sale_name ?? "";
 

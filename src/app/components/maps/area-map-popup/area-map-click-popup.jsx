@@ -6,6 +6,7 @@ import AreaMapClickPopupRowMultiValue from './area-map-click-popup-row-multiValu
 import { useSelector } from 'react-redux';
 import { Arimo } from "next/font/google";
 import { Tabs, Tab } from "@nextui-org/react";
+import LandingMapClickPopupRowMultiValue from "../landing-map-popup/landing-map-click-popup-row-multiValue";
 
 const arimo = Arimo({
   subsets: ['latin'],
@@ -115,7 +116,12 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
           <div>
             <AreaMapClickPopupHeaderRow label="Featured Property Info" />
             <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-              <AreaMapClickPopupRow
+              {/* <AreaMapClickPopupRow
+                label={"Sponsored owners:"}
+                value={fpropObj.sponsoredowners}
+                url={fpropObj.profile}
+              /> */}
+              <LandingMapClickPopupRowMultiValue
                 label={"Sponsored owners:"}
                 value={fpropObj.sponsoredowners}
                 url={fpropObj.profile}
@@ -132,7 +138,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
                 label={"Asset List:"}
                 value={fpropObj.assets}
               />
-              <AreaMapClickPopupRowMultiValue
+              <LandingMapClickPopupRowMultiValue
                 label={"Resources:"}
                 value={resourcesFormated}
               />
@@ -144,13 +150,13 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
                 label={"Map Event:"}
                 value={fpropObj.sale_name}
               />
-              <AreaMapClickPopupRow
+              <LandingMapClickPopupRowMultiValue
                 label={"Ownership:"}
                 value={fpropObj.owners}
               />
               <AreaMapClickPopupRow
                 label={"External Property Page:"}
-                value={fpropObj.prop_exturl ? "Open Url" : ""}
+                value={fpropObj.prop_exturl ?? ""}
                 url={fpropObj.prop_exturl}
               />
             </div>

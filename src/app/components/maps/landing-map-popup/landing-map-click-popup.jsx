@@ -99,7 +99,7 @@ const LandingMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => 
           <div>
             <LandingMapClickPopupHeaderRow label="Featured Property Info" />
             <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-              <LandingMapClickPopupRow
+              <LandingMapClickPopupRowMultiValue
                 label={"Sponsored owners:"}
                 value={fpropObj.sponsoredowners}
                 url={fpropObj.profile}
@@ -128,7 +128,7 @@ const LandingMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => 
                 label={"Map Event:"}
                 value={fpropObj.sale_name}
               />
-              <LandingMapClickPopupRow
+              <LandingMapClickPopupRowMultiValue
                 label={"Ownership:"}
                 value={fpropObj.owners}
               />

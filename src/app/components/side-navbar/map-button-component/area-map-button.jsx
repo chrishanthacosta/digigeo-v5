@@ -62,6 +62,7 @@ const AreaMapButton = ({ onClick }) => {
 
   const closePopup = () => {
     setIsOpenIn(false);
+    // dispatch(setSelectedMap("landing"));
   };
 
   const resetFilters = () => {

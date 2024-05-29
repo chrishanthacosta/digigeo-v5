@@ -5,6 +5,7 @@ import PropertyMapClickPopupRow from './property-map-click-popup-row';
 import { useSelector } from 'react-redux';
 import { Arimo } from "next/font/google";
 import { Tabs, Tab } from "@nextui-org/react";
+import LandingMapClickPopupRowMultiValue from '../landing-map-popup/landing-map-click-popup-row-multiValue';
 
 const arimo = Arimo({
   subsets: ['latin'],
@@ -51,14 +52,19 @@ const PropertyMapClickPopup = ({}) => {
         <Tab key="fprop" title="Featured Property">
             <PropertyMapClickPopupHeaderRow label="Featured Property Info" />
             <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-              <PropertyMapClickPopupRow label={"Sponsored owners:"} value={fpropObj.sponsoredowners} url={fpropObj.profile }/>
-              <PropertyMapClickPopupRow label={"Property Name:"} value={fpropObj.prop_name}/>
+              {/* <PropertyMapClickPopupRow label={"Sponsored owners:"} value={fpropObj.sponsoredowners} url={fpropObj.profile }/> */}
+            <LandingMapClickPopupRowMultiValue
+              label={"Sponsored owners:"}
+              value={fpropObj.sponsoredowners}
+              url={fpropObj.profile}
+            />
+            <PropertyMapClickPopupRow label={"Property Name:"} value={fpropObj.prop_name} />
               <PropertyMapClickPopupRow label={"Commodity:"} value={fpropObj.commo_ref}/>
               <PropertyMapClickPopupRow label={"Asset List:"} value={fpropObj.assets}/>
               <PropertyMapClickPopupRow label={":"} value={fpropObj.resources}/>
               <PropertyMapClickPopupRow label={"Map Area:"} value={fpropObj.map_area}/>
               <PropertyMapClickPopupRow label={"Map Event:"} value={fpropObj.sale_name} /> 
-              <PropertyMapClickPopupRow label={"Ownership:"} value={fpropObj.owners} /> 
+            <LandingMapClickPopupRowMultiValue label={"Ownership:"} value={fpropObj.owners} /> 
               <PropertyMapClickPopupRow label={"External Property Page:"} value={fpropObj.prop_exturl} url={fpropObj.prop_exturl } /> 
          
             </div>
