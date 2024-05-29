@@ -12,6 +12,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
 } from "@nextui-org/react";
 import {
   setIsSideNavOpen,
@@ -501,7 +502,7 @@ export const CompanyMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -848,7 +849,7 @@ export const CompanyMap = () => {
 
   useEffect(() => {
     if (companyFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, companyFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, companyFlyToLocation, () => {});
   }, [companyFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -1154,8 +1155,9 @@ export const CompanyMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     // updateWindowsHistory(newUrl);
     updateWindowsHistoryCmap({
@@ -1212,7 +1214,7 @@ export const CompanyMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1779,21 +1781,21 @@ export const CompanyMap = () => {
         const selPropertyOutlineFeatures =
           claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
           [];
-        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures);
+        
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
           const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
 
           const clinkDetails = await getClinkData(propId);
 
-          console.log("clinkDetails", clinkDetails, propId);
+          //console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
           let name1 = clinkDetails?.[0]?.name ?? "";
           const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
-          const area = clinkDetails?.[0]?.area ?? "";
+          const area = clinkDetails?.[0]?.map_area ?? "";
           // const selSynClaimLinkFeatures =
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
@@ -1970,39 +1972,68 @@ export const CompanyMap = () => {
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <BsFillArrowLeftSquareFill
-                // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show/Hide Details"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <BsFillArrowLeftSquareFill
+                  // size={26}
+                  className={`cursor-pointer text-white h-6 w-6 ${
+                    isSideNavOpen ? "" : "rotate-180"
                   }`}
-                onClick={() => collapsibleBtnHandler()}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewInitZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillPlusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewPlusZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillMinusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewMinusZoom}
-              />
-            </Button>
+                  onClick={() => collapsibleBtnHandler()}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show Entire Map"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <GiEarthAmerica
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewInitZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom In"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillPlusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewPlusZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom Out"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillMinusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewMinusZoom}
+                />
+              </Button>
+            </Tooltip>
             {isTabletOrMobile && (
               <Popover placement="right-start" showArrow offset={10}>
                 <PopoverTrigger>
                   <Button isIconOnly variant="bordered" className="bg-blue-900">
                     <SlLayers
                       className={`text-white cursor-pointer h-6 w-6`}
-                    // onClick={onClickViewMinusZoom}
+                      // onClick={onClickViewMinusZoom}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -2019,28 +2050,31 @@ export const CompanyMap = () => {
                         <ButtonGroup variant="faded" color="primary">
                           <Button
                             onClick={() => setLyrs("m")}
-                            className={`${companyLyrs == "m"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              companyLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Map
                           </Button>
                           <Button
                             onClick={() => setLyrs("s")}
-                            className={`${companyLyrs == "s"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              companyLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Satellite
                           </Button>
                           <Button
                             onClick={() => setLyrs("p")}
-                            className={`${companyLyrs == "p"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              companyLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Terrain
                           </Button>
@@ -2071,35 +2105,40 @@ export const CompanyMap = () => {
             >
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${companyLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  } w-22`}
+                className={`${
+                  companyLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                } w-22`}
               >
                 Map
               </Button>
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${companyLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22 `}
+                className={`${
+                  companyLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22 `}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${companyLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22 `}
+                className={`${
+                  companyLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22 `}
               >
                 Terrain
               </Button>
             </ButtonGroup>
           </div>
           <div>
-            <p>{copyRight}</p>
+            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">
+              {copyRight}
+            </p>
           </div>
 
           <ButtonGroup
@@ -2182,10 +2221,10 @@ export const CompanyMap = () => {
                     : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                  ? isTabletOrMobile
-                    ? "calc(100vw - 208px)"
-                    : "calc(100vw - 288px)"
-                  : "100vw"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
+                : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2239,7 +2278,7 @@ export const CompanyMap = () => {
                 ref={claimLinkSourceRef}
                 minResolution={0}
                 maxResolution={maxResolutionSyncOutlines}
-              //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>

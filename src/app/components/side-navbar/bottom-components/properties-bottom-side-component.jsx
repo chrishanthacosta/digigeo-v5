@@ -14,7 +14,6 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
 import {
-
   setpropertyMapAreaBoundaryLayerVisible,
   setpropertyMapAssetLayerVisible,
   setpropertyMapClaimLayerVisible,
@@ -30,36 +29,32 @@ import {
   setpmapClaimLableVisible,
   setpmapsyncPropLableVisible,
   setpmapAreaLableVisible,
-  setpmapAssetLableVisible
+  setpmapAssetLableVisible,
 } from "../../../../store/properties-map/properties-map-slice";
 import Image from "next/image";
-import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
-import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
-import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import LayerVisibleVisibilityStateDiv from "./../../common-comp/layer-visible-eye-visibility-state";
+import LayerVisibleLockVisibilityDiv from "./../../common-comp/layer-visible-eye-with-lock-with-visibility";
+import AccordionItemWithEyeWithLockVisibility from "./../../common-comp/accordion-eye-with-lock-with-visibilty";
 import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
 import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
 import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
 
-
-
 const PropertiesBottomSideComp = () => {
-
-
-
   let pathname = "";
   const dispatch = useDispatch();
-  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =
+    useState(true);
   const [claimsVisibilityState, setclaimsVisibilityState] = useState(true);
   const [propertyVisibilityState, setpropertyVisibilityState] = useState(true);
   const [assetVisibilityState, setassetVisibilityState] = useState(true);
-  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] = useState(false);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =
+    useState(false);
 
   // const [pMapViewScales, setpMapViewScales] = useState({});
 
-
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -86,7 +81,6 @@ const PropertiesBottomSideComp = () => {
       content: "Content for Accordion Item 3",
     },
   ];
-
 
   //layer visibility redux states
   const propertyMapFpropLayerVisible = useSelector(
@@ -118,19 +112,29 @@ const PropertiesBottomSideComp = () => {
     dispatch(setpropertyMapAssetLayerVisible(!propertyMapAssetLayerVisible));
   };
   const setpropertyMapSyncPropLayerVisibility = (e) => {
-    dispatch(setpropertyMapSyncPropLayerVisible(!propertyMapSyncPropLayerVisible));
+    dispatch(
+      setpropertyMapSyncPropLayerVisible(!propertyMapSyncPropLayerVisible)
+    );
   };
   const setpropertyMapSyncClaimLinkLayerVisibility = (e) => {
-    dispatch(setpropertyMapSyncClaimLinkLayerVisible(!propertyMapSyncClaimLinkLayerVisible));
+    dispatch(
+      setpropertyMapSyncClaimLinkLayerVisible(
+        !propertyMapSyncClaimLinkLayerVisible
+      )
+    );
   };
   const setpropertyMapClaimLayerVisibility = (e) => {
     dispatch(setpropertyMapClaimLayerVisible(!propertyMapClaimLayerVisible));
   };
   const setpropertyMapAreaBoundaryLayerVisibility = (e) => {
-    dispatch(setpropertyMapAreaBoundaryLayerVisible(!propertyMapAreaBoundaryLayerVisible));
+    dispatch(
+      setpropertyMapAreaBoundaryLayerVisible(
+        !propertyMapAreaBoundaryLayerVisible
+      )
+    );
   };
 
-  //asset visibility redux states 
+  //asset visibility redux states
   const propertyMapAssetOpMineVisible = useSelector(
     (state) => state.propertiesMapReducer.propertyMapAssetOpMineVisible
   );
@@ -150,26 +154,36 @@ const PropertiesBottomSideComp = () => {
   //asset type visibility functions
   const setpropertyMapAssetOpMineVisibility = (e) => {
     dispatch(setpropertyMapAssetOpMineVisible(!propertyMapAssetOpMineVisible));
-  }
+  };
   const setpropertyMapAssetDepositVisibility = (e) => {
-    dispatch(setpropertyMapAssetDepositsVisible(!propertyMapAssetDepositsVisible));
-  }
+    dispatch(
+      setpropertyMapAssetDepositsVisible(!propertyMapAssetDepositsVisible)
+    );
+  };
   const setpropertyMapAssetZoneVisibility = (e) => {
     dispatch(setpropertyMapAssetZoneVisible(!propertyMapAssetZoneVisible));
-  }
+  };
   const setpropertyMapAssetHistoricalVisibility = (e) => {
-    dispatch(setpropertyMapAssetHistoricalVisible(!propertyMapAssetHistoricalVisible));
-  }
+    dispatch(
+      setpropertyMapAssetHistoricalVisible(!propertyMapAssetHistoricalVisible)
+    );
+  };
   const setpropertyMapAssetOccurrenceVisibility = (e) => {
-    dispatch(setpropertyMapAssetOccurrenceVisible(!propertyMapAssetOccurrenceVisible));
-  }
+    dispatch(
+      setpropertyMapAssetOccurrenceVisible(!propertyMapAssetOccurrenceVisible)
+    );
+  };
   const setpropertyAssetLayerAlwaysVisibility = (e) => {
-    dispatch(setpropertyAssetLayerAlwaysVisible(!propertyAssetLayerAlwaysVisible));
+    dispatch(
+      setpropertyAssetLayerAlwaysVisible(!propertyAssetLayerAlwaysVisible)
+    );
   };
 
-
   useEffect(() => {
-    if (propertyMapSyncPropLayerVisible && propertyMapSyncClaimLinkLayerVisible) {
+    if (
+      propertyMapSyncPropLayerVisible &&
+      propertyMapSyncClaimLinkLayerVisible
+    ) {
       setproperty_claimLinkGroupVisible(true);
     } else {
       setproperty_claimLinkGroupVisible(false);
@@ -178,7 +192,10 @@ const PropertiesBottomSideComp = () => {
 
   //handle Properties Group Eye
   const setPropertiesGroupEye = () => {
-    if (propertyMapSyncPropLayerVisible || propertyMapSyncClaimLinkLayerVisible) {
+    if (
+      propertyMapSyncPropLayerVisible ||
+      propertyMapSyncClaimLinkLayerVisible
+    ) {
       dispatch(setpropertyMapSyncPropLayerVisible(false));
       dispatch(setpropertyMapSyncClaimLinkLayerVisible(false));
     } else {
@@ -200,21 +217,30 @@ const PropertiesBottomSideComp = () => {
   // },[propertyMapViewScales])
 
   useEffect(() => {
-    console.log("popl23-pCurrentScale", propertyCurrentScale, propertyMapViewScales)
+    console.log(
+      "popl23-pCurrentScale",
+      propertyCurrentScale,
+      propertyMapViewScales
+    );
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (propertyMapViewScales) {
-      console.log("popl23-succ-pMapViewScales", propertyMapViewScales)
-      propertyMapViewScales.claimscale > propertyCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
-      propertyMapViewScales.proplayerscale > propertyCurrentScale ? setpropertyVisibilityState(true) : setpropertyVisibilityState(false)
-      propertyMapViewScales.assetscale > propertyCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
-      propertyMapViewScales.propoutlinescale > propertyCurrentScale ? setpropertyOutLineVisibilityState(true) : setpropertyOutLineVisibilityState(false)
-
+      console.log("popl23-succ-pMapViewScales", propertyMapViewScales);
+      propertyMapViewScales.claimscale > propertyCurrentScale
+        ? setclaimsVisibilityState(true)
+        : setclaimsVisibilityState(false);
+      propertyMapViewScales.proplayerscale > propertyCurrentScale
+        ? setpropertyVisibilityState(true)
+        : setpropertyVisibilityState(false);
+      propertyMapViewScales.assetscale > propertyCurrentScale
+        ? setassetVisibilityState(true)
+        : setassetVisibilityState(false);
+      propertyMapViewScales.propoutlinescale > propertyCurrentScale
+        ? setpropertyOutLineVisibilityState(true)
+        : setpropertyOutLineVisibilityState(false);
     }
 
     // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
-
-  }, [propertyCurrentScale, propertyMapViewScales])
-
+  }, [propertyCurrentScale, propertyMapViewScales]);
 
   const setClaimLabelVisibility = (state) => {
     dispatch(setpmapClaimLableVisible(state));
@@ -244,13 +270,36 @@ const PropertiesBottomSideComp = () => {
   const pmapAssetLableVisible = useSelector(
     (state) => state.propertiesMapReducer.pmapAssetLableVisible
   );
+  const isPropertiesSideNavOpen = useSelector(
+    (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
+  );
+
+  const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
+
+   const propertySearchQuery = useSelector(
+     (state) => state.propertiesMapReducer.propertySearchQuery
+   );
 
   return (
     <div className="flex flex-col w-full  h-full grow">
       <div className="ml-2 mr-2  flex items-center justify-center border-b-2 dark:text-white text-black">
         <span className="font-bold">Map Layers</span>
       </div>
-      <div className="overflow-y-auto max-h-[52vh]">
+      <div
+        // className="overflow-y-auto max-h-[52vh]"
+        className={`${
+          selectedMap === "properties" &&
+          !isPropertiesSideNavOpen &&
+          propertySearchQuery
+            ? // &&
+              // areaCountry != "" &&
+              // areaState != ""
+              "overflow-y-auto max-h-[50vh]"
+            : "overflow-y-auto max-h-[52vh]"
+        } `}
+      >
         <Accordion>
           <div className="flex flex-col gap-1">
             <AccordionItemWithEyeWithLockVisibilityLabel

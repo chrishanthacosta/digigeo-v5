@@ -6,7 +6,7 @@ import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import { Button, ButtonGroup, Tooltip } from "@nextui-org/react";
 import {
   setAreaInitialCenter,
   setAreaLyrs,
@@ -17,7 +17,6 @@ import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import {
-
   setclickassetObject,
   setclickclaimObject,
   setclickfPropertyObject,
@@ -76,7 +75,6 @@ import { SlLayers } from "react-icons/sl";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import { useMediaQuery } from "react-responsive";
 
-
 const fill = new Fill();
 const stroke = new Stroke({
   color: "rgba(0,0,0,0.8)",
@@ -103,7 +101,6 @@ const assetTypesColorMappings = [
     src: "svgicons/past_producer_black.svg",
   },
 ];
-
 
 const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -216,7 +213,7 @@ const svgOccurence = `<?xml version="1.0" encoding="utf-8"?>
             d="M2 1178 l-2 -1178 1223 2 c699 0 1162 4 1082 9 -468 25 -949 210 -1345 517 -117 91 -306 277 -401 395 -232 288 -391 602 -483 958 -24 94 -62 327 -69 424 -2 28 -4 -480 -5 -1127z" />
     </g>
 
-</svg>`
+</svg>`;
 
 const getText = function (feature, resolution) {
   // const type = dom.text.value;
@@ -248,7 +245,6 @@ const getText = function (feature, resolution) {
 
 const createTextStyle = function (feature, resolution) {
   // const font = 600 + " " + 65 + "/" + 65 + " " + "Sans Serif";
-
 
   return new Text({
     font: "bold 14px serif",
@@ -476,7 +472,6 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
   //set text Style
 
-
   image = new Circle({
     radius: 2,
     fill: new Fill({ color: colour }),
@@ -516,7 +511,7 @@ export const LandingMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
   //  useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -535,7 +530,6 @@ export const LandingMap = () => {
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
 
-
   const dispatch = useDispatch();
 
   const landingMapFlyToLocation = useSelector(
@@ -545,9 +539,9 @@ export const LandingMap = () => {
     (state) => state.landingMapReducer.navigatedFPropId
   );
 
-  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
-
-
+  const mapViewMode = useSelector(
+    (state) => state.mapSelectorReducer.mapViewMode
+  );
 
   const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
   //
@@ -576,7 +570,6 @@ export const LandingMap = () => {
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
     useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
-
 
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
@@ -613,19 +606,14 @@ export const LandingMap = () => {
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
-
   useEffect(() => {
-
     if (lmapNavigationExtent.length > 0) {
-
       mapRef.current?.getView()?.fit(lmapNavigationExtent, {
         padding: [100, 100, 100, 100],
         duration: 3000,
       });
-
-
     }
-  }, [lmapNavigationExtent])
+  }, [lmapNavigationExtent]);
 
   // useEffect(() => {
   //   console.log("maxResolutionFProp", maxResolutionFProp);
@@ -633,11 +621,11 @@ export const LandingMap = () => {
 
   const syncClaimLinkLoaderFunc = useCallback(
     (extent, resolution, projection) => {
-      console.log("outline-loading");
+     
       const url =
         `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
         `/${extent.join("/")}`;
-      // console.log("url", url);
+      
       fetch(url, {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
@@ -719,8 +707,8 @@ export const LandingMap = () => {
             fPropSourceLabelRef?.current?.clear();
             fPropSourceRef.current.addFeatures(features);
             fPropSourceLabelRef.current.addFeatures(features);
-            setfPropRenderCount((p) => p + 1)
-            console.log("qq2-loader-ext", extent)
+            setfPropRenderCount((p) => p + 1);
+            console.log("qq2-loader-ext", extent);
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
@@ -760,21 +748,21 @@ export const LandingMap = () => {
   useEffect(() => {
     if (navigatedFPropId != 0) {
       if (fPropSourceRef.current) {
-
         //set prev selected styles to null
         for (const fid of prevSelFeaturedProps) {
+          const fp = fPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("id") == fid);
 
-          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
-
-          fp?.setStyle(undefined)
-          mapRef.current.render()
+          fp?.setStyle(undefined);
+          mapRef.current.render();
         }
-        setprevSelFeaturedProps([])
+        setprevSelFeaturedProps([]);
 
         //highlight
-        const fp = fPropSourceRef.current.getFeatures().find(
-          (f) => f.get("id") == navigatedFPropId
-        );
+        const fp = fPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("id") == navigatedFPropId);
         if (fp) {
           // setunselectFProps((p) => p + 1)
 
@@ -782,45 +770,40 @@ export const LandingMap = () => {
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp.setStyle(selectStyle);
-          mapRef.current.render()
-          setprevSelFeaturedProps([navigatedFPropId])
-
+          mapRef.current.render();
+          setprevSelFeaturedProps([navigatedFPropId]);
         }
       }
     }
-  }, [navigatedFPropId])
-
+  }, [navigatedFPropId]);
 
   useEffect(() => {
     //unselect prev styles
     for (const fid of prevSelFeaturedProps) {
+      const fp = fPropSourceRef?.current
+        ?.getFeatures()
+        .find((f) => f.get("id") == fid);
 
-      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
-
-      fp?.setStyle(undefined)
+      fp?.setStyle(undefined);
     }
     mapRef.current.render();
-    setprevSelFeaturedProps([])
+    setprevSelFeaturedProps([]);
 
     if (lmapNavigationHighlightFProps.length > 0) {
-
       for (const fpid of lmapNavigationHighlightFProps) {
-        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        const fp = fPropSourceRef?.current
+          ?.getFeatures()
+          .find((f) => f.get("id") == fpid);
         if (fp) {
-
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp?.setStyle(selectStyle);
         }
-
       }
-      setprevSelFeaturedProps(lmapNavigationHighlightFProps)
-
+      setprevSelFeaturedProps(lmapNavigationHighlightFProps);
     }
   }, [lmapNavigationHighlightFProps]);
-
-
 
   useEffect(() => {
     dispatch(setclickassetObject(assetObject));
@@ -1037,15 +1020,13 @@ export const LandingMap = () => {
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
-    setfPropRenderCount((p) => p + 1)
+    setfPropRenderCount((p) => p + 1);
     //mapRef.current.render()
   }, []);
 
-
   useEffect(() => {
-
     if (fPropVectorLayerRef?.current?.isVisible()) {
-      console.log("qq2-scale-uef-",)
+      console.log("qq2-scale-uef-");
       //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
@@ -1063,25 +1044,22 @@ export const LandingMap = () => {
           map_area: f.get("map_area"),
         };
       });
-      console.log("qq2-1lmap-", vfObjs.length,)
+      console.log("qq2-1lmap-", vfObjs.length);
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0 && !isTabletOrMobile) {
         dispatch(setIsLandingMapSideNavOpen(true));
       } else {
-
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
-
-  }, [fPropRenderCount])
+  }, [fPropRenderCount]);
 
   const xonViewChange0 = useCallback((e) => {
-
     const scale = mapRatioScale({ map: mapRef.current });
-    console.log("qq2-0lmap-scale", scale)
+    console.log("qq2-0lmap-scale", scale);
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
@@ -1103,15 +1081,15 @@ export const LandingMap = () => {
           map_area: f.get("map_area"),
         };
       });
-      console.log("qq2-1lmap-", vfObjs.length,)
+      console.log("qq2-1lmap-", vfObjs.length);
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0) {
         // console.log("setIsLandingMapSideNavOpen(true",)
-        console.log("qq2-1.1-lmap-dispatch-sn",)
+        console.log("qq2-1.1-lmap-dispatch-sn");
         dispatch(setIsLandingMapSideNavOpen(true));
       } else {
-        console.log("qq2-1.2-lmap-dispatch-sn",)
+        console.log("qq2-1.2-lmap-dispatch-sn");
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
@@ -1133,7 +1111,7 @@ export const LandingMap = () => {
 
   useEffect(() => {
     if (landingMapFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, landingMapFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, landingMapFlyToLocation, () => {});
   }, [landingMapFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -1191,11 +1169,8 @@ export const LandingMap = () => {
       style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
       fPropVectorLayerLabelRef.current?.setStyle(style);
     } else {
-
       fPropVectorLayerLabelRef.current?.setStyle(style);
-
     }
-
   }, [fPropVectorLayerLabelRef.current, lmapFpropLableVisible]);
 
   useEffect(() => {
@@ -1226,7 +1201,6 @@ export const LandingMap = () => {
       allSyncPropSourceRef?.current?.addFeatures(e);
       setsyncPropsLoaded(true);
     }
-
   }, [syncPropertyFeatures]);
 
   // useEffect(() => {
@@ -1261,7 +1235,7 @@ export const LandingMap = () => {
 
   //init useeffect
   useEffect(() => {
-    console.log("mapViewMode", mapViewMode,)
+    console.log("mapViewMode", mapViewMode);
     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
       const e = new GeoJSON().readFeatures(assetFeatures);
@@ -1284,7 +1258,7 @@ export const LandingMap = () => {
   // init useeffect
   useEffect(() => {
     // mouseScrollEvent();
-    //console.log("yy-lmap -init") 
+    //console.log("yy-lmap -init")
 
     getSyncPropertiesGeometry();
   }, []);
@@ -1292,8 +1266,6 @@ export const LandingMap = () => {
   useEffect(() => {
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
-
-
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -1384,8 +1356,13 @@ export const LandingMap = () => {
         //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
         // window.history.replaceState({}, "", newUrl);
-        updateWindowsHistoryLmap({ isSideNavOpen, lyrs: mapLyrs, zoom: tmpZoomLevel, center: tmpinitialCenter, sidenav2: isLandingMapSideNavOpen });
-
+        updateWindowsHistoryLmap({
+          isSideNavOpen,
+          lyrs: mapLyrs,
+          zoom: tmpZoomLevel,
+          center: tmpinitialCenter,
+          sidenav2: isLandingMapSideNavOpen,
+        });
 
         // router.push(
         //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
@@ -1414,23 +1391,28 @@ export const LandingMap = () => {
   // };
 
   const collapsibleBtnHandler = () => {
-    console.log("yy-lmap-url2")
+    console.log("yy-lmap-url2");
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
 
-    newUrl = `${window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
 
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistoryLmap({ isSideNavOpen, lyrs: mapLyrs, zoom: landingMapZoomLevel, center: center, sidenav2: isLandingMapSideNavOpen });
-
+    updateWindowsHistoryLmap({
+      isSideNavOpen,
+      lyrs: mapLyrs,
+      zoom: landingMapZoomLevel,
+      center: center,
+      sidenav2: isLandingMapSideNavOpen,
+    });
 
     // dispatch(setUrlUpdate());
   };
 
   const setLyrs = (lyrs) => {
-
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
@@ -1440,7 +1422,13 @@ export const LandingMap = () => {
     //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter} `;
     // }
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistoryLmap({ isSideNavOpen, lyrs: lyrs, zoom: landingMapZoomLevel, center: landingMapInitialCenter, sidenav2: isLandingMapSideNavOpen });
+    updateWindowsHistoryLmap({
+      isSideNavOpen,
+      lyrs: lyrs,
+      zoom: landingMapZoomLevel,
+      center: landingMapInitialCenter,
+      sidenav2: isLandingMapSideNavOpen,
+    });
   };
   // const openAreaNav = () => {
   //   console.log("yy-lmap-url4")
@@ -1477,7 +1465,7 @@ export const LandingMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1541,7 +1529,6 @@ export const LandingMap = () => {
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(landingMapFpropLayerVisible);
     fPropVectorLayerLabelRef?.current?.setVisible(landingMapFpropLayerVisible);
-
   }, [landingMapFpropLayerVisible]);
   useEffect(() => {
     claimLinkVectorLayerRef?.current?.setVisible(
@@ -1699,8 +1686,7 @@ export const LandingMap = () => {
   );
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-
-    let txtObjAreaName
+    let txtObjAreaName;
     if (resolution < 3000) {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
@@ -1715,7 +1701,7 @@ export const LandingMap = () => {
         // maxAngle: maxAngle,
         overflow: true,
         // rotation: rotation,
-      })
+      });
     }
 
     const s = new Style({
@@ -1823,7 +1809,6 @@ export const LandingMap = () => {
   };
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
-
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
@@ -1986,8 +1971,6 @@ export const LandingMap = () => {
       const selSyncPropFeatures =
         allSyncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-
-
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
         clickedOnFeatureTmp = true;
@@ -2010,7 +1993,7 @@ export const LandingMap = () => {
         setsyncPropertyObject(syncPropertyObject1);
       } else {
         //if sync_prop  is not selected try claimlink prop outline
-        // 
+        //
         const getClinkData = async (propid) => {
           const url =
             "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
@@ -2042,11 +2025,12 @@ export const LandingMap = () => {
         };
 
         const selPropertyOutlineFeatures =
-          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
+          [];
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
-          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
-          const clinkDetails = await getClinkData(propId)
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
+          const clinkDetails = await getClinkData(propId);
 
           // console.log("clinkDetails", clinkDetails, propId)
 
@@ -2055,7 +2039,7 @@ export const LandingMap = () => {
           let name1 = clinkDetails?.[0]?.name ?? "";
           const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
-          const area = clinkDetails?.[0]?.area ?? "";
+          const area = clinkDetails?.[0]?.map_area ?? "";
           // const selSynClaimLinkFeatures =
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
@@ -2071,9 +2055,6 @@ export const LandingMap = () => {
           setsyncPropertyObject(undefined);
           dispatch(setclicksyncPropertyObject(undefined));
         }
-
-
-
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -2123,114 +2104,110 @@ export const LandingMap = () => {
     dispatch(setIsLandingMapSideNavOpen(false));
   };
 
-  const copyRight = `©2024 The Northern Miner`
+  const copyRight = `©2024 The Northern Miner`;
 
   const lmapsyncPropLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapsyncPropLableVisible
   );
 
-  const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
-    (feature, resolution) => {
+  const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction = (
+    feature,
+    resolution
+  ) => {
+    const colour = "#e8b52a"; //feature.values_.colour;
 
+    let fill = new Fill({
+      color: colour,
+      opacity: 1,
+    });
 
-      const colour = "#e8b52a"; //feature.values_.colour;
+    const stroke = new Stroke({
+      color: "#8B4513",
+      width: 1.25,
+    });
 
-      let fill = new Fill({
+    let image;
+    let text;
 
+    image = new Circle({
+      radius: 9,
+      fill: new Fill({ color: colour }),
+      // stroke: new Stroke({ color: "#8B4513", width: 3 }),
+    });
 
-        color: colour,
-        opacity: 1,
+    let textObj;
+    const size = feature.get("features").length;
+    if (size == 1 && resolution < 5000) {
+      const propName = feature.get("features")[0].get("prop_name");
+      textObj = new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font: "bold 16px serif",
+        text: lmapsyncPropLableVisible ? propName : "",
+        // fill: new Fill({ color: fillColor }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 2,
+        offsetY: -19,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        // overflow: overflow,
+        // rotation: rotation,
       });
+    } else {
+      textObj = new Text({
+        text: size.toString(),
 
-      const stroke = new Stroke({
-        color: "#8B4513",
-        width: 1.25,
+        fill: new Fill({
+          color: "#fff",
+        }),
       });
+    }
+    //  if (resolution < 700) {
+    //     propNameTextObj = new Text({
+    //       // textAlign: align == "" ? undefined : align,
+    //       // textBaseline: baseline,
+    //       font: "bold 16px serif",
+    //       text: propName,
+    //       // fill: new Fill({ color: fillColor }),
+    //       // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+    //       offsetX: 2,
+    //       offsetY: -10,
+    //       // placement: placement,
+    //       // maxAngle: maxAngle,
+    //       // overflow: overflow,
+    //       // rotation: rotation,
+    //     });
+    //   }
 
-      let image;
-      let text;
+    // if (resolution > 500) {
+    //    image = null;
+    // }
+    // console.log("featuresqqqq",feature)
 
-      image = new Circle({
-        radius: 9,
-        fill: new Fill({ color: colour }),
-        // stroke: new Stroke({ color: "#8B4513", width: 3 }),
-      });
+    //console.log("size",size)
+    // let style = styleCache[size];
+    // if (!style) {
 
-      let textObj;
-      const size = feature.get("features").length;
-      if (size == 1 && resolution < 5000) {
-        const propName = feature.get("features")[0].get("prop_name");
-        textObj = new Text({
-          //       // textAlign: align == "" ? undefined : align,
-          //       // textBaseline: baseline,
-          font: "bold 16px serif",
-          text: lmapsyncPropLableVisible ? propName : "",
-          // fill: new Fill({ color: fillColor }),
-          // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-          offsetX: 2,
-          offsetY: -19,
-          // placement: placement,
-          // maxAngle: maxAngle,
-          // overflow: overflow,
-          // rotation: rotation,
-        });
-      } else {
-        textObj = new Text({
-          text: size.toString(),
-
-          fill: new Fill({
-            color: "#fff",
-          }),
-        });
-      }
-      //  if (resolution < 700) {
-      //     propNameTextObj = new Text({
-      //       // textAlign: align == "" ? undefined : align,
-      //       // textBaseline: baseline,
-      //       font: "bold 16px serif",
-      //       text: propName,
-      //       // fill: new Fill({ color: fillColor }),
-      //       // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-      //       offsetX: 2,
-      //       offsetY: -10,
-      //       // placement: placement,
-      //       // maxAngle: maxAngle,
-      //       // overflow: overflow,
-      //       // rotation: rotation,
-      //     });
-      //   }
-
-      // if (resolution > 500) {
-      //    image = null;
-      // }
-      // console.log("featuresqqqq",feature)
-
-      //console.log("size",size)
-      // let style = styleCache[size];
-      // if (!style) {
-
-      const style = new Style({
-        //  stroke: new Stroke({
-        //    color: "#021691",
-        //    width: 2,
-        //  }),
-        image,
-        //  text: propNameTextObj,
-        text: textObj,
-        fill,
-      });
-      // styleCache[size] = style;
-      // }// console.log("st", st);
-      return style;
-    };
+    const style = new Style({
+      //  stroke: new Stroke({
+      //    color: "#021691",
+      //    width: 2,
+      //  }),
+      image,
+      //  text: propNameTextObj,
+      text: textObj,
+      fill,
+    });
+    // styleCache[size] = style;
+    // }// console.log("st", st);
+    return style;
+  };
 
   const lmapAssetLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapAssetLableVisible
   );
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
-
-
     const colour = feature.values_.colour;
 
     const fill = new Fill({
@@ -2273,14 +2250,12 @@ export const LandingMap = () => {
     } else if (resolution > 125) {
       svgScale = 1.375;
       radius = 5;
-
     } else {
       svgScale = 1.5;
       radius = 10;
     }
     let image;
     let text;
-
 
     if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
       image = new Icon({
@@ -2309,7 +2284,6 @@ export const LandingMap = () => {
       });
     }
 
-
     //set text Style
 
     text = createTextStyle(feature, resolution);
@@ -2327,91 +2301,125 @@ export const LandingMap = () => {
     return st;
   };
 
-
-
-
   return (
     <div className="flex   ">
       <LandingMapSideNavbar />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50  ">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`}>
-              <BsFillArrowLeftSquareFill
-                // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show/Hide Details"
+              placement="right"
+            >
+              <Button
+                isIconOnly
+                variant="bordered"
+                className={`bg-blue-900 ${
+                  mapViewMode == "HEADED" ? "flex" : "hidden"
+                }`}
+              >
+                <BsFillArrowLeftSquareFill
+                  // size={26}
+                  className={`cursor-pointer text-white h-6 w-6 ${
+                    isSideNavOpen ? "" : "rotate-180"
                   }`}
-                onClick={() => collapsibleBtnHandler()}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewInitZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillPlusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewPlusZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillMinusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewMinusZoom}
-              />
-            </Button>
-
-            {isTabletOrMobile && <Popover placement="right-start" showArrow offset={10}>
-              <PopoverTrigger>
-                <Button isIconOnly variant="bordered" className="bg-blue-900">
-                  <SlLayers
-                    className={`text-white cursor-pointer h-6 w-6`}
-                  // onClick={onClickViewMinusZoom}
-                  />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className=" ">
-                {(titleProps) => (
-                  <div className="px-1 py-2 w-full">
-                    <p className="text-small font-bold text-foreground" {...titleProps}>
-                      Layers
-                    </p>
-                    <div className="mt-2 flex   gap-2 w-full">
-                      <ButtonGroup
-                        variant="faded"
-
-                        color="primary"
+                  onClick={() => collapsibleBtnHandler()}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show Entire Map"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <GiEarthAmerica
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewInitZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom In"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillPlusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewPlusZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom Out"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillMinusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewMinusZoom}
+                />
+              </Button>
+            </Tooltip>
+            {isTabletOrMobile && (
+              <Popover placement="right-start" showArrow offset={10}>
+                <PopoverTrigger>
+                  <Button isIconOnly variant="bordered" className="bg-blue-900">
+                    <SlLayers
+                      className={`text-white cursor-pointer h-6 w-6`}
+                      // onClick={onClickViewMinusZoom}
+                    />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className=" ">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p
+                        className="text-small font-bold text-foreground"
+                        {...titleProps}
                       >
-                        <Button
-                          onClick={() => setLyrs("m")}
-                          className={`${mapLyrs == "m"
-                            ? "bg-blue-900 text-white"
-                            : "bg-blue-700 text-white"
+                        Layers
+                      </p>
+                      <div className="mt-2 flex   gap-2 w-full">
+                        <ButtonGroup variant="faded" color="primary">
+                          <Button
+                            onClick={() => setLyrs("m")}
+                            className={`${
+                              mapLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
                             }  w-22`}
-                        >
-                          Map
-                        </Button>
-                        <Button
-                          onClick={() => setLyrs("s")}
-                          className={`${mapLyrs == "s"
-                            ? "bg-blue-900 text-white"
-                            : "bg-blue-700 text-white"
+                          >
+                            Map
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("s")}
+                            className={`${
+                              mapLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
                             }  w-22`}
-                        >
-                          Satellite
-                        </Button>
-                        <Button
-                          onClick={() => setLyrs("p")}
-                          className={`${mapLyrs == "p"
-                            ? "bg-blue-900 text-white"
-                            : "bg-blue-700 text-white"
+                          >
+                            Satellite
+                          </Button>
+                          <Button
+                            onClick={() => setLyrs("p")}
+                            className={`${
+                              mapLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
                             }  w-22`}
-                        >
-                          Terrain
-                        </Button>
-                        {/* <Button
+                          >
+                            Terrain
+                          </Button>
+                          {/* <Button
             className={`${
               mapLyrs == "p"
                 ? "bg-blue-900 text-white"
@@ -2420,12 +2428,13 @@ export const LandingMap = () => {
           >
             {curcenteredareaid}
           </Button> */}
-                      </ButtonGroup>
+                        </ButtonGroup>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </PopoverContent>
-            </Popover>}
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
 
             {/* {!isLandingMapSideNavOpen && isSideNavOpen ? (
               <Button
@@ -2439,44 +2448,46 @@ export const LandingMap = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap " >
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap ">
           <div className="hidden sm:block">
-            <ButtonGroup
-              variant="faded"
-
-              color="primary"
-            >
+            <ButtonGroup variant="faded" color="primary">
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${mapLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Map
               </Button>
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${mapLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${mapLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Terrain
               </Button>
-
             </ButtonGroup>
           </div>
-          <div><p>{copyRight}</p></div>
+          <div>
+            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">
+              {copyRight}
+            </p>
+          </div>
           <ButtonGroup
             variant="faded"
             // className="    hidden md:block "
@@ -2553,8 +2564,12 @@ export const LandingMap = () => {
           style={{
             width: isSideNavOpen
               ? isLandingMapSideNavOpen
-                ? mapViewMode == "HEADED" ? "65vw" : "100vw"
-                : mapViewMode == "HEADED" ? "83vw" : "100vw"
+                ? mapViewMode == "HEADED"
+                  ? "65vw"
+                  : "100vw"
+                : mapViewMode == "HEADED"
+                ? "83vw"
+                : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2619,7 +2634,7 @@ export const LandingMap = () => {
               ref={claimLinkSourceRef}
               strategy={bbox}
               loader={syncClaimLinkLoaderFunc}
-            // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
             ></olSourceVector>
           </olLayerVector>
           <olLayerVectorImage
@@ -2630,10 +2645,9 @@ export const LandingMap = () => {
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
-              // format={new GeoJSON()}  
+              // format={new GeoJSON()}
               strategy={bbox}
               loader={claimLoaderFunc}
-
             ></olSourceVector>
           </olLayerVectorImage>
 
@@ -2656,7 +2670,9 @@ export const LandingMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={landingAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
+            maxResolution={
+              landingAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets
+            }
           >
             <olSourceVector
               ref={assetSourceRef}
@@ -2671,7 +2687,6 @@ export const LandingMap = () => {
               commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction
             }
           >
-
             <olSourceCluster distance={distance} minDistance={minDistance}>
               <olSourceVector ref={allSyncPropSourceRef}>
                 {/* <PointsAtCoordinates coordinates={coordinates} /> */}

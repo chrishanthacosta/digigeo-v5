@@ -509,7 +509,7 @@ export const AreaMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
   //  useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -889,7 +889,7 @@ export const AreaMap = () => {
 
   useEffect(() => {
     if (areaFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, areaFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, areaFlyToLocation, () => {});
   }, [areaFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -1285,7 +1285,7 @@ export const AreaMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1862,7 +1862,7 @@ export const AreaMap = () => {
           let name1 = clinkDetails?.[0]?.name ?? "";
           const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
-          const area = clinkDetails?.[0]?.area ?? "";
+          const area = clinkDetails?.[0]?.map_area ?? "";
           // const selSynClaimLinkFeatures =
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
@@ -2096,8 +2096,11 @@ export const AreaMap = () => {
     return st;
   };
 
-  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+  console.log("isTabletOrMobile", isTabletOrMobile);
 
+  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
+  const ShowButtonGroup =
+    !isTabletOrMobile || (isTabletOrMobile && !isSideNavOpen);
   return (
     <div className="flex ">
       <ToastContainer
@@ -2118,44 +2121,75 @@ export const AreaMap = () => {
       <div className="relative ">
         <div className="w-12 absolute left-0 top-0 z-50 ">
           <div className="flex flex-col gap-4 mt-2">
-            <Button
-              isIconOnly
-              variant="bordered"
-              className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"
-                }`}
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show/Hide Details"
+              placement="right"
             >
-              <BsFillArrowLeftSquareFill
-                // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+              <Button
+                isIconOnly
+                variant="bordered"
+                className={`bg-blue-900 ${
+                  mapViewMode == "HEADED" ? "flex" : "hidden"
+                }`}
+              >
+                <BsFillArrowLeftSquareFill
+                  // size={26}
+                  className={`cursor-pointer text-white h-6 w-6 ${
+                    isSideNavOpen ? "" : "rotate-180"
                   }`}
-                onClick={() => collapsibleBtnHandler()}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewInitZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillPlusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewPlusZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillMinusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewMinusZoom}
-              />
-            </Button>
+                  onClick={() => collapsibleBtnHandler()}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show Entire Map"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <GiEarthAmerica
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewInitZoom}
+                />
+              </Button>
+            </Tooltip>
+
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom In"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillPlusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewPlusZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom Out"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillMinusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewMinusZoom}
+                />
+              </Button>
+            </Tooltip>
             {isTabletOrMobile && (
               <Popover placement="right-start" showArrow offset={10}>
                 <PopoverTrigger>
                   <Button isIconOnly variant="bordered" className="bg-blue-900">
                     <SlLayers
                       className={`text-white cursor-pointer h-6 w-6`}
-                    // onClick={onClickViewMinusZoom}
+                      // onClick={onClickViewMinusZoom}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -2172,28 +2206,31 @@ export const AreaMap = () => {
                         <ButtonGroup variant="faded" color="primary">
                           <Button
                             onClick={() => setLyrs("m")}
-                            className={`${mapLyrs == "m"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              mapLyrs == "m"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Map
                           </Button>
                           <Button
                             onClick={() => setLyrs("s")}
-                            className={`${mapLyrs == "s"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              mapLyrs == "s"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Satellite
                           </Button>
                           <Button
                             onClick={() => setLyrs("p")}
-                            className={`${mapLyrs == "p"
-                              ? "bg-blue-900 text-white"
-                              : "bg-blue-700 text-white"
-                              }  w-22`}
+                            className={`${
+                              mapLyrs == "p"
+                                ? "bg-blue-900 text-white"
+                                : "bg-blue-700 text-white"
+                            }  w-22`}
                           >
                             Terrain
                           </Button>
@@ -2252,28 +2289,32 @@ export const AreaMap = () => {
             >
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${mapLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "m"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Map
               </Button>
+
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${mapLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "s"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${mapLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
-                  }  w-22`}
+                className={`${
+                  mapLyrs == "p"
+                    ? "bg-blue-900 text-white"
+                    : "bg-blue-700 text-white"
+                }  w-22`}
               >
                 Terrain
               </Button>
@@ -2281,26 +2322,27 @@ export const AreaMap = () => {
           </div>
 
           <div>
-            <p>{copyRight}</p>
+            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">{copyRight}</p>
           </div>
 
-          <ButtonGroup
-            variant="faded"
-            // className="fixed right-[85px] bottom-1 z-50 "
+          {ShowButtonGroup && (
+            <ButtonGroup
+              variant="faded"
+              // className="fixed right-[85px] bottom-1 z-50 "
 
-            color="primary"
-          >
-            <Button className={`w-32 bg-blue-700 text-white`}>
-              {`Scale:${mapScale}`}
-            </Button>
-            <Button className={`w-32 bg-blue-700 text-white`}>
-              {`Lat:${lat}`}
-            </Button>
-            <Button className={`w-32 bg-blue-700 text-white`}>
-              {`Long:${long}`}
-            </Button>
-          </ButtonGroup>
-
+              color="primary"
+            >
+              <Button className={`w-32 bg-blue-700 text-white`}>
+                {`Scale:${mapScale}`}
+              </Button>
+              <Button className={`w-32 bg-blue-700 text-white`}>
+                {`Lat:${lat}`}
+              </Button>
+              <Button className={`w-32 bg-blue-700 text-white`}>
+                {`Long:${long}`}
+              </Button>
+            </ButtonGroup>
+          )}
         </div>
         <Draggable>
           <div
@@ -2368,10 +2410,10 @@ export const AreaMap = () => {
                     : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                  ? isTabletOrMobile
-                    ? "calc(100vw - 208px)"
-                    : "calc(100vw - 288px)"
-                  : "100vw"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
+                : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2432,7 +2474,7 @@ export const AreaMap = () => {
             {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>
@@ -2469,9 +2511,9 @@ export const AreaMap = () => {
               areaAssetLayerAlwaysVisible
                 ? 40075016
                 : getMapResolution(
-                  areaMapViewScales?.assetscale ?? 450000,
-                  mapUnits
-                ) ?? 150
+                    areaMapViewScales?.assetscale ?? 450000,
+                    mapUnits
+                  ) ?? 150
             }
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
@@ -2484,9 +2526,9 @@ export const AreaMap = () => {
               areaSyncPropLayerAlwaysVisible
                 ? 40075016
                 : getMapResolution(
-                  areaMapViewScales?.proplayerscale ?? 950000,
-                  mapUnits
-                ) ?? 150
+                    areaMapViewScales?.proplayerscale ?? 950000,
+                    mapUnits
+                  ) ?? 150
             }
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
