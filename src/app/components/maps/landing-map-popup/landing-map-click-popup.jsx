@@ -13,23 +13,7 @@ const arimo = Arimo({
 })
 
 const LandingMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
-
-  
-
-
-  //clickObjects
-  // const claimObj = useSelector(
-  //   (state) => state.areaMapReducer.clickclaimObject
-  // );
-  // const fpropObj = useSelector(
-  //   (state) => state.areaMapReducer.clickfPropertyObject
-  // );
-  // const assetObj = useSelector(
-  //   (state) => state.areaMapReducer.clickassetObject
-  // );
-  // const syncPropObj = useSelector(
-  //   (state) => state.areaMapReducer.clicksyncPropertyObject
-  // );
+ 
 
   const [resourcesFormated, setresourcesFormated] = useState([]);
 
@@ -150,9 +134,14 @@ const LandingMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => 
               />
               <LandingMapClickPopupRow
                 label={"External Property Page:"}
-                value={fpropObj.prop_exturl ? "Open Url" : ""}
+                value={fpropObj.prop_exturl }
                 url={fpropObj.prop_exturl}
               />
+              {/* <LandingMapClickPopupRow
+                label={"External Property Page:"}
+                value={fpropObj.prop_exturl ? "Open Url" : ""}
+                url={fpropObj.prop_exturl}
+              /> */}
             </div>
           </div>
         </Tab>

@@ -22,7 +22,7 @@ import useDebounce from "./useDebounce";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import { useMediaQuery } from "react-responsive";
 import { setIsSideNavOpen } from "@/store/map-selector/map-selector-slice";
-
+import { ToastContainer, toast } from "react-toastify";
 const CompanyFilter = ({ isOpenIn, closePopup }) => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
@@ -172,6 +172,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
 
   const searchAction = async () => {
     // if (company && miningArea) {
+      if(companyidLocal){
     dispatch(setcompanyId(companyidLocal));
     dispatch(setcompanyName(company));
     dispatch(setcompanyZoomMode("extent"));
@@ -195,6 +196,9 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     dispatch(setcompanyStockcode(stockcode));
     closePopup();
     // }
+  }else{
+    toast.error("Company Not Found")
+  }
   };
 
   useEffect(() => {
@@ -256,6 +260,18 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         style={customStyles}
         ariaHideApp={false}
       >
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div className="bg-white rounded-lg ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
@@ -270,8 +286,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
             <div className="mx-auto w-full max-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap mt-8">
                 <div className="w-full px-3 flex flex-col gap-3">
-                 
-                 
                   <div className="flex-col gap-2">
                     <span className="block">Filter By Company Name</span>
                     <Autocomplete
@@ -337,7 +351,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-
                   </div>
                 </div>
               </div>

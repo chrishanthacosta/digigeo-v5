@@ -471,7 +471,7 @@ const CompanySideNavbar = () => {
 
   };
   return (
-    <section className="flex gap-6">
+    <section className="flex gap-6 text-black">
       <div className={`duration-500 flex w-auto`}>
         <div
           className={`

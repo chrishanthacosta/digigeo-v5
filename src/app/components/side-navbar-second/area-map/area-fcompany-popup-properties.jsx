@@ -308,7 +308,10 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           >
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-              <div> {fp.get("prop_name") + "[" + fps.length + " polygons]"}</div>
+              <div>
+                 
+                <span>{fp.get("prop_name")}</span> <span className="text-gray-500"> {` (${fps.length} Polygons)`}</span>
+              </div>
             </div>
             <div className="flex gap-1">
               <span className="">
@@ -323,8 +326,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
-                //onClick={() => setIsOpenIn(true)}
-                // onClick={() => console.log("title", title)}
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
                 />
               </span>
 
@@ -340,8 +343,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
               />
             </div>
           </div>
-
-        )
+        );
       }
 
     });

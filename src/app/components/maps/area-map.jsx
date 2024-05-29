@@ -1862,7 +1862,7 @@ export const AreaMap = () => {
           let name1 = clinkDetails?.[0]?.name ?? "";
           const state_prov = clinkDetails?.[0]?.state_prov ?? "";
           const country = clinkDetails?.[0]?.country ?? "";
-          const area = clinkDetails?.[0]?.area ?? "";
+          const area = clinkDetails?.[0]?.map_area ?? "";
           // const selSynClaimLinkFeatures =
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
@@ -2121,39 +2121,68 @@ export const AreaMap = () => {
       <div className="relative ">
         <div className="w-12 absolute left-0 top-0 z-50 ">
           <div className="flex flex-col gap-4 mt-2">
-            <Button
-              isIconOnly
-              variant="bordered"
-              className={`bg-blue-900 ${
-                mapViewMode == "HEADED" ? "flex" : "hidden"
-              }`}
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show/Hide Details"
+              placement="right"
             >
-              <BsFillArrowLeftSquareFill
-                // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${
-                  isSideNavOpen ? "" : "rotate-180"
+              <Button
+                isIconOnly
+                variant="bordered"
+                className={`bg-blue-900 ${
+                  mapViewMode == "HEADED" ? "flex" : "hidden"
                 }`}
-                onClick={() => collapsibleBtnHandler()}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewInitZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillPlusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewPlusZoom}
-              />
-            </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <AiFillMinusSquare
-                className={`text-white cursor-pointer h-6 w-6`}
-                onClick={onClickViewMinusZoom}
-              />
-            </Button>
+              >
+                <BsFillArrowLeftSquareFill
+                  // size={26}
+                  className={`cursor-pointer text-white h-6 w-6 ${
+                    isSideNavOpen ? "" : "rotate-180"
+                  }`}
+                  onClick={() => collapsibleBtnHandler()}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Show Entire Map"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <GiEarthAmerica
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewInitZoom}
+                />
+              </Button>
+            </Tooltip>
+
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom In"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillPlusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewPlusZoom}
+                />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom Out"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <AiFillMinusSquare
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickViewMinusZoom}
+                />
+              </Button>
+            </Tooltip>
             {isTabletOrMobile && (
               <Popover placement="right-start" showArrow offset={10}>
                 <PopoverTrigger>
@@ -2268,6 +2297,7 @@ export const AreaMap = () => {
               >
                 Map
               </Button>
+
               <Button
                 onClick={() => setLyrs("s")}
                 className={`${
@@ -2292,8 +2322,9 @@ export const AreaMap = () => {
           </div>
 
           <div>
-            <p>{copyRight}</p>
+            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">{copyRight}</p>
           </div>
+
           {ShowButtonGroup && (
             <ButtonGroup
               variant="faded"

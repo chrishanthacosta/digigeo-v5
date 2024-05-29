@@ -15,8 +15,7 @@ import {
 import DialogComponent from "../../../utils/dialog/dialog";
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 import { Spinner } from "@nextui-org/react";
-import { boundingExtent } from 'ol/extent';
-
+import { boundingExtent } from "ol/extent";
 
 const LmapFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -28,8 +27,6 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const blocknoRef = useRef(0);
   const pidRef = useRef(0);
 
-
-
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
   );
@@ -39,7 +36,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
   useEffect(() => {
-    console.log("ff1-companyid", companyid,)
+    console.log("ff1-companyid", companyid);
     setunNamedFeatureObjects([]);
     setloadData((t) => !t);
   }, [companyid]);
@@ -49,7 +46,6 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     console.log("unNamedFeatureObjects2", unNamedFeatureObjects);
     let gj;
     const getFeaturedProperties = async () => {
-
       const f = async () => {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
@@ -69,10 +65,10 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         };
 
         if (gj?.features?.length > 0) {
-          console.log("ff1-gj",)
+          console.log("ff1-gj");
           const e = new GeoJSON().readFeatures(gj);
           let b = 0;
-          const unNamedPs = []
+          const unNamedPs = [];
           for (let index = 0; index < e.length; index++) {
             const element = e[index];
             if (!element.get("propertyid")) {
@@ -84,7 +80,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
               if (companyid == element.get("companyid")) {
                 b++;
                 element.set("prop_name_empty", "Block" + b);
-                unNamedPs.push(element)
+                unNamedPs.push(element);
                 // setunNamedFeatureObjects((p) => [...p, element]);
                 // console.log("b",b)
               }
@@ -92,31 +88,22 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           }
           setunNamedFeatureObjects(unNamedPs);
 
-
           //sort
           // e.sort((a, b) => {
           //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
           // })
-          console.log("ff1-esorted", e,)
-          setdataLoaded(false)
+          console.log("ff1-esorted", e);
+          setdataLoaded(false);
           setfeaturesObjects(e);
         } else {
           console.log("no f props for compnayid:" + companyid);
         }
-
-
-
-
-
       };
 
       await f();
-
     };
 
     getFeaturedProperties();
-
-
   }, [loadData]);
 
   //flyto
@@ -129,7 +116,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    console.log("ff1-loc", loc,)
+    console.log("ff1-loc", loc);
     dispatch(setlandingMapFlyToLocation(loc));
 
     //set style
@@ -219,28 +206,20 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   };
 
   const flytoMultipleHandler = (features) => {
-
-    // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
-    const coords = []
+    // const coords = features.map((f) => f.values_.geometry.flatCoordinates)
+    const coords = [];
     for (const f of features) {
       const polygon = f.getGeometry();
 
       if (polygon) {
         const c = polygon.getCoordinates();
 
-        coords.push(...c[0][0])
+        coords.push(...c[0][0]);
         // c.forEach((i)=> coords.push(i[0]))
-
       }
-
-
-
-
     }
 
-
-
-    const bounds = boundingExtent(coords)
+    const bounds = boundingExtent(coords);
 
     //   console.log("bounds",bounds,)
     //  // const polygon = feature.getGeometry();
@@ -253,7 +232,9 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     //flyTo
     // dispatch(setareaFlyToLocation(loc));
     dispatch(setlmapNavigationExtent(bounds));
-    dispatch(setlmapNavigationHighlightFProps(features.map(f => f.get("id"))));
+    dispatch(
+      setlmapNavigationHighlightFProps(features.map((f) => f.get("id")))
+    );
 
     //set style
     //dispatch(setnavigatedFPropId(features[0].get("id")));
@@ -267,37 +248,35 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
     //  console.log("fSelected",fSelected)
     //  fSelected?.setStyle(selectStyle);
-
   };
 
-
   const getDomElements = useMemo(() => {
-
     //sort
     // e.sort((a, b) => {
     //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
     // })
-    //  const unnamedProperties = featureObjects.filter(fp => !fp.get("prop_name"))   
-    const namedProperties = featureObjects.filter(fp => fp.get("prop_name"))
-
+    //  const unnamedProperties = featureObjects.filter(fp => !fp.get("prop_name"))
+    const namedProperties = featureObjects.filter((fp) => fp.get("prop_name"));
 
     //console.log("ff1-namedProperties",namedProperties,)
 
     namedProperties.sort((a, b) => {
-      return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
-    })
+      return a.get("prop_name")?.toUpperCase() <
+        b.get("prop_name")?.toUpperCase()
+        ? -1
+        : 1;
+    });
 
     function myCallback({ values_ }) {
       return values_.prop_name;
     }
     const groupByPropName = Object.groupBy(namedProperties, myCallback);
 
-
     //const r = namedProperties.map((fp) => {
 
     const r = Object.keys(groupByPropName).map((propName) => {
-      const fps = groupByPropName[propName]
-      const fp = fps?.[0]
+      const fps = groupByPropName[propName];
+      const fp = fps?.[0];
       if (fps.length == 1) {
         return (
           <div
@@ -327,8 +306,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
-                //onClick={() => setIsOpenIn(true)}
-                // onClick={() => console.log("title", title)}
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
                 />
               </span>
 
@@ -359,7 +338,13 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           >
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-              <div> {fp.get("prop_name") + "[" + fps.length + "]Polygons"}</div>
+              <div>
+                {/* {fp.get("prop_name") + "[" + fps.length + "]Polygons"} */}
+                <span>{fp.get("prop_name")}</span>
+                <span className="text-gray-500">
+                  {` (${fps.length} Polygons)`}
+                </span>
+              </div>
             </div>
             <div className="flex gap-1">
               <span className="">
@@ -374,8 +359,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
-                //onClick={() => setIsOpenIn(true)}
-                // onClick={() => console.log("title", title)}
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
                 />
               </span>
 
@@ -390,7 +375,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
                 }}
               />
             </div>
-          </div>)
+          </div>
+        );
       }
     });
 
@@ -463,7 +449,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         </div>
       </div>
     );
-    setdataLoaded(true)
+    setdataLoaded(true);
     return [...r, h, ...unNamedProps];
   }, [featureObjects]);
 
@@ -480,7 +466,9 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       }}
     >
       <div className="font-bold dark:text-white text-black">{areaName}</div>
-      <div className="flex justify-center bg-blue-600 text-white w-full font-medium">{"Featured Properties"}</div>
+      <div className="flex justify-center bg-blue-600 text-white w-full font-medium">
+        {"Featured Properties"}
+      </div>
       <div
         className="bg-slate-100"
         style={{
