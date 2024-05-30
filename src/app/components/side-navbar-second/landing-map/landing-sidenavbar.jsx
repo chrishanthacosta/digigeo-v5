@@ -57,6 +57,7 @@ const LandingMapSideNavbar = () => {
 
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
+  const [isOpen, setIsOpen] = useState(true);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -357,6 +358,8 @@ const LandingMapSideNavbar = () => {
                     eyeState={landingMapFpropLayerVisible}
                     labelState={lmapFpropLableVisible}
                     setLabelState={setsetlmapFpropLableVisibility}
+                    setIsOpen={setIsOpen}
+                    isOpen={isOpen}
                   >
                     <div className="flex flex-col gap-1 overflow-y-scroll h-[75vh] mb-1">
                       {featuredCompanies?.map((ii) => (
