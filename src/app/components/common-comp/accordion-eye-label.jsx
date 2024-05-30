@@ -14,8 +14,10 @@ const AccordionItemWithEyeLabel = ({
   eyeState,
   labelState,
   setLabelState,
+  setIsOpen,
+  isOpen,
+
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };

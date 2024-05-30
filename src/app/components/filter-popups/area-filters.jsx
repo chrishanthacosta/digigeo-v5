@@ -435,7 +435,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     Exploration Areas
                   </span> */}
           {/* <div className="flex-col gap-2   w-[16vw]"> */}
-          <div className="flex    justify-around  dark:text-white text-black flex-wrap sm:flex-nowrap max-w-[300px] ">
+          <div className="flex    justify-around  dark:text-white text-black flex-wrap sm:flex-nowrap max-w-full gap-1">
             <div>
               <span className="block">Country</span>
               <Autocomplete
@@ -443,7 +443,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 allowsEmptyCollection={true}
                 allowsCustomValue={true}
                 // label="Select a country"
-                className="max-w-xs dark:text-white text-black"
+                className="max-w-xs sm:w-full dark:text-white text-black"
                 onInputChange={(e) => {
                   if (e) {
                     const fa = allAreaList.filter((a) => a.country == e);
@@ -473,7 +473,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                   <AutocompleteItem
                     key={countryObj.country}
                     value={countryObj.country}
-                    className="dark:text-white text-black"
+                    className="dark:text-white  text-black"
                   >
                     {countryObj.country}
                   </AutocompleteItem>
@@ -488,7 +488,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 allowsEmptyCollection={true}
                 allowsCustomValue
                 // label={areaInfo}
-                className="max-w-xs dark:text-white text-black"
+                className="max-w-xs sm:w-full dark:text-white text-black"
                 defaultSelectedKey={miningArea}
                 onInputChange={(e) => {
                   const r = new RegExp(e, "i");

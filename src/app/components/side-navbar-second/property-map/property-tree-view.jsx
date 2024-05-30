@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropertyCountryNode from "./property-country-treenode";
 import GeoJSON from "ol/format/GeoJSON";
 
-const PropertyTreeView = ({ syncPropFeatures }) => {
+const PropertyTreeView = ({ syncPropFeatures, isOpen }) => {
   const [treeViewData, setTreeViewData] = useState();
 
   useEffect(() => {
@@ -156,7 +156,14 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
     }
   };
   return (
-    <div className="max-h-[150px] bg-white text-black">
+    <div
+      // className="max-h-[150px] bg-white text-black"
+      className={
+        isOpen
+          ? `bg-white overflow-y-auto max-h-[20vh] text-black  pb-2`
+          : `bg-white overflow-y-auto max-h-[60vh] text-black  h-[60vh] pb-2`
+      }
+    >
       {treeViewData?.map((node) => (
         <PropertyCountryNode
           key={node.label}

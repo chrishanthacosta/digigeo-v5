@@ -28,7 +28,7 @@ import {
   setSyncPropertyFeatures,
   setpmapFpropLableVisible,
   setpropertyMapFpropLayerVisible,
-  setsyncClaimLinkPropertyFeatures
+  setsyncClaimLinkPropertyFeatures,
 } from "../../../../store/properties-map/properties-map-slice";
 import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
@@ -42,18 +42,13 @@ import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
 
-
-
-
-
-
 const PropertiesSideNavbar = () => {
   let pathname = "";
   const dispatch = useDispatch();
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -61,8 +56,6 @@ const PropertiesSideNavbar = () => {
       pathname = pathname.substring(0, r);
     }
   }
-
-
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -101,7 +94,9 @@ const PropertiesSideNavbar = () => {
   const [selectedAssetTypes, setselectedAssetTypes] = useState("");
   const [selectedCommodities, setselectedCommodities] = useState("");
   const [featuredCompaniesLocal, setFeaturedCompaniesLocal] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(true);
+  const [accordionItemWithOutEyeIsOpen, setAccordionItemWithOutIsOpen] =
+    useState(true);
   //searchParam Redux
 
   const searchParamPropertyName = useSelector(
@@ -127,30 +122,23 @@ const PropertiesSideNavbar = () => {
   );
 
   useEffect(() => {
-
     if (searchParamAssetTypeList?.length > 0) {
-      setselectedAssetTypes(searchParamAssetTypeList.join(","))
+      setselectedAssetTypes(searchParamAssetTypeList.join(","));
     }
-
-  }, [searchParamAssetTypeList])
+  }, [searchParamAssetTypeList]);
 
   useEffect(() => {
-
     if (searchParamCommodityList?.length > 0) {
-
-      setselectedCommodities(searchParamCommodityList.join(","))
+      setselectedCommodities(searchParamCommodityList.join(","));
     }
-
-  }, [searchParamCommodityList])
+  }, [searchParamCommodityList]);
   //data load
   useEffect(() => {
-
     getFeaturedCompanyDetails();
     getSyncPropertiesGeometry();
     getClaimLinkPropertiesGeometry();
     getAssetsGeometry();
     getFeaturedPropertyGeom();
-
   }, [propertySearchQuery, pmapSelectedPropertyIds]);
 
   const closeSecondNavBar = () => {
@@ -167,7 +155,9 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(",")}`,
+          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(
+            ","
+          )}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -183,10 +173,8 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
 
-
         dispatch(setFPropertyFeatures(gj));
-      }
-      else if (propertySearchQuery) {
+      } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
@@ -204,9 +192,7 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
 
-
         dispatch(setFPropertyFeatures(gj));
-
       } else {
         dispatch(setFPropertyFeatures({}));
       }
@@ -219,48 +205,48 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(",")}`,
+          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
+            ","
+          )}`,
           { cache: "no-store" }
         );
         const d = await res.json();
-        let i = 0
+        let i = 0;
         for (const o of d.data) {
-          o.id = i
-          i++
+          o.id = i;
+          i++;
         }
 
         setFeaturedCompanies(d.data);
-      }
-      else if (propertySearchQuery) {
+      } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();
-        let i = 0
+        let i = 0;
         for (const o of d.data) {
-          o.id = i
-          i++
+          o.id = i;
+          i++;
         }
 
         setFeaturedCompanies(d.data);
-      }
-      else {
+      } else {
         setFeaturedCompanies([]);
       }
-
     };
 
     f().catch(console.error);
   };
 
   const getSyncPropertiesGeometry = async () => {
-
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         //
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/propertygeomlist/${pmapSelectedPropertyIds.join(",")}`,
+          `https://atlas.ceyinfo.cloud/matlas/propertygeomlist/${pmapSelectedPropertyIds.join(
+            ","
+          )}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -276,9 +262,7 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
         dispatch(setSyncPropertyFeatures(gj));
-
-      }
-      else if (propertySearchQuery) {
+      } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
@@ -306,7 +290,9 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal_byids/${pmapSelectedPropertyIds.join(",") }`,
+          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal_byids/${pmapSelectedPropertyIds.join(
+            ","
+          )}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -322,8 +308,7 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
         dispatch(setAssetFeatures(gj));
-      }
-      else if (propertySearchQuery) {
+      } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
@@ -354,7 +339,9 @@ const PropertiesSideNavbar = () => {
       //pmapclinkgeomuniversal_byids
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal_byids/${pmapSelectedPropertyIds.join(",") }`,
+          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal_byids/${pmapSelectedPropertyIds.join(
+            ","
+          )}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -370,9 +357,7 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
         dispatch(setsyncClaimLinkPropertyFeatures(gj));
-
-      }
-      else if (propertySearchQuery) {
+      } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
@@ -390,8 +375,7 @@ const PropertiesSideNavbar = () => {
           features: d.data[0].json_build_object.features,
         };
         dispatch(setsyncClaimLinkPropertyFeatures(gj));
-      }
-      else {
+      } else {
         dispatch(setsyncClaimLinkPropertyFeatures({}));
       }
     };
@@ -404,7 +388,6 @@ const PropertiesSideNavbar = () => {
   );
 
   const setareaFpropLayerVisibility = (e) => {
-
     dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
   };
 
@@ -420,8 +403,8 @@ const PropertiesSideNavbar = () => {
   );
 
   useEffect(() => {
-    const result = []
-   // console.log("featuredCompanies",featuredCompanies,)
+    const result = [];
+    // console.log("featuredCompanies",featuredCompanies,)
     function myCallback({ map_area }) {
       return map_area;
     }
@@ -445,38 +428,40 @@ const PropertiesSideNavbar = () => {
     //   }
     //   const groupByPropName = Object.groupBy(namedProps, myCallback);
 
-
     //   result.push({ map_area: area, namedProps: groupByPropName, unnamedProps })
 
-      
     // }
 
-    setFeaturedCompaniesLocal(resultByArea)
-    
-  }, [featuredCompanies])
+    setFeaturedCompaniesLocal(resultByArea);
+  }, [featuredCompanies]);
 
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
         <div
           className={`
-        ${isPropertiesSideNavOpen && isSideNavOpen
-              ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
-              : ""
-            } 
+        ${
+          isPropertiesSideNavOpen && isSideNavOpen
+            ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
+            : ""
+        } 
            
-        ${isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
-            } 
+        ${
+          isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
+        } 
         duration-500`}
         >
           <div
-            className={`${isPropertiesSideNavOpen && isSideNavOpen
-              ? "py-0.1 flex flex-col "
-              : "hidden"
-              }`}
+            className={`${
+              isPropertiesSideNavOpen && isSideNavOpen
+                ? "py-0.1 flex flex-col "
+                : "hidden"
+            }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
-              <span className="font-bold dark:text-white text-black">Property List </span>
+              <span className="font-bold dark:text-white text-black">
+                Property List{" "}
+              </span>
               <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
                 className="h-6 w-6 text-blue-700 cursor-pointer absolute right-0"
@@ -484,7 +469,9 @@ const PropertiesSideNavbar = () => {
             </div>
           </div>
           <div>
-            <span className="dark:text-white text-black">Filters Applied:</span>
+            <span className="dark:text-white text-black ml-1">
+              Filters Applied:
+            </span>
             <Breadcrumbs
               separator="/"
               itemClasses={{
@@ -533,38 +520,50 @@ const PropertiesSideNavbar = () => {
                   eyeState={propertyMapFpropLayerVisible}
                   labelState={pmapFpropLableVisible}
                   setLabelState={setpmapFpropLableVisibility}
-
+                  setIsOpen={setIsOpen}
+                  isOpen={isOpen}
                 >
-                  <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                    {Object.keys(featuredCompaniesLocal).map((areaName) => {
-                      const fc = featuredCompaniesLocal[areaName]
-                      return (<div  key={areaName}>
-                        <div className="text-xs font-medium">{areaName}</div>
-                        {fc.map((i) => (
-                          <PropertyFeaturedCompanyDetailDiv
-                            key={i.id}
-                            title={i.company2}
-                            companyid={i.companyid}
-                          // onClick={() => console.log(featuredCompanies)}
-                          >
-                            <div
-                              className={`w-4 h-4`}
-                              style={{ backgroundColor: `${i.colour}` }}
-                            ></div>
-                          </PropertyFeaturedCompanyDetailDiv>))}
-                      
-                        
-
-
-                      </div>)
-                    })
+                  <div
+                    className={
+                      accordionItemWithOutEyeIsOpen
+                        ? `flex flex-col gap-1 overflow-y-auto max-h-[40vh]`
+                        : "flex flex-col gap-1 overflow-y-auto max-h-[60vh]"
                     }
-                    </div>
-                </AccordionItemWithEyeLabel>
-                <AccordionItemWithOutEye title="All Properties">
-                  <div className="overflow-y-auto max-h-[25vh]">
-                    <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />
+                  >
+                    {Object.keys(featuredCompaniesLocal).map((areaName) => {
+                      const fc = featuredCompaniesLocal[areaName];
+                      return (
+                        <div key={areaName}>
+                          <div className="text-xs font-medium text-black">{areaName}</div>
+                          {fc.map((i) => (
+                            <PropertyFeaturedCompanyDetailDiv
+                              key={i.id}
+                              title={i.company2}
+                              companyid={i.companyid}
+                              // onClick={() => console.log(featuredCompanies)}
+                            >
+                              <div
+                                className={`w-4 h-4`}
+                                style={{ backgroundColor: `${i.colour}` }}
+                              ></div>
+                            </PropertyFeaturedCompanyDetailDiv>
+                          ))}
+                        </div>
+                      );
+                    })}
                   </div>
+                </AccordionItemWithEyeLabel>
+                <AccordionItemWithOutEye
+                  title="All Properties"
+                  setAccordionItemWithOutIsOpen={setAccordionItemWithOutIsOpen}
+                  accordionItemWithOutEyeIsOpen={accordionItemWithOutEyeIsOpen}
+                >
+                  {/* <div className="overflow-y-auto max-h-[25vh]"> */}
+                  <PropertyTreeView
+                    syncPropFeatures={syncPropertyFeatures}
+                    isOpen={isOpen}
+                  />
+                  {/* </div> */}
                 </AccordionItemWithOutEye>
               </div>
             </Accordion>
