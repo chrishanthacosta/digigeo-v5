@@ -6,26 +6,23 @@ import { AreaCompanyNode } from './area-company-treenode';
 import AreaPropertyNode from './area-peoperty-tree-node';
 import GeoJSON from 'ol/format/GeoJSON';
 
-const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
-
+const AreaTreeView = ({ syncPropFeatues, treeViewHeight, isOpen }) => {
   const [treeViewData, setTreeViewData] = useState();
 
   useEffect(() => {
     // console.log("kkk",syncPropFeatues)
-    buildTreeViewData(syncPropFeatues)
+    buildTreeViewData(syncPropFeatues);
   }, [syncPropFeatues]);
 
   const addNode = (nodes, company, prop_name, location) => {
-
     const companyNode = nodes.find((n) => n.label == company);
     if (companyNode) {
-
       companyNode.children.push({
         label: prop_name,
         location,
         childrem: [],
-        nodetype: "property"
-      })
+        nodetype: "property",
+      });
 
       return companyNode;
     } else {
@@ -33,28 +30,31 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
         label: company,
         nodetype: "company",
         //   id: getTreeViewNodeId(),
-        children: [{
-          label: prop_name,
-          location,
-          children: [],
-          nodetype: "property"
-        }],
+        children: [
+          {
+            label: prop_name,
+            location,
+            children: [],
+            nodetype: "property",
+          },
+        ],
       };
       nodes.push(newcompanyNode);
-
     }
   };
   const buildTreeViewData = (syncPropFeatues) => {
-    console.log("syncPropFeatues", syncPropFeatues,)
+    console.log("syncPropFeatues", syncPropFeatues);
     if (syncPropFeatues?.features?.length > 0) {
-      const features = new GeoJSON().readFeatures(syncPropFeatues)
+      const features = new GeoJSON().readFeatures(syncPropFeatues);
       //sort features
-      features.sort((a, b) => { return a.get("name")?.toUpperCase() > b.get("name")?.toUpperCase() ? 1 : -1 })
-
+      features.sort((a, b) => {
+        return a.get("name")?.toUpperCase() > b.get("name")?.toUpperCase()
+          ? 1
+          : -1;
+      });
 
       const nodes = [];
-      features?.map(f => {
-
+      features?.map((f) => {
         let loc = [];
         const polygon = f.getGeometry();
         if (polygon) {
@@ -62,27 +62,24 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
           loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
         }
 
-
-        addNode(nodes, f.get("name"), f.get("prop_name"), loc)
-
-      })
+        addNode(nodes, f.get("name"), f.get("prop_name"), loc);
+      });
 
       //sort according to property names
 
       for (const comp of nodes) {
-        comp.children.sort((a, b) => { return a.label.toUpperCase() > b.label.toUpperCase() ? 1:-1 })
+        comp.children.sort((a, b) => {
+          return a.label.toUpperCase() > b.label.toUpperCase() ? 1 : -1;
+        });
       }
 
       //move unnamed propos to end
-      
+
       if (nodes[0]?.label == null) {
-        
         const n = nodes.shift();
-        n.label="No ownership!"
-        nodes.push(n)
-      }     
-
-
+        n.label = "No ownership!";
+        nodes.push(n);
+      }
 
       //     const treeData = [
       //   {
@@ -122,23 +119,32 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
       //     ],
       //   },
       // ];
-      setTreeViewData(nodes)
-
+      setTreeViewData(nodes);
     } else {
-      setTreeViewData([])
+      setTreeViewData([]);
     }
-  }
+  };
   return (
     // <TreeView data={treeViewData} />
 
-    <div className={`bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black`}>
+    <div
+      className={
+        isOpen
+          ? `bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black overflow-y-scroll h-[80vh] pb-2 `
+          : `bg-white  max-h-[80vh] text-black overflow-y-scroll h-[80vh] pb-2`
+          // + ` overflow-y-scroll h-[50vh] bg-red-400`
+      }
+    >
       {/* <div className="max-h-[150px]"> */}
       {treeViewData?.map((node) => (
-
-        <AreaCompanyNode key={node.label} comapanyName={node.label} propertyNodes={node.children} />
+        <AreaCompanyNode
+          key={node.label}
+          comapanyName={node.label}
+          propertyNodes={node.children}
+        />
       ))}
     </div>
-  )
-}
+  );
+};
 
 export default AreaTreeView

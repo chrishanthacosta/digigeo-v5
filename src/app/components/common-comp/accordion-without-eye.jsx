@@ -3,11 +3,19 @@ import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-const AccordionItemWithOutEye = ({ title, children, onClick, eyeState }) => {
-  const [isOpen, setIsOpen] = useState(true);
-
+const AccordionItemWithOutEye = ({
+  title,
+  children,
+  onClick,
+  eyeState,
+  accordionItemWithOutEyeIsOpen,
+  setAccordionItemWithOutIsOpen,
+}) => {
+  // const [isOpen, setIsOpen] = useState(true);
+  //  const [accordionItemWithOutEyeIsOpen, setAccordionItemWithOutIsOpen] =
+  //    useState(true);
   const toggleAccordion = () => {
-    setIsOpen(!isOpen);
+    setAccordionItemWithOutIsOpen(!accordionItemWithOutEyeIsOpen);
   };
 
   const eyeClickHandler = () => {
@@ -23,7 +31,11 @@ const AccordionItemWithOutEye = ({ title, children, onClick, eyeState }) => {
         <h3 style={{ margin: 0, marginRight: "10px" }}>{title}</h3>
         <div className="flex absolute right-0 mr-4 gap-4">
           <span onClick={toggleAccordion} className="cursor-pointer">
-            {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
+            {accordionItemWithOutEyeIsOpen ? (
+              <FaChevronDown />
+            ) : (
+              <FaChevronLeft />
+            )}
           </span>
           {/* <span className="">
             {eyeState && (
@@ -38,7 +50,7 @@ const AccordionItemWithOutEye = ({ title, children, onClick, eyeState }) => {
           </span> */}
         </div>
       </div>
-      {isOpen && <div className="mt-2">{children}</div>}
+      {accordionItemWithOutEyeIsOpen && <div className="mt-2">{children}</div>}
     </div>
   );
 };
