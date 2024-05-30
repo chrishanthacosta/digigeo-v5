@@ -180,7 +180,7 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
       const d = await res.json();
         
         let { url, urlPrefix,profile } = formatUrl(d.data[0]?.url ?? "");
-        seturl(url)
+      seturl(urlPrefix+ url)
       const logo = d.data[0]?.logo;
       if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
@@ -221,11 +221,11 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
             } 
             </span>
             {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
-          {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid  " >
+          {profile && (<Link href={url} target="_blank" className="rounded-lg border border-solid  " >
              
-            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {profile}</p>
+            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {url}</p>
             </Link>)}
-            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid underline" >
+          {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid underline" >
              
               {"Read More"} 
             </Link>)}
