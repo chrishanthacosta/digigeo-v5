@@ -47,7 +47,7 @@ const getStyledTexts = (name) => {
     const sp = document.createElement("SPAN");
     const sptext = document.createTextNode(name ?? "");
     sp.appendChild(sptext);
-    return  [{ text: "", style: {} }];
+    return [{ text: "", style: {} }];
   }
   const compName = name.substr(0, stBracketIndex);
   const addends = name.substr(stBracketIndex, name.length - stBracketIndex);
@@ -73,7 +73,7 @@ const getStyledTexts = (name) => {
       const sptext = document.createTextNode(str + ",");
       sp.appendChild(sptext);
       spans.push(sp);
-       contents.push({text:str + ",",style:{} });
+      contents.push({ text: str + ",", style: {} });
     } else {
       const stockEx = str.substr(1, indexColon - 1);
       const stockVal = str.substr(indexColon, str.length - indexColon - 1);
@@ -83,7 +83,7 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({text:stockEx  ,style:{marginLeft : "0.25rem"} });
+      contents.push({ text: stockEx, style: { marginLeft: "0.25rem" } });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -96,7 +96,7 @@ const getStyledTexts = (name) => {
       sp2.style.fontWeight = 600;
       sp2.appendChild(sptext2);
       spans.push(sp2);
-      contents.push({text:stockVal + trailingComma,style:{color: "blue",fontWeight : 600} });
+      contents.push({ text: stockVal + trailingComma, style: { color: "blue", fontWeight: 600 } });
     }
 
     i++;
@@ -105,9 +105,9 @@ const getStyledTexts = (name) => {
 };
 
 
-const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
+const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
   // const dispatch = useDispatch();
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [logoPath, setlogoPath] = useState("");
@@ -132,7 +132,7 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-       
+
     },
   };
 
@@ -150,47 +150,48 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
     }
   }, [companyid]);
 
- const getSponsorDetails = async () => {
+  const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-     //console.log("d", d)
+      //console.log("d", d)
       if (d.data.length > 0) {
         const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
         setsponsorData(sponsorData)
 
         setprofile(d.data[0]?.profile ?? "")
       } else {
-         setprofile("")
-         setsponsorData("")
+        setprofile("")
+        setsponsorData("")
       }
-   };
-   
+    };
+
     f().catch(console.error);
   };
- const getCompanyDetails = async () => {
+  const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-        
-        let { url, urlPrefix,profile } = formatUrl(d.data[0]?.url ?? "");
-      seturl(urlPrefix+ url)
+
+      let { url, urlPrefix, profile } = formatUrl(d.data[0]?.url ?? "");
+      //console.log("ppp", urlPrefix + url)
+      seturl(urlPrefix + url)
       const logo = d.data[0]?.logo;
       if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
         let urlimg =
           `data:image/${logoext};base64,` +
           btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
- 
+
         setlogoPath(urlimg)
-      }else{
-         setlogoPath("")
+      } else {
+        setlogoPath("")
       }
 
     };
@@ -200,41 +201,42 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
 
 
   return (
-    <div className = {companyid==0 ? "hidden":"block" } >
-     
-        <div className="bg-white rounded-lg   flex-col justify-center items-center">
+    <div className={companyid == 0 ? "hidden" : "block"} >
 
-         
-          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center"}}>
-             <div> {logoPath && (<Image
-              src={logoPath}
-              width={200}
-              height={100}
-              
-              alt="Logo"
-               
-              />)} </div>
+      <div className="bg-white rounded-lg   flex-col justify-center items-center">
+
+
+        <div style={{ display: "flex", flexDirection: "column", justify: "center", alignItems: "center" }}>
+          <div> {logoPath && (<Image
+            src={logoPath}
+            width={200}
+            height={100}
+
+            alt="Logo"
+
+          />)} </div>
           <div className="flex justify-center p-2 w-full"><p className="mx-auto  max-w-[15rem] text-center font-bold">{title}</p> </div>
-            <span>
-            {sponsorData && sponsorData.map(sd =>(  
+          <span>
+            {sponsorData && sponsorData.map(sd => (
               <span key={sd.text} style={sd.style}>{sd.text}</span>))
-            } 
-            </span>
-            {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
+            }
+          </span>
+          {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
           {profile && (<Link href={url} target="_blank" className="rounded-lg border border-solid  " >
-             
-            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {url}</p>
-            </Link>)}
-          {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid underline" >
-             
-              {"Read More"} 
-            </Link>)}
-            {/* <AreaFCompanyFProperties companyid={companyid} /> */}
 
-          </div>
-         
+            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {url}</p>
+          </Link>)}
+          {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid underline" >
+
+            {"Read More"}
+          </Link>)}
+          {!profile && <span className="text-gray-400 italic">(This is not a featured Company)</span>}
+          {/* <AreaFCompanyFProperties companyid={companyid} /> */}
+
         </div>
-      
+
+      </div>
+
     </div>
   );
 };
