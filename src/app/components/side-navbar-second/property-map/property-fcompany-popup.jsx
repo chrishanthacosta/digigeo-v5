@@ -282,7 +282,7 @@ const PropertyFCompanyPopup = ({ }) => {
               <Link
                 href={profile}
                 target="_blank"
-                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600 bg-black"
+                className="text-white rounded-full border border-solid border-black p-2 underline hover:text-blue-600 bg-black"
               >
                 {"Read More"}
               </Link>

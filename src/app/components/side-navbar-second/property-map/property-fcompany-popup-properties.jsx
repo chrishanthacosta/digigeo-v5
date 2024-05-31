@@ -300,7 +300,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
             })}
             {
               <div className="flex flex-col w-full">
-                <div className="text-xs  font-bold">{"Unnamed properties"}</div>
+                {areaObj.unnamedProps.length >0 && <div className="text-xs  font-bold">{"Unnamed properties"}</div>}
                 {areaObj.unnamedProps.map((fp, index) => {
                   return (
                     <div

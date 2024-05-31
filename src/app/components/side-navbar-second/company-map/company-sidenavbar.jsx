@@ -587,9 +587,9 @@ const CompanySideNavbar = () => {
                                     <div>
                                       {" "}
                                       {fp.get("prop_name") +
-                                        "[" +
+                                        " (" +
                                         fps.length +
-                                        " polygons]"}
+                                        " polygons)"}
                                     </div>
                                   </div>
                                   <div className="flex gap-1">
