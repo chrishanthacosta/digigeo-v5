@@ -2531,6 +2531,11 @@ export const LandingMap = () => {
                 e.target.blur();
                 return false;
               }}
+              onTouchStart={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                return false;
+              }}
               style={{
                 textDecoration: "none",
                 position: "absolute",

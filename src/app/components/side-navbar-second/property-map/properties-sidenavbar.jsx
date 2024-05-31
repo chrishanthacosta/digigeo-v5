@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
   AiFillAppstore,
@@ -98,6 +98,10 @@ const PropertiesSideNavbar = () => {
   const [accordionItemWithOutEyeIsOpen, setAccordionItemWithOutIsOpen] =
     useState(true);
   //searchParam Redux
+  const [isLoadingFeaturedCompanies, setIsLoadingFeaturedCompanies] =
+    useState(false);
+  const [isLoadingSyncAllProperties, setIsLoadingSyncAllProperties] =
+    useState(true);
 
   const searchParamPropertyName = useSelector(
     (state) => state.propertiesMapReducer.searchParamPropertyName
@@ -153,6 +157,7 @@ const PropertiesSideNavbar = () => {
 
   const getFeaturedPropertyGeom = async () => {
     const f = async () => {
+      // setIsLoadingSyncAllProperties(true);
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(
@@ -203,6 +208,7 @@ const PropertiesSideNavbar = () => {
 
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
+      setIsLoadingFeaturedCompanies(true);
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
@@ -218,6 +224,7 @@ const PropertiesSideNavbar = () => {
         }
 
         setFeaturedCompanies(d.data);
+        setIsLoadingFeaturedCompanies(false);
       } else if (propertySearchQuery) {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
@@ -231,8 +238,10 @@ const PropertiesSideNavbar = () => {
         }
 
         setFeaturedCompanies(d.data);
+        setIsLoadingFeaturedCompanies(false);
       } else {
         setFeaturedCompanies([]);
+        setIsLoadingFeaturedCompanies(false);
       }
     };
 
@@ -530,27 +539,43 @@ const PropertiesSideNavbar = () => {
                         : "flex flex-col gap-1 overflow-y-auto max-h-[60vh]"
                     }
                   >
-                    {Object.keys(featuredCompaniesLocal).map((areaName) => {
-                      const fc = featuredCompaniesLocal[areaName];
-                      return (
-                        <div key={areaName}>
-                          <div className="text-xs font-medium text-black">{areaName}</div>
-                          {fc.map((i) => (
-                            <PropertyFeaturedCompanyDetailDiv
-                              key={i.id}
-                              title={i.company2}
-                              companyid={i.companyid}
-                              // onClick={() => console.log(featuredCompanies)}
-                            >
-                              <div
-                                className={`w-4 h-4`}
-                                style={{ backgroundColor: `${i.colour}` }}
-                              ></div>
-                            </PropertyFeaturedCompanyDetailDiv>
-                          ))}
-                        </div>
-                      );
-                    })}
+                    {isLoadingFeaturedCompanies ? (
+                      <div className="text-center">
+                        <Spinner size="sm" />
+                      </div>
+                    ) : Object.keys(featuredCompaniesLocal).length > 0 ? (
+                      Object.keys(featuredCompaniesLocal).map((areaName) => {
+                        const fc = featuredCompaniesLocal[areaName];
+                        console.log(
+                          Object.keys(featuredCompaniesLocal).length,
+                          "Object.keys(featuredCompaniesLocal)"
+                        );
+                        return (
+                          <div key={areaName}>
+                            <div className="text-xs font-medium text-black">
+                              {areaName}
+                            </div>
+                            {fc.map((i) => (
+                              <PropertyFeaturedCompanyDetailDiv
+                                key={i.id}
+                                title={i.company2}
+                                companyid={i.companyid}
+                                // onClick={() => console.log(featuredCompanies)}
+                              >
+                                <div
+                                  className={`w-4 h-4`}
+                                  style={{ backgroundColor: `${i.colour}` }}
+                                ></div>
+                              </PropertyFeaturedCompanyDetailDiv>
+                            ))}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="text-center text-black  text-sm">
+                        No Featured Companies
+                      </div>
+                    )}
                   </div>
                 </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye
@@ -562,6 +587,10 @@ const PropertiesSideNavbar = () => {
                   <PropertyTreeView
                     syncPropFeatures={syncPropertyFeatures}
                     isOpen={isOpen}
+                    isLoadingSyncAllProperties={isLoadingSyncAllProperties}
+                    setIsLoadingSyncAllProperties={
+                      setIsLoadingSyncAllProperties
+                    }
                   />
                   {/* </div> */}
                 </AccordionItemWithOutEye>

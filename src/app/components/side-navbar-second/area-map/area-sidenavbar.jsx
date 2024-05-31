@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import {
   AiFillAppstore,
@@ -67,6 +67,10 @@ const AreaSideNavbar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [accordionItemWithOutEyeIsOpen, setAccordionItemWithOutIsOpen] =
     useState(true);
+  const [featuredCompaniesLoading, setFeaturedCompaniesLoading] =
+    useState(false);
+  const [isLoadingSyncPropertyFeatures, setIsLoadingSyncPropertyFeatures] =
+    useState(true);
   const fullSideBarHeight = 80;
 
   const selectedMap = useSelector(
@@ -126,8 +130,10 @@ const AreaSideNavbar = () => {
     updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(false));
   };
+
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
+      setFeaturedCompaniesLoading(true);
       console.log("areaName", areaName);
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
@@ -137,6 +143,7 @@ const AreaSideNavbar = () => {
       // console.log("fps", d);
 
       setFeaturedCompanies(d.data);
+      setFeaturedCompaniesLoading(false);
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
       // );
@@ -250,6 +257,7 @@ const AreaSideNavbar = () => {
       dispatch(setSyncPropertyFeatures(gj));
       console.log("gj", gj);
     };
+
     f().catch(console.error);
   };
   const getAssetsGeometry = async () => {
@@ -304,7 +312,7 @@ const AreaSideNavbar = () => {
   );
 
   // console.log(amapFpropLableVisible, "amapFpropLableVisible");
-
+  // console.log("featuredCompaniesLoading", featuredCompaniesLoading);
   return (
     <>
       <div
@@ -358,23 +366,33 @@ const AreaSideNavbar = () => {
                 className={
                   accordionItemWithOutEyeIsOpen
                     ? `flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh]`
-                    : "flex flex-col gap-1 overflow-y-auto max-h-[70vh]"
+                    : "flex flex-col gap-1 overflow-y-auto max-h-[70vh] "
                 }
               >
                 {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
-                {featuredCompanies?.map((i) => (
-                  <FeaturedCompanyDetailDiv
-                    key={i.colour}
-                    title={i.company2}
-                    companyid={i.companyid}
-                    // onClick={() => console.log(featuredCompanies)}
-                  >
-                    <div
-                      className={`w-4 h-4`}
-                      style={{ backgroundColor: `${i.colour}` }}
-                    ></div>
-                  </FeaturedCompanyDetailDiv>
-                ))}
+                {featuredCompaniesLoading ? (
+                  <div className="text-black text-center text-sm">
+                    <Spinner size="sm" />
+                  </div>
+                ) : featuredCompanies?.length > 0 ? (
+                  featuredCompanies?.map((i) => (
+                    <FeaturedCompanyDetailDiv
+                      key={i.colour}
+                      title={i.company2}
+                      companyid={i.companyid}
+                      // onClick={() => console.log(featuredCompanies)}
+                    >
+                      <div
+                        className={`w-4 h-4`}
+                        style={{ backgroundColor: `${i.colour}` }}
+                      ></div>
+                    </FeaturedCompanyDetailDiv>
+                  ))
+                ) : (
+                  <div className="text-black text-center text-sm">
+                    No Featured Companies
+                  </div>
+                )}
               </div>
             </AccordionItemWithEyeLabel>
           </div>
@@ -389,6 +407,10 @@ const AreaSideNavbar = () => {
                 syncPropFeatues={syncPropertyFeatures}
                 treeViewHeight={treeViewHeight}
                 isOpen={isOpen}
+                isLoadingSyncPropertyFeatures={isLoadingSyncPropertyFeatures}
+                setIsLoadingSyncPropertyFeatures={
+                  setIsLoadingSyncPropertyFeatures
+                }
               />
             </AccordionItemWithOutEye>
           </div>

@@ -1,12 +1,17 @@
+import React, { useEffect, useState } from "react";
+import TreeView from "../../common-comp/treeview";
+import { AreaCompanyNode } from "./area-company-treenode";
+import AreaPropertyNode from "./area-peoperty-tree-node";
+import GeoJSON from "ol/format/GeoJSON";
+import { Spinner } from "@nextui-org/react";
 
-
-import React, { useEffect, useState } from 'react'
-import TreeView from '../../common-comp/treeview'
-import { AreaCompanyNode } from './area-company-treenode';
-import AreaPropertyNode from './area-peoperty-tree-node';
-import GeoJSON from 'ol/format/GeoJSON';
-
-const AreaTreeView = ({ syncPropFeatues, treeViewHeight, isOpen }) => {
+const AreaTreeView = ({
+  syncPropFeatues,
+  treeViewHeight,
+  isOpen,
+  isLoadingSyncPropertyFeatures,
+  setIsLoadingSyncPropertyFeatures,
+}) => {
   const [treeViewData, setTreeViewData] = useState();
 
   useEffect(() => {
@@ -120,6 +125,7 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight, isOpen }) => {
       //   },
       // ];
       setTreeViewData(nodes);
+      setIsLoadingSyncPropertyFeatures(false);
     } else {
       setTreeViewData([]);
     }
@@ -130,21 +136,29 @@ const AreaTreeView = ({ syncPropFeatues, treeViewHeight, isOpen }) => {
     <div
       className={
         isOpen
-          ? `bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black overflow-y-scroll h-[80vh] pb-2 `
-          : `bg-white  max-h-[80vh] text-black overflow-y-scroll h-[80vh] pb-2`
-          // + ` overflow-y-scroll h-[50vh] bg-red-400`
+          ? `bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black overflow-y-scroll h-[75vh] pb-5 `
+          : `bg-white  max-h-[75vh] text-black overflow-y-scroll h-[75vh] pb-5`
+        // + ` overflow-y-scroll h-[50vh] bg-red-400`
       }
     >
       {/* <div className="max-h-[150px]"> */}
-      {treeViewData?.map((node) => (
-        <AreaCompanyNode
-          key={node.label}
-          comapanyName={node.label}
-          propertyNodes={node.children}
-        />
-      ))}
+      {isLoadingSyncPropertyFeatures ? (
+        <div className="text-center">
+          <Spinner size="sm" />
+        </div>
+      ) : treeViewData?.length > 0 ? (
+        treeViewData?.map((node) => (
+          <AreaCompanyNode
+            key={node.label}
+            comapanyName={node.label}
+            propertyNodes={node.children}
+          />
+        ))
+      ) : (
+        <div className="text-center">No Companies found</div>
+      )}
     </div>
   );
 };
 
-export default AreaTreeView
+export default AreaTreeView;

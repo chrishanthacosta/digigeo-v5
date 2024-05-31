@@ -1760,7 +1760,7 @@ export const AreaMap = () => {
         const d = dd?.[0];
 
         // const sponsoredowners = d?.sponsor ?? "";
-        const sponsoredowners = dd?.map(d => d.sponsor ?? "");
+        const sponsoredowners = dd?.map((d) => d.sponsor ?? "");
 
         let commo_ref = d?.commo_ref ?? "";
         let assets = d?.assets ?? "";
@@ -2098,7 +2098,7 @@ export const AreaMap = () => {
     return st;
   };
 
-  console.log("isTabletOrMobile", isTabletOrMobile);
+  // console.log("isTabletOrMobile", isTabletOrMobile);
 
   // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
   const ShowButtonGroup =
@@ -2324,7 +2324,9 @@ export const AreaMap = () => {
           </div>
 
           <div>
-            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">{copyRight}</p>
+            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">
+              {copyRight}
+            </p>
           </div>
 
           {ShowButtonGroup && (
@@ -2368,6 +2370,13 @@ export const AreaMap = () => {
               onClick={(e) => {
                 setCoordinates(undefined);
                 e.target.blur();
+                console.log("click", e);
+                return false;
+              }}
+              onTouchStart={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                console.log("touchstart",e);
                 return false;
               }}
               style={{
@@ -2375,10 +2384,12 @@ export const AreaMap = () => {
                 position: "absolute",
                 top: "2px",
                 right: "8px",
+                fontSize: "18px",
               }}
             >
               ✖
             </button>
+
             <div id="popup-contenta" className="z-0">
               {/* <p>Info:</p> */}
               {clickDataLoaded && (

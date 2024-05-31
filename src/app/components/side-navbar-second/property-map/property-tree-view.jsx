@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PropertyCountryNode from "./property-country-treenode";
 import GeoJSON from "ol/format/GeoJSON";
+import { Spinner } from "@nextui-org/react";
 
-const PropertyTreeView = ({ syncPropFeatures, isOpen }) => {
+const PropertyTreeView = ({
+  syncPropFeatures,
+  isOpen,
+  isLoadingSyncAllProperties,
+  setIsLoadingSyncAllProperties,
+}) => {
   const [treeViewData, setTreeViewData] = useState();
 
   useEffect(() => {
@@ -151,6 +157,7 @@ const PropertyTreeView = ({ syncPropFeatures, isOpen }) => {
       //   },
       // ];
       setTreeViewData(nodes);
+      setIsLoadingSyncAllProperties(false);      
     } else {
       setTreeViewData([]);
     }
@@ -164,13 +171,21 @@ const PropertyTreeView = ({ syncPropFeatures, isOpen }) => {
           : `bg-white overflow-y-auto max-h-[60vh] text-black  h-[60vh] pb-2`
       }
     >
-      {treeViewData?.map((node) => (
-        <PropertyCountryNode
-          key={node.label}
-          countryName={node.label}
-          stateProvNodes={node.children}
-        />
-      ))}
+      {isLoadingSyncAllProperties ? (
+        <div className="text-center">
+          <Spinner size="sm" />
+        </div>
+      ) : treeViewData?.length > 0 ? (
+        treeViewData?.map((node) => (
+          <PropertyCountryNode
+            key={node.label}
+            countryName={node.label}
+            stateProvNodes={node.children}
+          />
+        ))
+      ) : (
+        <div className="text-center">No property data available</div>
+      )}
     </div>
   );
 };

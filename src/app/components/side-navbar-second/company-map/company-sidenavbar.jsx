@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
   AiFillAppstore,
@@ -107,6 +107,12 @@ const CompanySideNavbar = () => {
     useState([]);
   const [unNamedFeaturedPropertiesLocal, setunNamedFeaturedPropertiesLocal] =
     useState([]);
+
+  const [isLoadingFeaturedProperties, setIsLoadingFeaturedProperties] =
+    useState(false);
+  const [isLoadingSyncAllProperties, setIsLoadingSyncAllProperties] =
+    useState(true);
+
   //data load
   useEffect(() => {
     // console.log("companyId",companyId)
@@ -129,6 +135,7 @@ const CompanySideNavbar = () => {
 
   const getFeaturedPropertyGeom = async () => {
     const f = async () => {
+      setIsLoadingFeaturedProperties(true);
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyId}`,
         { cache: "no-store" }
@@ -147,6 +154,8 @@ const CompanySideNavbar = () => {
       };
 
       dispatch(setFPropertyFeatures(gj));
+      setIsLoadingFeaturedProperties(false);
+
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
       // );
@@ -216,6 +225,7 @@ const CompanySideNavbar = () => {
       // }
       //console.log("loading f props -cmp2", result)
       setFeaturedPropertiesLocal(result);
+
       // setnamedFeaturedPropertiesLocal(namedp)
       // setunNamedFeaturedPropertiesLocal(unnamedp)
     } else {
@@ -281,6 +291,7 @@ const CompanySideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
       dispatch(setSyncPropertyFeatures(gj));
+
       // console.log("gj", gj);
     };
     if (companyName == "") {
@@ -496,9 +507,9 @@ const CompanySideNavbar = () => {
               </div>
             </div>
           </div>
-          <div className="mt-4  flex flex-col gap-4 relative">
+          <div className="mt-1  flex flex-col gap-4 relative">
             <Accordion>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
                 <AccordionItemWithEyeLabel
                   title="Featured Properties"
                   onClick={setFpropLayerVisibility}
@@ -516,48 +527,28 @@ const CompanySideNavbar = () => {
                         : "flex flex-col gap-1 overflow-y-auto max-h-[40vh]"
                     }
                   >
-                    {featuredPropertiesLocal.map((area) => (
-                      <>
-                        <div className="font-semibold">{area.map_area}</div>
-                        {/* {area.namedProps.map((i) => { */}
-                        {Object.keys(area.namedProps).map((propName) => {
-                          const fps = area.namedProps[propName];
-                          const fp = fps[0];
-                          if (fps.length == 1) {
+                    {isLoadingFeaturedProperties ? (
+                      <div className="text-center">
+                        <Spinner size="sm" />
+                      </div>
+                    ) : featuredPropertiesLocal?.length > 0 ? (
+                      featuredPropertiesLocal.map((area) => (
+                        <>
+                          <div className="font-semibold">{area.map_area}</div>
+                          {/* {area.namedProps.map((i) => { */}
+                          {Object.keys(area.namedProps).map((propName) => {
+                            const fps = area.namedProps[propName];
                             const fp = fps[0];
-                            return (
-                              <FeaturedPropertyDetailDiv
-                                key={fp.get("id")}
-                                title={fp.get("prop_name")}
-                                propertyid={fp.get("propertyid")}
-                                // onClick={() => console.log(featuredCompanies)}
-                                //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                              >
-                                <Image
-                                  src={
-                                    "data:image/svg+xml;utf8," +
-                                    encodeURIComponent(fp.get("hatch"))
-                                  }
-                                  className={`w-4 h-4`}
-                                  width={4}
-                                  height={4}
-                                  alt="prop"
-                                />
-                              </FeaturedPropertyDetailDiv>
-                            );
-                          } else {
-                            return (
-                              <div
-                                key={fp.get("propertyid")}
-                                className="   text-xs pl-4 py-1 px-2 text-black border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none"
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  width: "100%",
-                                }}
-                              >
-                                <div className="flex gap-2">
+                            if (fps.length == 1) {
+                              const fp = fps[0];
+                              return (
+                                <FeaturedPropertyDetailDiv
+                                  key={fp.get("id")}
+                                  title={fp.get("prop_name")}
+                                  propertyid={fp.get("propertyid")}
+                                  // onClick={() => console.log(featuredCompanies)}
+                                  //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                                >
                                   <Image
                                     src={
                                       "data:image/svg+xml;utf8," +
@@ -568,16 +559,41 @@ const CompanySideNavbar = () => {
                                     height={4}
                                     alt="prop"
                                   />
-                                  <div>
-                                    {" "}
-                                    {fp.get("prop_name") +
-                                      "[" +
-                                      fps.length +
-                                      " polygons]"}
+                                </FeaturedPropertyDetailDiv>
+                              );
+                            } else {
+                              return (
+                                <div
+                                  key={fp.get("propertyid")}
+                                  className="   text-xs pl-4 py-1 px-2 text-black border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none"
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <div className="flex gap-2">
+                                    <Image
+                                      src={
+                                        "data:image/svg+xml;utf8," +
+                                        encodeURIComponent(fp.get("hatch"))
+                                      }
+                                      className={`w-4 h-4`}
+                                      width={4}
+                                      height={4}
+                                      alt="prop"
+                                    />
+                                    <div>
+                                      {" "}
+                                      {fp.get("prop_name") +
+                                        "[" +
+                                        fps.length +
+                                        " polygons]"}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="flex gap-1">
-                                  {/* <span className="">
+                                  <div className="flex gap-1">
+                                    {/* <span className="">
                                     <MdInfoOutline
                                       className="cursor-pointer h-4 w-4 hover:scale-125 "
                                       onClick={(e) =>
@@ -589,52 +605,57 @@ const CompanySideNavbar = () => {
                                           fp.get("id")
                                         )
                                       }
-                                    
+
                                     />
                                   </span> */}
 
-                                  <Image
-                                    src="./navigation.svg"
-                                    width={15}
-                                    height={15}
-                                    alt="prop"
-                                    className=" cursor-pointer hover:scale-125 "
-                                    onClick={(e) => {
-                                      flytoMultipleHandler(fps);
-                                    }}
-                                  />
+                                    <Image
+                                      src="./navigation.svg"
+                                      width={15}
+                                      height={15}
+                                      alt="prop"
+                                      className=" cursor-pointer hover:scale-125 "
+                                      onClick={(e) => {
+                                        flytoMultipleHandler(fps);
+                                      }}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
+                              );
+                            }
+                          })}
+                          <div className="font-semibold">
+                            {"Unnamed Properties"}
+                          </div>
+                          {area.unnamedProps.map((i) => {
+                            return (
+                              <FeaturedPropertyDetailDiv
+                                key={i.get("id")}
+                                title={i.get("prop_name")}
+                                propertyid={i.get("propertyid")}
+                                // onClick={() => console.log(featuredCompanies)}
+                                //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                              >
+                                <Image
+                                  src={
+                                    "data:image/svg+xml;utf8," +
+                                    encodeURIComponent(i.get("hatch"))
+                                  }
+                                  className={`w-4 h-4`}
+                                  width={4}
+                                  height={4}
+                                  alt="prop"
+                                />
+                              </FeaturedPropertyDetailDiv>
                             );
-                          }
-                        })}
-                        <div className="font-semibold">
-                          {"Unnamed Properties"}
-                        </div>
-                        {area.unnamedProps.map((i) => {
-                          return (
-                            <FeaturedPropertyDetailDiv
-                              key={i.get("id")}
-                              title={i.get("prop_name")}
-                              propertyid={i.get("propertyid")}
-                              // onClick={() => console.log(featuredCompanies)}
-                              //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                            >
-                              <Image
-                                src={
-                                  "data:image/svg+xml;utf8," +
-                                  encodeURIComponent(i.get("hatch"))
-                                }
-                                className={`w-4 h-4`}
-                                width={4}
-                                height={4}
-                                alt="prop"
-                              />
-                            </FeaturedPropertyDetailDiv>
-                          );
-                        })}
-                      </>
-                    ))}
+                          })}
+                        </>
+                      ))
+                    ) : (
+                      <div className="text-center text-sm text-black">
+                        No Featured Properties
+                      </div>
+                    )}
                     {/* {unNamedFeaturedPropertiesLocal.length > 0 && <div className="w-full bg-blue-800 text-white mx-2 px-2">Un-named Properties</div>}
                     {unNamedFeaturedPropertiesLocal.map(
                       (i) =>
@@ -667,10 +688,14 @@ const CompanySideNavbar = () => {
                   accordionItemWithOutEyeIsOpen={accordionItemWithOutEyeIsOpen}
                 >
                   {/* <div className="overflow-y-auto max-h-[25vh]"> */}
-                    <CompanyTreeView
-                      syncPropFeatures={syncPropertyFeatures}
-                      isOpen={isOpen}
-                    />
+                  <CompanyTreeView
+                    syncPropFeatures={syncPropertyFeatures}
+                    isOpen={isOpen}
+                    setIsLoadingSyncAllProperties={
+                      setIsLoadingSyncAllProperties
+                    }
+                    isLoadingSyncAllProperties={isLoadingSyncAllProperties}
+                  />
                   {/* </div> */}
                 </AccordionItemWithOutEye>
               </div>
