@@ -123,21 +123,21 @@ const SideNavbar = () => {
     if (selectedValue == "area") {
       if (areaState == "") {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-        console.log("yy-hit-sidenavbar-compo2")
+       // console.log("yy-hit-sidenavbar-compo2")
       } else {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
       }
       updateWindowsHistory(newUrl);
     } else if (selectedValue == "properties") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
-      updateWindowsHistory(newUrl);
+      //updateWindowsHistory(newUrl);
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
       console.log("ff2-updateWindowsHistoryCmap", companyInitialCenter, companyZoomLevel)
       updateWindowsHistoryCmap({ isSideNavOpen, lyrs: companyLyrs, zoom: companyZoomLevel, center: companyInitialCenter, sidenav2: isCompanySideNavOpen, companyId: 0 });
 
     } else {
-       console.log("yy-hit-sidenavbar-compo3")
+       //console.log("yy-hit-sidenavbar-compo3")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
       updateWindowsHistory(newUrl);
     }

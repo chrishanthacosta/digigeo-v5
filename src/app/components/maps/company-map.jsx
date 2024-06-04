@@ -911,6 +911,8 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.companyName
   );
   const companyId = useSelector((state) => state.companyMapReducer.companyId);
+
+
   const companyStockcode = useSelector(
     (state) => state.companyMapReducer.companyStockcode
   );
@@ -1014,7 +1016,7 @@ export const CompanyMap = () => {
 
   useEffect(() => {
     mouseScrollEvent();
-  }, [mapViewScaleReducer.mapViewScales]);
+  }, [mapViewScaleReducer.mapViewScales,companyId]);
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -1050,96 +1052,188 @@ export const CompanyMap = () => {
   //    updateWindowsHistory(newUrl);
   // }, [zoom, center]);
 
+        const setCenteredAreaViewScales = (center) => {
+          let closestArea = { d: 9999999999999999 };
+
+          mapViewScaleReducer.mapViewScales.forEach((a) => {
+            const dx = a.centroid_x - center[0];
+            const dy = a.centroid_y - center[1];
+
+            const d = Math.sqrt(dx * dx + dy * dy);
+
+            if (closestArea.d > d) {
+              closestArea = { area: a, d };
+            }
+          });
+
+          dispatch(setcompanyMapViewScales(closestArea.area));
+          if (!closestArea.area) {
+            // alert(`no area found `)
+            return;
+          } else {
+            dispatch(setcompanyMapViewScales(closestArea.area));
+            setcurcenteredareaid(closestArea.area.area_id);
+          }
+          // console.log("aa-curAreaId",closestArea.area.area_id)
+          const r = getMapResolution(
+            closestArea.area.featuredpropscale,
+            mapUnits
+          );
+          // console.log("rrr",r,closestArea.area  )
+
+          // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+          //featured prop max-scale
+          setmaxResolutionFProp(r);
+
+          const r1 = getMapResolution(
+            closestArea.area.propoutlinescale,
+            mapUnits
+          );
+          // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+          //prop outline max-res
+          setmaxResolutionSyncOutlines(r1);
+
+          //asset max-res
+          // console.log("aa-assetscale",closestArea.area.assetscale)
+          const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+          setmaxResolutionAssets(r2);
+          //asset max-res
+          // console.log("aa-claimscale",closestArea.area.claimscale)
+          const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+          setmaxResolutionClaims(r3);
+          const r4 = getMapResolution(
+            closestArea.area.proplayerscale,
+            mapUnits
+          );
+          setmaxResolutionPropPoints(r4);
+          //
+        };
+
+              const handleMoveEnd = useCallback(() => {
+                const map = mapRef.current;
+                 console.log("companyId", companyId);
+                const tmpZoomLevel = map.getView().getZoom();
+                console.log("tmpZoomLevel", tmpZoomLevel);
+
+                const tmpinitialCenter = map.getView().getCenter();
+                dispatch(setCompanyZoomLevel(tmpZoomLevel));
+                dispatch(setCompanyInitialCenter(tmpinitialCenter));
+                setZoom(tmpZoomLevel);
+                setCenter(tmpinitialCenter);
+
+                setCenteredAreaViewScales(tmpinitialCenter);
+
+                //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+                updateWindowsHistoryCmap({
+                  isSideNavOpen,
+                  lyrs: companyLyrs,
+                  zoom: tmpZoomLevel,
+                  center: tmpinitialCenter,
+                  sidenav2: isCompanySideNavOpen,
+                  companyId: companyId,
+                });
+
+                // window.history.replaceState({}, "", newUrl);
+
+                // router.push(
+                //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+                // );
+                // console.log("tmpinitialCenter", tmpinitialCenter);
+                // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+                // window.history.replaceState({}, "", newUrl);
+              }, [companyId]);
   const mouseScrollEvent = useCallback(
     (event) => {
       const map = mapRef.current;
 
-      const setCenteredAreaViewScales = (center) => {
-        let closestArea = { d: 9999999999999999 };
-        console.log("qq-mapViewScaleReducer.mapViewScales", center);
-        mapViewScaleReducer.mapViewScales.forEach((a) => {
-          const dx = a.centroid_x - center[0];
-          const dy = a.centroid_y - center[1];
+      // const setCenteredAreaViewScales = (center) => {
+      //   let closestArea = { d: 9999999999999999 };
+        
+      //   mapViewScaleReducer.mapViewScales.forEach((a) => {
+      //     const dx = a.centroid_x - center[0];
+      //     const dy = a.centroid_y - center[1];
 
-          const d = Math.sqrt(dx * dx + dy * dy);
+      //     const d = Math.sqrt(dx * dx + dy * dy);
 
-          if (closestArea.d > d) {
-            closestArea = { area: a, d };
-          }
-        });
+      //     if (closestArea.d > d) {
+      //       closestArea = { area: a, d };
+      //     }
+      //   });
 
-        dispatch(setcompanyMapViewScales(closestArea.area));
-        if (!closestArea.area) {
-          // alert(`no area found `)
-          return;
-        } else {
-          dispatch(setcompanyMapViewScales(closestArea.area));
-          setcurcenteredareaid(closestArea.area.area_id);
-        }
-        // console.log("aa-curAreaId",closestArea.area.area_id)
-        const r = getMapResolution(
-          closestArea.area.featuredpropscale,
-          mapUnits
-        );
-        // console.log("rrr",r,closestArea.area  )
+      //   dispatch(setcompanyMapViewScales(closestArea.area));
+      //   if (!closestArea.area) {
+      //     // alert(`no area found `)
+      //     return;
+      //   } else {
+      //     dispatch(setcompanyMapViewScales(closestArea.area));
+      //     setcurcenteredareaid(closestArea.area.area_id);
+      //   }
+      //   // console.log("aa-curAreaId",closestArea.area.area_id)
+      //   const r = getMapResolution(
+      //     closestArea.area.featuredpropscale,
+      //     mapUnits
+      //   );
+      //   // console.log("rrr",r,closestArea.area  )
 
-        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
-        //featured prop max-scale
-        setmaxResolutionFProp(r);
+      //   // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+      //   //featured prop max-scale
+      //   setmaxResolutionFProp(r);
 
-        const r1 = getMapResolution(
-          closestArea.area.propoutlinescale,
-          mapUnits
-        );
-        // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
-        //prop outline max-res
-        setmaxResolutionSyncOutlines(r1);
+      //   const r1 = getMapResolution(
+      //     closestArea.area.propoutlinescale,
+      //     mapUnits
+      //   );
+      //   // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+      //   //prop outline max-res
+      //   setmaxResolutionSyncOutlines(r1);
 
-        //asset max-res
-        // console.log("aa-assetscale",closestArea.area.assetscale)
-        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-        setmaxResolutionAssets(r2);
-        //asset max-res
-        // console.log("aa-claimscale",closestArea.area.claimscale)
-        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
-        setmaxResolutionClaims(r3);
-        const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
-        setmaxResolutionPropPoints(r4);
-        //
-      };
-
+      //   //asset max-res
+      //   // console.log("aa-assetscale",closestArea.area.assetscale)
+      //   const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+      //   setmaxResolutionAssets(r2);
+      //   //asset max-res
+      //   // console.log("aa-claimscale",closestArea.area.claimscale)
+      //   const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+      //   setmaxResolutionClaims(r3);
+      //   const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
+      //   setmaxResolutionPropPoints(r4);
+      //   //
+      // };
+      
+     
       // console.log("mapRef", mapRef.current?.getZoom());
-      const handleMoveEnd = () => {
-        // console.log("map", map);
-        const tmpZoomLevel = map.getView().getZoom();
-        const tmpinitialCenter = map.getView().getCenter();
-        dispatch(setCompanyZoomLevel(tmpZoomLevel));
-        dispatch(setCompanyInitialCenter(tmpinitialCenter));
-        setZoom(tmpZoomLevel);
-        setCenter(tmpinitialCenter);
+      // const handleMoveEnd = () => {
+      //   // console.log("map", map);
+      //   const tmpZoomLevel = map.getView().getZoom();
+      //   const tmpinitialCenter = map.getView().getCenter();
+      //   dispatch(setCompanyZoomLevel(tmpZoomLevel));
+      //   dispatch(setCompanyInitialCenter(tmpinitialCenter));
+      //   setZoom(tmpZoomLevel);
+      //   setCenter(tmpinitialCenter);
 
-        setCenteredAreaViewScales(tmpinitialCenter);
+      //   setCenteredAreaViewScales(tmpinitialCenter);
 
-        //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+      //   //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+         
+      //   updateWindowsHistoryCmap({
+      //     isSideNavOpen,
+      //     lyrs: companyLyrs,
+      //     zoom: tmpZoomLevel,
+      //     center: tmpinitialCenter,
+      //     sidenav2: isCompanySideNavOpen,
+      //     companyId: companyId,
+      //   });
 
-        updateWindowsHistoryCmap({
-          isSideNavOpen,
-          lyrs: companyLyrs,
-          zoom: tmpZoomLevel,
-          center: tmpinitialCenter,
-          sidenav2: isCompanySideNavOpen,
-          companyId: companyId,
-        });
+      //   // window.history.replaceState({}, "", newUrl);
 
-        // window.history.replaceState({}, "", newUrl);
-
-        // router.push(
-        //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
-        // );
-        // console.log("tmpinitialCenter", tmpinitialCenter);
-        // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-        // window.history.replaceState({}, "", newUrl);
-      };
+      //   // router.push(
+      //   //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+      //   // );
+      //   // console.log("tmpinitialCenter", tmpinitialCenter);
+      //   // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+      //   // window.history.replaceState({}, "", newUrl);
+      // };
       if (mapViewScaleReducer.mapViewScales.length > 0) {
         map?.on("moveend", handleMoveEnd);
       }
@@ -1148,8 +1242,34 @@ export const CompanyMap = () => {
         map?.un("moveend", handleMoveEnd);
       };
     },
-    [mapViewScaleReducer.mapViewScales]
+    [mapViewScaleReducer.mapViewScales,companyId]
   );
+//  useEffect(() => {
+//     const map = mapRef.current;
+//     const tmpZoomLevel = map.getView().getZoom();
+//     const tmpinitialCenter = map.getView().getCenter();
+//     // dispatch(setCompanyZoomLevel(tmpZoomLevel));
+//     // dispatch(setCompanyInitialCenter(tmpinitialCenter));
+//     // setZoom(tmpZoomLevel);
+//     // setCenter(tmpinitialCenter);
+
+    
+//     console.log("companyId-2", companyId);
+
+//     updateWindowsHistoryCmap({
+//       isSideNavOpen,
+//       lyrs: companyLyrs,
+//       zoom: tmpZoomLevel,
+//       center: tmpinitialCenter,
+//       sidenav2: isCompanySideNavOpen,
+//       companyId: companyId,
+//     });
+
+
+//  }, [companyId]);
+
+
+
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
@@ -1971,7 +2091,7 @@ export const CompanyMap = () => {
   return (
     <div className="flex">
       <CompanySideNavbar />
-      <div className="relative">
+      <div className="relative max-h-[90vh]">
         <div className="w-12 absolute left-0 top-0 z-50">
           <div className="flex flex-col gap-4 mt-2">
             <Tooltip

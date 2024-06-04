@@ -30,7 +30,7 @@ import {
   setcompanyName,
   setcompanyStockcode,
 } from "../../../../store/company-map/company-map-slice";
-import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { updateWindowsHistory, updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import { setSelectedMap } from "@/store/map-selector/map-selector-slice";
 
 const CompanyMapButton = ({ onClick }) => {
@@ -84,10 +84,20 @@ const CompanyMapButton = ({ onClick }) => {
   };
 
   const openCompanyNav = () => {
-    let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    // let newUrl;
+    // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    //updateWindowsHistory(newUrl);
+
+      updateWindowsHistoryCmap({
+        isSideNavOpen,
+        lyrs: companyLyrs,
+        zoomLevel: companyZoomLevel,
+        initialCenter: companyInitialCenter,
+        companyId,
+      });
+
+
     dispatch(setIsCompanySideNavOpen(true));
   };
   const onClickLocal = () => {

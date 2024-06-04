@@ -380,7 +380,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    // updateWindowsHistory(newUrl);
 
     // dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
    
@@ -1006,6 +1006,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           <AutocompleteItem
                             key={countryObj.country}
                             value={countryObj.country}
+                            className="text-black"
                           >
                             {countryObj.country}
                           </AutocompleteItem>
@@ -1038,6 +1039,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           <AutocompleteItem
                             key={spObj.state_prov}
                             value={spObj.state_prov}
+                            className="text-black"
                           >
                             {spObj.state_prov}
                           </AutocompleteItem>
@@ -1067,7 +1069,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       inputValue={area ?? ""}
                     >
                       {areaList.map((ao) => (
-                        <AutocompleteItem key={ao.area} value={ao.area}>
+                        <AutocompleteItem
+                          className="text-black"
+                          key={ao.area}
+                          value={ao.area}
+                        >
                           {ao.area}
                         </AutocompleteItem>
                       ))}

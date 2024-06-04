@@ -8,7 +8,6 @@ const CompanyTreeView = ({
   isOpen,
   setIsLoadingSyncAllProperties,
   isLoadingSyncAllProperties,
-  featuredPropertiesLocal,
 }) => {
   const [treeViewData, setTreeViewData] = useState();
 
@@ -165,15 +164,11 @@ const CompanyTreeView = ({
   };
   return (
     <div
+      //  className="max-h-[150px] bg-white text-black"
       className={
-        // isOpen && featuredPropertiesLocal.length > 0
-        //   ? "overflow-y-auto max-h-[18vh] text-black  pb-2 grow"
-        //   : "max-h-[45vh] text-black overflow-y-auto pb-2"
         isOpen
-          ? featuredPropertiesLocal.length > 0
-            ? "overflow-y-auto max-h-[18vh] text-black pb-2 grow"
-            : "max-h-[50vh] text-black overflow-y-auto pb-2"
-          : "max-h-[45vh] text-black overflow-y-auto pb-2"
+          ? `bg-white overflow-y-scroll max-h-[18vh] text-black  pb-2 `
+          : `bg-white  max-h-[40vh] text-black overflow-y-scroll pb-2`
       }
     >
       {isLoadingSyncAllProperties ? (

@@ -4,6 +4,7 @@ import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
+import { Tooltip } from "@nextui-org/react";
 
 const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -29,20 +30,27 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
           <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
-          <span className="">
-            {eyeState && (
-              <TbEye
-                className="cursor-pointer hover:scale-125"
-                onClick={eyeClickHandler}
-              />
-            )}
-            {!eyeState && (
-              <TbEyeOff
-                className="cursor-pointer hover:scale-125"
-                onClick={eyeClickHandler}
-              />
-            )}
-          </span>
+          <Tooltip
+            content={"Layer On/Off"}
+            placement="top"
+            color="primary"
+            className="bg-[#52525B] text-white "
+          >
+            <span className="">
+              {eyeState && (
+                <TbEye
+                  className="cursor-pointer hover:scale-125"
+                  onClick={eyeClickHandler}
+                />
+              )}
+              {!eyeState && (
+                <TbEyeOff
+                  className="cursor-pointer hover:scale-125"
+                  onClick={eyeClickHandler}
+                />
+              )}
+            </span>
+          </Tooltip>
         </div>
       </div>
       {isOpen && <div className="mt-2">{children}</div>}

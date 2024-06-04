@@ -6,6 +6,7 @@ import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { MdOutlineLabel } from "react-icons/md";
 import { MdOutlineLabelOff } from "react-icons/md";
+import { Tooltip } from "@nextui-org/react";
 
 const AccordionItemWithEyeLabel = ({
   title,
@@ -16,7 +17,6 @@ const AccordionItemWithEyeLabel = ({
   setLabelState,
   setIsOpen,
   isOpen,
-
 }) => {
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
@@ -39,34 +39,48 @@ const AccordionItemWithEyeLabel = ({
           <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
-          <span>
-            {labelState && (
-              <MdOutlineLabel
-                onClick={() => setLabelState(false)}
-                className=" cursor-pointer hover:scale-125"
-              />
-            )}
-            {!labelState && (
-              <MdOutlineLabelOff
-                onClick={() => setLabelState(true)}
-                className=" cursor-pointer hover:scale-125"
-              />
-            )}
-          </span>
-          <span className="">
-            {eyeState && (
-              <TbEye
-                className="cursor-pointer hover:scale-125"
-                onClick={eyeClickHandler}
-              />
-            )}
-            {!eyeState && (
-              <TbEyeOff
-                className="cursor-pointer hover:scale-125"
-                onClick={eyeClickHandler}
-              />
-            )}
-          </span>
+          <Tooltip
+            content={"Label On/Off"}
+            placement="top"
+            color="primary"
+             className="bg-[#52525B] text-white "
+          >
+            <span>
+              {labelState && (
+                <MdOutlineLabel
+                  onClick={() => setLabelState(false)}
+                  className=" cursor-pointer hover:scale-125"
+                />
+              )}
+              {!labelState && (
+                <MdOutlineLabelOff
+                  onClick={() => setLabelState(true)}
+                  className=" cursor-pointer hover:scale-125"
+                />
+              )}
+            </span>
+          </Tooltip>
+          <Tooltip
+            content={"Layer On/Off"}
+            placement="top"
+            color="primary"
+             className="bg-[#52525B] text-white "
+          >
+            <span className="">
+              {eyeState && (
+                <TbEye
+                  className="cursor-pointer hover:scale-125"
+                  onClick={eyeClickHandler}
+                />
+              )}
+              {!eyeState && (
+                <TbEyeOff
+                  className="cursor-pointer hover:scale-125"
+                  onClick={eyeClickHandler}
+                />
+              )}
+            </span>
+          </Tooltip>
         </div>
       </div>
       {isOpen && <div className="mt-2">{children}</div>}

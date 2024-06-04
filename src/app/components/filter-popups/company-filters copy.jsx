@@ -72,6 +72,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     (state) => state.companyMapReducer.companyStockcode
   );
 
+  console.log("companyName", companyName);
+  console.log("companyId", companyId);
+  console.log("companyStockcode", companyStockcode);
+
   useEffect(() => {
     setCompany(companyName);
   }, [companyName]);
@@ -138,15 +142,27 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   }, [isOpenIn]);
   useEffect(() => {
     // dispatch(setcompanyId(companyidLocal));
-    console.log("companyList", companyList);
-    const c = companyList.find((c) => c.companyid == companyidLocal);
-    if (c) {
-      setStockcode(c.stockcode);
-      setCompany(c.name);
+    if (companyidLocal) {
+      const c = companyList.find((c) => c.companyid == companyidLocal);
+      if (c) {
+        // dispatch(setcompanyName(c.name));
+        setStockcode(c.stockcode);
+        setCompany(c.name);
+      }
+    } else {
+      setStockcode("");
+      setCompany("");
     }
     // else{
-    //   setStockcode("");
-    //   setCompany("");
+    //    setStockcode("");
+    // }
+
+    // if(companyId==0){
+    //    console.log("set stockcode to 0 an d other-",companyId )
+    //   setStockcode("")
+    // }
+    // else{
+    //    setStockcode("")
     // }
   }, [companyidLocal]);
 
@@ -206,7 +222,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   };
 
   useEffect(() => {
-    
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/companylist/${search}`,
@@ -215,12 +230,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         }
       );
       const d = await res.json();
-       console.log("companyList", d.data);
       setCompanyList(d.data);
       setStockcodeList(d.data);
     };
     if (debouncedSearch) {
-      console.log("debouncedSearch", debouncedSearch,"pppp",search);
       f().catch(console.error);
     }
   }, [debouncedSearch]);
@@ -302,28 +315,25 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                       selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                         console.log("e1", e);
-                        setStockcode("");
-                        setCompanyidLocal(0);
                         setSearch(e);
                         setCompany(e);
                       }}
                       onSelectionChange={(e) => {
-                        console.log("e2", e);
                         setCompanyidLocal(e);
-                        // const c = companyList.find((c) => c.companyid == e);
-                        // if (c) {
-                        //   sethistoricalCompany(c.historical);
-                        // } else {
-                        //   sethistoricalCompany(false);
-                        // }
+                        const c = companyList.find((c) => c.companyid == e);
+                        if (c) {
+                          sethistoricalCompany(c.historical);
+                        } else {
+                          sethistoricalCompany(false);
+                        }
                       }}
+                      value={company}
                       defaultSelectedKey={company}
                       inputValue={company}
                       classNames={customClassNames}
                       inputProps={{ className: "dark:text-white text-black" }}
                     >
-                      {companyList.length > 0 && companyList.map((companyObj) => (
+                      {companyList.map((companyObj) => (
                         <AutocompleteItem
                           key={companyObj.companyid}
                           value={companyObj.name}
@@ -349,6 +359,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       }}
                       // defaultSelectedKey={stockcode}
                       inputValue={stockcode}
+                      value={stockcode}
                       classNames={customClassNames}
                       inputProps={{ className: "dark:text-white text-black" }}
                     >

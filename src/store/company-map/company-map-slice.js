@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState = {
   isCompanySideNavOpen: false,
   companyName: "",
-  companyId: "",
+  companyId: 0,
   companyStockcode: "",
   syncPropertyFeatures: undefined,
   featuredPropertyFeatures: undefined,

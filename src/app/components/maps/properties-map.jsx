@@ -65,7 +65,7 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 // import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
-import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
+// import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 import Draggable from "react-draggable";
 import { useMediaQuery } from "react-responsive";
 import { SlLayers } from "react-icons/sl";
@@ -956,13 +956,13 @@ export const PropertiesMap = () => {
         //       let newUrl;
         // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
-        updateWindowsHistoryCmap({
-          isSideNavOpen,
-          lyrs: propertiesLyrs,
-          zoom: tmpZoomLevel,
-          center: tmpinitialCenter,
-          sidenav2: isPropertiesSideNavOpen,
-        });
+        // updateWindowsHistoryCmap({
+        //   isSideNavOpen,
+        //   lyrs: propertiesLyrs,
+        //   zoom: tmpZoomLevel,
+        //   center: tmpinitialCenter,
+        //   sidenav2: isPropertiesSideNavOpen,
+        // });
 
         // router.push(
         //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
@@ -990,7 +990,7 @@ export const PropertiesMap = () => {
       window.location.pathname
     }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    // updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
   };
 
@@ -999,7 +999,7 @@ export const PropertiesMap = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${lyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
+    // updateWindowsHistory(newUrl);
   };
 
   const image = new Icon({

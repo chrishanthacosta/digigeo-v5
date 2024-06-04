@@ -27,8 +27,12 @@ import {
   setareaSelectedAreaId,
 } from "../../../store/area-map/area-map-slice";
 // import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
-import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
-import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
+import { setIsPropertiesSideNavOpen, setsearchParamMiningArea } from "../../../store/properties-map/properties-map-slice";
+import {
+  setcompanyId,
+  setcompanyName,
+  setIsCompanySideNavOpen,
+} from "../../../store/company-map/company-map-slice";
 import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
 // import { MapViewMode } from "@/store/types";
 import { useMediaQuery } from "react-responsive";
@@ -55,6 +59,16 @@ export const LandingPage = () => {
   const areaCountry = searchParams.get("co");
   const areaid = searchParams.get("aid");
   const mapViewMode = searchParams.get("mvm") ?? "HEADED";
+  const companyId = searchParams.get("companyId") ?? "";
+  //pmap
+  const pname = searchParams.get("pname") ?? "";
+  const atype = searchParams.get("atype") ?? "";
+  const commodity = searchParams.get("comdt") ?? "";
+  const country = searchParams.get("cty") ?? "";
+  const state = searchParams.get("state") ?? "";
+  const mArea = searchParams.get("mArea") ?? "";
+  const selprops = searchParams.get("selprops") ?? "";
+
   // const mapViewMode = searchParams.get("mvm") ?? MapViewMode.HEADLESS;
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -82,25 +96,18 @@ export const LandingPage = () => {
 
       switch (mapType) {
         case "area":
-        
           if (isTabletOrMobile) {
-              dispatch(
-                setIsAreaSideNavOpen(
-                  false
-                )
-              );
-                dispatch(
-                  setIsSideNavOpen(false)
-                );
+            dispatch(setIsAreaSideNavOpen(false));
+            dispatch(setIsSideNavOpen(false));
           } else {
             dispatch(
               setIsAreaSideNavOpen(
                 String(isSecondNavOpen).toLowerCase() === "true"
               )
             );
-              dispatch(
-                setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
-              );
+            dispatch(
+              setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+            );
           }
 
           dispatch(setAreaLyrs(mapLyrs));
@@ -111,14 +118,31 @@ export const LandingPage = () => {
           dispatch(setAreaMiningArea(areaName ? areaName : ""));
           break;
         case "company":
-          dispatch(
-            setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+          //https://atlas.ceyinfo.cloud/matlas/company_details/33
+          const res = await fetch(
+            `https://atlas.ceyinfo.cloud/matlas/company_details/${companyId}`,
+            { cache: "no-store" }
           );
-          dispatch(
-            setIsCompanySideNavOpen(
-              String(isSecondNavOpen).toLowerCase() === "true"
-            )
-          );
+          const d = await res.json();
+          const companyName = d.data?.[0].name ?? "";
+
+          dispatch(setcompanyName(companyName));
+
+          if (isTabletOrMobile) {
+            dispatch(setIsCompanySideNavOpen(false));
+            dispatch(setIsSideNavOpen(false));
+          } else {
+            dispatch(
+              setIsCompanySideNavOpen(
+                String(isSecondNavOpen).toLowerCase() === "true"
+              )
+            );
+            dispatch(
+              setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+            );
+          }
+
+          dispatch(setcompanyId(companyId));
           dispatch(setCompanyLyrs(mapLyrs));
           dispatch(setCompanyZoomLevel(mapZoom));
           const tmpMapCenter3 = mapCenter.split(",").map(Number);
@@ -138,7 +162,24 @@ export const LandingPage = () => {
           dispatch(setPropertiesZoomLevel(mapZoom));
           const tmpMapCenter2 = mapCenter.split(",").map(Number);
           dispatch(setPropertiesInitialCenter(tmpMapCenter2));
-
+          //pmap
+          // const pname = searchParams.get("pname") ?? "";
+          // const atype = searchParams.get("atype") ?? "";
+          // const commodity = searchParams.get("comdt") ?? "";
+          // const country = searchParams.get("cty") ?? "";
+          // const state = searchParams.get("state") ?? "";
+          // const mArea = searchParams.get("mArea") ?? "";
+          dispatch(setsearchParamPropertyName(pname));
+          dispatch(setsearchParamCountry(country));
+          dispatch(setsearchParamStateProv(state));
+          dispatch(setsearchParamMiningArea(mArea));
+          dispatch(setsearchParamAssetTypeList(atype));
+          dispatch(setsearchParamCommodityList(commodity));
+          if(selprops){
+              dispatch(setpmapSelectedPropertyIds(selprops));
+          }else{
+              dispatch(setpmapSelectedPropertyIds(""));
+          }
           break;
 
         default:
