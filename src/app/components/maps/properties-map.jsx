@@ -70,6 +70,9 @@ import Draggable from "react-draggable";
 import { useMediaQuery } from "react-responsive";
 import { SlLayers } from "react-icons/sl";
 
+import { SiGooglenearby } from "react-icons/si";
+import { MdNearbyOff } from "react-icons/md";
+
 const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -259,17 +262,17 @@ const propertyMApFPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   const height = getHeight(extent);
   //new code
   const svgtext2 = state.feature.get("hatch");
-  const img = new Image();
+  // const img = new Image();
 
   // img.onload = function () {
   //   feature.set("flag", img);
   // };
 
-  img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+  // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
 
   //end new code
-  //  const flag = state.feature.get("flag");
-  const flag = img;
+  const flag = state.feature.get("flag");
+  // const flag = img;
   // console.log("flag", flag);
   if (!flag || height < 1 || width < 1) {
     return;
@@ -360,6 +363,7 @@ export const PropertiesMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
+  const [togglecurVisible, settogglecurVisible] = useState(false);
   // const navigatedFPropertyRef = useRef();
 
   const dispatch = useDispatch();
@@ -389,7 +393,7 @@ export const PropertiesMap = () => {
 
   const [mapUnits, setmapUnits] = useState("m");
 
-  const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+  const [maxResolutionFProp, setmaxResolutionFProp] = useState(5);
   const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
@@ -700,11 +704,17 @@ export const PropertiesMap = () => {
   );
 
   const syncPropSourceRef = useRef(null);
+  const othersyncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
+  const othersyncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
+  const otherfPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
+  const otherfPropVectorLayerRef = useRef(null);
 
   const fPropSourceLabelRef = useRef(null);
+  //const otherfPropSourceLabelRef = useRef(null);
+
   const fPropVectorLayerLabelRef = useRef(null);
 
   const assetSourceRef = useRef(null);
@@ -853,7 +863,6 @@ export const PropertiesMap = () => {
     // }
   }, [assetFeatures]);
 
-  //init useeffect
   useEffect(() => {
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
@@ -1011,7 +1020,7 @@ export const PropertiesMap = () => {
   // aa//
 
   const styleFunctionSyncProperties = (feature, resolution) => {
-    //console.log("resolution",resolution)
+    console.log("resolutionss",resolution)
     let t = "";
     if (resolution < 300)
       t =
@@ -1032,7 +1041,7 @@ export const PropertiesMap = () => {
         width: 2,
       }),
       fill: new Fill({
-        color: "rgba(255,23,0,0.2)",
+        color: "rgba(1,23,0,0.2)",
       }),
     });
 
@@ -1520,6 +1529,40 @@ export const PropertiesMap = () => {
       });
   }, []);
 
+  const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
+    console.log("fprop-loading");
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            otherfPropSourceRef?.current?.clear();
+            //fPropSourceLabelRef?.current?.clear();
+            otherfPropSourceRef.current.addFeatures(features);
+            //fPropSourceLabelRef.current.addFeatures(features);
+
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
+          }
+        }
+      });
+  }, []);
+
   const styleFunctionClaim = (feature, resolution) => {
     const colour = "#D3D3D3"; //feature.values_.colour;
     //console.log("colour", colour);
@@ -1692,11 +1735,11 @@ export const PropertiesMap = () => {
           return sponsors;
         };
         const dd = await getData(hotplayid);
-        
+
         const d = dd?.[0];
 
         // const sponsoredowners = d?.sponsor ?? "";
-        const sponsoredowners = dd?.map(d => d.sponsor ?? "");
+        const sponsoredowners = dd?.map((d) => d.sponsor ?? "");
 
         let commo_ref = d?.commo_ref ?? "";
         let assets = d?.assets ?? "";
@@ -1785,7 +1828,7 @@ export const PropertiesMap = () => {
         const selPropertyOutlineFeatures =
           claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
           [];
-        
+
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
           const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
@@ -2214,6 +2257,72 @@ export const PropertiesMap = () => {
 
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
 
+  useEffect(() => {
+    otherfPropVectorLayerRef?.current
+      ?.getSource()
+      .on("addfeature", function (event) {
+        const feature = event.feature;
+        const svgtext2 = feature.get("hatch");
+        const img = new Image();
+
+        img.onload = function () {
+          feature.set("flag", img);
+        };
+
+        img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+      });
+
+    const style = new Style({});
+    style.setRenderer(propertyMApFPropertyVectorRendererFuncV2);
+
+    otherfPropVectorLayerRef.current?.setStyle(style);
+    otherfPropVectorLayerRef.current?.setVisible(false);
+  }, [otherfPropVectorLayerRef.current]);
+
+  const onClickToggleOtherFprops = () => {
+    const curVisible = otherfPropVectorLayerRef.current.getVisible();
+    otherfPropVectorLayerRef.current.setVisible(!curVisible);
+    settogglecurVisible(!curVisible);
+  };
+
+    const othersyncPropLoaderFunc = useCallback(
+      (extent, resolution, projection) => {
+         console.log("qqqq1");
+        const url =
+          `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
+          `/${extent.join("/")}`;
+        // console.log("url", url);
+        fetch(url, {
+          method: "GET", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (json.data) {
+              console.log("qqqq");
+              if (json.data[0].json_build_object.features) {
+                const features = new GeoJSON().readFeatures(
+                  json.data[0].json_build_object
+                );
+                //console.log("hit claims3")
+                othersyncPropSourceRef.current.clear();
+                othersyncPropSourceRef.current.addFeatures(features);
+
+                //console.log("bbsync uni tbl01_claims   features count", features.count);
+              }
+            }
+          });
+      },
+      [othersyncPropSourceRef.current]
+    );
+
+ 
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
@@ -2274,6 +2383,48 @@ export const PropertiesMap = () => {
                 />
               </Button>
             </Tooltip>
+            {/* <Tooltip
+              showArrow={true}
+              color="primary"
+              content="Zoom Out"
+              placement="right"
+            >
+              <Button isIconOnly variant="bordered" className="bg-blue-900">
+                <SiGooglenearby
+                  className={`text-white cursor-pointer h-6 w-6`}
+                  onClick={onClickToggleOtherFprops}
+                />
+              </Button>
+            </Tooltip> */}
+            {togglecurVisible ? (
+              <Tooltip
+                showArrow={true}
+                color="primary"
+                content="Zoom Out"
+                placement="right"
+              >
+                <Button isIconOnly variant="bordered" className="bg-blue-900">
+                  <SiGooglenearby
+                    className={`text-white cursor-pointer h-6 w-6`}
+                    onClick={onClickToggleOtherFprops}
+                  />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip
+                showArrow={true}
+                color="primary"
+                content="Zoom Out"
+                placement="right"
+              >
+                <Button isIconOnly variant="bordered" className="bg-blue-900">
+                  <MdNearbyOff
+                    className={`text-white cursor-pointer h-6 w-6`}
+                    onClick={onClickToggleOtherFprops}
+                  />
+                </Button>
+              </Tooltip>
+            )}
             {isTabletOrMobile && (
               <Popover placement="right-start" showArrow offset={10}>
                 <PopoverTrigger>
@@ -2548,7 +2699,13 @@ export const PropertiesMap = () => {
           <olLayerVector ref={fPropVectorLayerLabelRef}>
             <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
           </olLayerVector>
-
+          <olLayerVector ref={otherfPropVectorLayerRef}>
+            <olSourceVector
+              ref={otherfPropSourceRef}
+              strategy={bbox}
+              loader={otherfPropLoaderFunc}
+            ></olSourceVector>
+          </olLayerVector>
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
@@ -2572,6 +2729,22 @@ export const PropertiesMap = () => {
                 {/* <PointsAtCoordinates coordinates={coordinates} /> */}
               </olSourceVector>
             </olSourceCluster>
+          </olLayerVector>
+          <olLayerVector
+            ref={othersyncPropVectorLayerRef}
+            style={styleFunctionSyncProperties}
+            minResolution={0}
+            maxResolution={300}
+          >
+            {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
+
+            <olSourceVector
+              ref={othersyncPropSourceRef}
+              strategy={bbox}
+              loader={othersyncPropLoaderFunc}
+            >
+              {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+            </olSourceVector>
           </olLayerVector>
         </Map>
       </div>

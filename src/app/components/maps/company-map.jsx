@@ -65,6 +65,7 @@ import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-rep
 import Draggable from "react-draggable";
 import { SlLayers } from "react-icons/sl";
 import { useMediaQuery } from "react-responsive";
+import CompanySideNavbar2 from "../side-navbar-second/company-map/company-sidenavbar copy 2";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->

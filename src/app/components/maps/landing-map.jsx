@@ -1233,9 +1233,9 @@ export const LandingMap = () => {
     // }
   }, [syncClaimLinkPropertyFeatures]);
 
-  //init useeffect
+ 
   useEffect(() => {
-    console.log("mapViewMode", mapViewMode);
+  
     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
       const e = new GeoJSON().readFeatures(assetFeatures);
