@@ -113,7 +113,8 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
   const [logoPath, setlogoPath] = useState("");
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState([]);
-  const [url, seturl] = useState([]);
+  const [url, seturl] = useState("");
+  const [preurl, setpreurl] = useState("");
 
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
@@ -180,8 +181,10 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
       const d = await res.json();
 
       let { url, urlPrefix, profile } = formatUrl(d.data[0]?.url ?? "");
+      setpreurl(urlPrefix);
       //console.log("ppp", urlPrefix + url)
-      seturl(urlPrefix + url)
+     // seturl(urlPrefix + url)
+      seturl(  url)
       const logo = d.data[0]?.logo;
       if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
@@ -222,11 +225,11 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
             }
           </span>
           {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
-          {profile && (<Link href={url} target="_blank" className="rounded-lg border border-solid  " >
+          {profile && (<Link href={preurl  + url} target="_blank" className="rounded-lg border border-solid p-1 " >
 
-            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {url}</p>
+            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem] hover:font-bold " > {url}</p>
           </Link>)}
-          {profile && (<Link href={profile} target="_blank" className="text-black rounded-lg border border-solid underline" >
+          {profile && (<Link href={profile} target="_blank" className="text-black rounded-lg border border-solid underline hover:font-bold" >
 
             {"Read More"}
           </Link>)}
