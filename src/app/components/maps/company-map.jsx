@@ -2236,8 +2236,8 @@ export const CompanyMap = () => {
                 json.data[0].json_build_object
               );
               //console.log("hit claims3")
-              claimLinkSourceRef.current.clear();
-              claimLinkSourceRef.current.addFeatures(features);
+              otherclaimLinkSourceRef.current.clear();
+              otherclaimLinkSourceRef.current.addFeatures(features);
               setotherclaimLinkVectorLayerIsLoading(false);
               //console.log("bbsync uni tbl01_claims   features count", features.count);
             }
@@ -2307,8 +2307,15 @@ export const CompanyMap = () => {
     // other sync prop layer
     othersyncPropVectorLayerRef.current?.setVisible(false);
     otherassetLayerRef.current?.setVisible(false);
-    otherclaimLinkVectorLayerRef.current?.setVisible(false);
+  
   }, [otherfPropVectorLayerRef.current]);
+
+
+  useEffect(() => {
+    otherclaimLinkVectorLayerRef.current?.setVisible(false);
+    
+    
+   }, [otherclaimLinkVectorLayerRef.current])
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();

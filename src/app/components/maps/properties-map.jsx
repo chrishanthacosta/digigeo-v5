@@ -344,7 +344,7 @@ export const PropertiesMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -693,7 +693,7 @@ export const PropertiesMap = () => {
 
   useEffect(() => {
     if (propertyFlyToLocation?.length > 0) {
-      flyTo(mapViewRef?.current, propertyFlyToLocation, () => {});
+      flyTo(mapViewRef?.current, propertyFlyToLocation, () => { });
     }
   }, [propertyFlyToLocation]);
 
@@ -1013,9 +1013,8 @@ export const PropertiesMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${
-      window.location.pathname
-    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${window.location.pathname
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     // updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
@@ -1043,7 +1042,7 @@ export const PropertiesMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1637,8 +1636,8 @@ export const PropertiesMap = () => {
                 json.data[0].json_build_object
               );
               //console.log("hit claims3")
-              claimLinkSourceRef.current.clear();
-              claimLinkSourceRef.current.addFeatures(features);
+              otherclaimLinkSourceRef.current.clear();
+              otherclaimLinkSourceRef.current.addFeatures(features);
               setotherclaimLinkVectorLayerIsLoading(false);
               //console.log("bbsync uni tbl01_claims   features count", features.count);
             }
@@ -2430,9 +2429,8 @@ export const PropertiesMap = () => {
             >
               <Button isIconOnly variant="bordered" className="bg-blue-900">
                 <BsFillArrowLeftSquareFill
-                  className={`cursor-pointer text-white h-6 w-6 ${
-                    isSideNavOpen ? "" : "rotate-180"
-                  }`}
+                  className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                    }`}
                   onClick={() => collapsibleBtnHandler()}
                 />
               </Button>
@@ -2524,7 +2522,7 @@ export const PropertiesMap = () => {
                   <Button isIconOnly variant="bordered" className="bg-blue-900">
                     <SlLayers
                       className={`text-white cursor-pointer h-6 w-6`}
-                      // onClick={onClickViewMinusZoom}
+                    // onClick={onClickViewMinusZoom}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -2541,31 +2539,28 @@ export const PropertiesMap = () => {
                         <ButtonGroup variant="faded" color="primary">
                           <Button
                             onClick={() => setLyrs("m")}
-                            className={`${
-                              propertiesLyrs == "m"
+                            className={`${propertiesLyrs == "m"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                            }  w-22`}
+                              }  w-22`}
                           >
                             Map
                           </Button>
                           <Button
                             onClick={() => setLyrs("s")}
-                            className={`${
-                              propertiesLyrs == "s"
+                            className={`${propertiesLyrs == "s"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                            }  w-22`}
+                              }  w-22`}
                           >
                             Satellite
                           </Button>
                           <Button
                             onClick={() => setLyrs("p")}
-                            className={`${
-                              propertiesLyrs == "p"
+                            className={`${propertiesLyrs == "p"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                            }  w-22`}
+                              }  w-22`}
                           >
                             Terrain
                           </Button>
@@ -2596,31 +2591,28 @@ export const PropertiesMap = () => {
             >
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${
-                  propertiesLyrs == "m"
+                className={`${propertiesLyrs == "m"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                }  w-22`}
+                  }  w-22`}
               >
                 Map
               </Button>
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${
-                  propertiesLyrs == "s"
+                className={`${propertiesLyrs == "s"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                }  w-22`}
+                  }  w-22`}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${
-                  propertiesLyrs == "p"
+                className={`${propertiesLyrs == "p"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                }  w-22`}
+                  }  w-22`}
               >
                 Terrain
               </Button>
@@ -2652,10 +2644,10 @@ export const PropertiesMap = () => {
             otherclaimLinkVectorLayerIsLoading ||
             otherfPropVectorLayerIsLoading ||
             othersyncPropVectorLayerIsLoading) && (
-            <div className="bg-white p-4">
-              <Spinner size="md" />
-            </div>
-          )}
+              <div className="bg-white p-4">
+                <Spinner size="md" />
+              </div>
+            )}
         </div>
         <Draggable>
           <div
@@ -2727,10 +2719,10 @@ export const PropertiesMap = () => {
                     : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                ? isTabletOrMobile
-                  ? "calc(100vw - 208px)"
-                  : "calc(100vw - 288px)"
-                : "100vw"
+                  ? isTabletOrMobile
+                    ? "calc(100vw - 208px)"
+                    : "calc(100vw - 288px)"
+                  : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2786,7 +2778,7 @@ export const PropertiesMap = () => {
               ref={otherclaimLinkSourceRef}
               strategy={bbox}
               loader={othersyncClaimLinkLoaderFunc}
-              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+            // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
             ></olSourceVector>
           </olLayerVector>
           <olLayerVectorImage
