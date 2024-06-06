@@ -119,14 +119,18 @@ export const LandingPage = () => {
           break;
         case "company":
           //https://atlas.ceyinfo.cloud/matlas/company_details/33
+          if(companyId){
           const res = await fetch(
             `https://atlas.ceyinfo.cloud/matlas/company_details/${companyId}`,
             { cache: "no-store" }
           );
           const d = await res.json();
-          const companyName = d.data?.[0].name ?? "";
+          const companyName = d?.data?.[0]?.name ?? "";
 
           dispatch(setcompanyName(companyName));
+        }else{
+          dispatch(setcompanyName(""));
+        }
 
           if (isTabletOrMobile) {
             dispatch(setIsCompanySideNavOpen(false));

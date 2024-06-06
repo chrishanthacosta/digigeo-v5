@@ -226,7 +226,7 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
 
             <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {url}</p>
           </Link>)}
-          {profile && (<Link href={profile} target="_blank" className="text-white rounded-lg border border-solid underline" >
+          {profile && (<Link href={profile} target="_blank" className="text-black rounded-lg border border-solid underline" >
 
             {"Read More"}
           </Link>)}

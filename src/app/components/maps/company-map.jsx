@@ -12,6 +12,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Tooltip,
 } from "@nextui-org/react";
 import {
@@ -66,6 +67,8 @@ import Draggable from "react-draggable";
 import { SlLayers } from "react-icons/sl";
 import { useMediaQuery } from "react-responsive";
 import CompanySideNavbar2 from "../side-navbar-second/company-map/company-sidenavbar copy 2";
+import { SiGooglenearby } from "react-icons/si";
+import { MdNearbyOff } from "react-icons/md";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -511,7 +514,8 @@ export const CompanyMap = () => {
   const [claimObject, setclaimObject] = useState(undefined);
   const [mapUnits, setmapUnits] = useState("m");
 
-  const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+  const [togglecurVisible, settogglecurVisible] = useState(false);
+  const [maxResolutionFProp, setmaxResolutionFProp] = useState(5);
   const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
@@ -525,6 +529,19 @@ export const CompanyMap = () => {
   const [lat, setlat] = useState(0);
   const [long, setlong] = useState(0);
   const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
+
+  const [otherfPropVectorLayerIsLoading, setotherfPropVectorLayerIsLoading] =
+    useState(false);
+  const [otherassetLayerIsLoading, setotherassetLayerIsLoading] =
+    useState(false);
+  const [
+    othersyncPropVectorLayerIsLoading,
+    setothersyncPropVectorLayerIsLoading,
+  ] = useState(false);
+  const [
+    otherclaimLinkVectorLayerIsLoading,
+    setotherclaimLinkVectorLayerIsLoading,
+  ] = useState(false);
 
   const mapRef = useRef();
   const mapViewRef = useRef();
@@ -887,13 +904,22 @@ export const CompanyMap = () => {
   const fPropVectorLayerLabelRef = useRef(null);
 
   const assetSourceRef = useRef(null);
+  const otherassetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
+  const otherassetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
   const claimLinkVectorLayerRef = useRef(null);
+  const otherclaimLinkSourceRef = useRef(null);
   const claimVectorImgSourceRef = useRef(null);
+  const otherclaimLinkVectorLayerRef = useRef(null);
   const claimVectorImgLayerRef = useRef(null);
   const areaBoundaryImgSourceRef = useRef(null);
   const areaBoundaryImgLayerRef = useRef(null);
+
+  const otherfPropVectorLayerRef = useRef(null);
+  const otherfPropSourceRef = useRef(null);
+  const othersyncPropVectorLayerRef = useRef(null);
+  const othersyncPropSourceRef = useRef(null);
 
   const syncPropertyFeatures = useSelector(
     (state) => state.companyMapReducer.syncPropertyFeatures
@@ -912,7 +938,6 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.companyName
   );
   const companyId = useSelector((state) => state.companyMapReducer.companyId);
-
 
   const companyStockcode = useSelector(
     (state) => state.companyMapReducer.companyStockcode
@@ -1017,7 +1042,7 @@ export const CompanyMap = () => {
 
   useEffect(() => {
     mouseScrollEvent();
-  }, [mapViewScaleReducer.mapViewScales,companyId]);
+  }, [mapViewScaleReducer.mapViewScales, companyId]);
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -1053,104 +1078,95 @@ export const CompanyMap = () => {
   //    updateWindowsHistory(newUrl);
   // }, [zoom, center]);
 
-        const setCenteredAreaViewScales = (center) => {
-          let closestArea = { d: 9999999999999999 };
+  const setCenteredAreaViewScales = (center) => {
+    let closestArea = { d: 9999999999999999 };
 
-          mapViewScaleReducer.mapViewScales.forEach((a) => {
-            const dx = a.centroid_x - center[0];
-            const dy = a.centroid_y - center[1];
+    mapViewScaleReducer.mapViewScales.forEach((a) => {
+      const dx = a.centroid_x - center[0];
+      const dy = a.centroid_y - center[1];
 
-            const d = Math.sqrt(dx * dx + dy * dy);
+      const d = Math.sqrt(dx * dx + dy * dy);
 
-            if (closestArea.d > d) {
-              closestArea = { area: a, d };
-            }
-          });
+      if (closestArea.d > d) {
+        closestArea = { area: a, d };
+      }
+    });
 
-          dispatch(setcompanyMapViewScales(closestArea.area));
-          if (!closestArea.area) {
-            // alert(`no area found `)
-            return;
-          } else {
-            dispatch(setcompanyMapViewScales(closestArea.area));
-            setcurcenteredareaid(closestArea.area.area_id);
-          }
-          // console.log("aa-curAreaId",closestArea.area.area_id)
-          const r = getMapResolution(
-            closestArea.area.featuredpropscale,
-            mapUnits
-          );
-          // console.log("rrr",r,closestArea.area  )
+    dispatch(setcompanyMapViewScales(closestArea.area));
+    if (!closestArea.area) {
+      // alert(`no area found `)
+      return;
+    } else {
+      dispatch(setcompanyMapViewScales(closestArea.area));
+      setcurcenteredareaid(closestArea.area.area_id);
+    }
+    // console.log("aa-curAreaId",closestArea.area.area_id)
+    const r = getMapResolution(closestArea.area.featuredpropscale, mapUnits);
+    // console.log("rrr",r,closestArea.area  )
 
-          // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
-          //featured prop max-scale
-          setmaxResolutionFProp(r);
+    // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+    //featured prop max-scale
+    setmaxResolutionFProp(r);
 
-          const r1 = getMapResolution(
-            closestArea.area.propoutlinescale,
-            mapUnits
-          );
-          // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
-          //prop outline max-res
-          setmaxResolutionSyncOutlines(r1);
+    const r1 = getMapResolution(closestArea.area.propoutlinescale, mapUnits);
+    // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+    //prop outline max-res
+    setmaxResolutionSyncOutlines(r1);
 
-          //asset max-res
-          // console.log("aa-assetscale",closestArea.area.assetscale)
-          const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-          setmaxResolutionAssets(r2);
-          //asset max-res
-          // console.log("aa-claimscale",closestArea.area.claimscale)
-          const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
-          setmaxResolutionClaims(r3);
-          const r4 = getMapResolution(
-            closestArea.area.proplayerscale,
-            mapUnits
-          );
-          setmaxResolutionPropPoints(r4);
-          //
-        };
+    //asset max-res
+    // console.log("aa-assetscale",closestArea.area.assetscale)
+    const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+    setmaxResolutionAssets(r2);
+    //asset max-res
+    // console.log("aa-claimscale",closestArea.area.claimscale)
+    const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+    setmaxResolutionClaims(r3);
+    const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
+    setmaxResolutionPropPoints(r4);
+    //
+  };
 
-              const handleMoveEnd = useCallback(() => {
-                const map = mapRef.current;
-                 console.log("companyId", companyId);
-                const tmpZoomLevel = map.getView().getZoom();
-                console.log("tmpZoomLevel", tmpZoomLevel);
+  const handleMoveEnd = useCallback(() => {
+    const map = mapRef.current;
+    console.log("companyId", companyId);
+    const tmpZoomLevel = map.getView().getZoom();
+    console.log("tmpZoomLevel", tmpZoomLevel);
 
-                const tmpinitialCenter = map.getView().getCenter();
-                dispatch(setCompanyZoomLevel(tmpZoomLevel));
-                dispatch(setCompanyInitialCenter(tmpinitialCenter));
-                setZoom(tmpZoomLevel);
-                setCenter(tmpinitialCenter);
+    const tmpinitialCenter = map.getView().getCenter();
+    dispatch(setCompanyZoomLevel(tmpZoomLevel));
+    dispatch(setCompanyInitialCenter(tmpinitialCenter));
+    setZoom(tmpZoomLevel);
+    setCenter(tmpinitialCenter);
 
-                setCenteredAreaViewScales(tmpinitialCenter);
+    setCenteredAreaViewScales(tmpinitialCenter);
 
-                //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+    //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
-                updateWindowsHistoryCmap({
-                  isSideNavOpen,
-                  lyrs: companyLyrs,
-                  zoom: tmpZoomLevel,
-                  center: tmpinitialCenter,
-                  sidenav2: isCompanySideNavOpen,
-                  companyId: companyId,
-                });
+    updateWindowsHistoryCmap({
+      isSideNavOpen,
+      lyrs: companyLyrs,
+      zoom: tmpZoomLevel,
+      center: tmpinitialCenter,
+      sidenav2: isCompanySideNavOpen,
+      companyId: companyId,
+    });
 
-                // window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
 
-                // router.push(
-                //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
-                // );
-                // console.log("tmpinitialCenter", tmpinitialCenter);
-                // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-                // window.history.replaceState({}, "", newUrl);
-              }, [companyId]);
+    // router.push(
+    //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+    // );
+    // console.log("tmpinitialCenter", tmpinitialCenter);
+    // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+    // window.history.replaceState({}, "", newUrl);
+  }, [companyId]);
   const mouseScrollEvent = useCallback(
     (event) => {
       const map = mapRef.current;
 
       // const setCenteredAreaViewScales = (center) => {
       //   let closestArea = { d: 9999999999999999 };
-        
+
       //   mapViewScaleReducer.mapViewScales.forEach((a) => {
       //     const dx = a.centroid_x - center[0];
       //     const dy = a.centroid_y - center[1];
@@ -1201,8 +1217,7 @@ export const CompanyMap = () => {
       //   setmaxResolutionPropPoints(r4);
       //   //
       // };
-      
-     
+
       // console.log("mapRef", mapRef.current?.getZoom());
       // const handleMoveEnd = () => {
       //   // console.log("map", map);
@@ -1216,7 +1231,7 @@ export const CompanyMap = () => {
       //   setCenteredAreaViewScales(tmpinitialCenter);
 
       //   //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-         
+
       //   updateWindowsHistoryCmap({
       //     isSideNavOpen,
       //     lyrs: companyLyrs,
@@ -1243,34 +1258,29 @@ export const CompanyMap = () => {
         map?.un("moveend", handleMoveEnd);
       };
     },
-    [mapViewScaleReducer.mapViewScales,companyId]
+    [mapViewScaleReducer.mapViewScales, companyId]
   );
-//  useEffect(() => {
-//     const map = mapRef.current;
-//     const tmpZoomLevel = map.getView().getZoom();
-//     const tmpinitialCenter = map.getView().getCenter();
-//     // dispatch(setCompanyZoomLevel(tmpZoomLevel));
-//     // dispatch(setCompanyInitialCenter(tmpinitialCenter));
-//     // setZoom(tmpZoomLevel);
-//     // setCenter(tmpinitialCenter);
+  //  useEffect(() => {
+  //     const map = mapRef.current;
+  //     const tmpZoomLevel = map.getView().getZoom();
+  //     const tmpinitialCenter = map.getView().getCenter();
+  //     // dispatch(setCompanyZoomLevel(tmpZoomLevel));
+  //     // dispatch(setCompanyInitialCenter(tmpinitialCenter));
+  //     // setZoom(tmpZoomLevel);
+  //     // setCenter(tmpinitialCenter);
 
-    
-//     console.log("companyId-2", companyId);
+  //     console.log("companyId-2", companyId);
 
-//     updateWindowsHistoryCmap({
-//       isSideNavOpen,
-//       lyrs: companyLyrs,
-//       zoom: tmpZoomLevel,
-//       center: tmpinitialCenter,
-//       sidenav2: isCompanySideNavOpen,
-//       companyId: companyId,
-//     });
+  //     updateWindowsHistoryCmap({
+  //       isSideNavOpen,
+  //       lyrs: companyLyrs,
+  //       zoom: tmpZoomLevel,
+  //       center: tmpinitialCenter,
+  //       sidenav2: isCompanySideNavOpen,
+  //       companyId: companyId,
+  //     });
 
-
-//  }, [companyId]);
-
-
-
+  //  }, [companyId]);
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
@@ -1588,6 +1598,54 @@ export const CompanyMap = () => {
     return s;
   };
 
+  const propertyMApFPropertyVectorRendererFuncV2 = (
+    pixelCoordinates,
+    state
+  ) => {
+    const context = state.context;
+    const geometry = state.geometry.clone();
+    geometry.setCoordinates(pixelCoordinates);
+    const extent = geometry.getExtent();
+    const width = getWidth(extent);
+    const height = getHeight(extent);
+    //new code
+    const svgtext2 = state.feature.get("hatch");
+    // const img = new Image();
+
+    // img.onload = function () {
+    //   feature.set("flag", img);
+    // };
+
+    // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+
+    //end new code
+    const flag = state.feature.get("flag");
+    // const flag = img;
+    // console.log("flag", flag);
+    if (!flag || height < 1 || width < 1) {
+      return;
+    }
+
+    context.save();
+    const renderContext = toContext(context, {
+      pixelRatio: 1,
+    });
+
+    renderContext.setFillStrokeStyle(fill, stroke);
+    renderContext.drawGeometry(geometry);
+
+    context.clip();
+
+    // Fill transparent country with the flag image
+    const bottomLeft = getBottomLeft(extent);
+    const left = bottomLeft[0];
+    const bottom = bottomLeft[1];
+    const hf = width / (height * 8);
+    context.drawImage(flag, left, bottom, width * 20, height * hf * 20);
+
+    context.restore();
+  };
+
   const areaLoaderFunc = useCallback((extent, resolution, projection) => {
     const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
     fetch(url, {
@@ -1814,7 +1872,7 @@ export const CompanyMap = () => {
         //console.log("dd",dd)
         const d = dd?.[0];
 
-        const sponsoredowners = dd?.map(d => d.sponsor ?? "");
+        const sponsoredowners = dd?.map((d) => d.sponsor ?? "");
 
         // const sponsoredowners = d?.sponsor ?? "";
         let commo_ref = d?.commo_ref ?? "";
@@ -1904,7 +1962,7 @@ export const CompanyMap = () => {
         const selPropertyOutlineFeatures =
           claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ??
           [];
-        
+
         if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
           const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid");
@@ -2088,6 +2146,178 @@ export const CompanyMap = () => {
 
     return st;
   };
+  const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
+    console.log("fprop-loading");
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    setotherfPropVectorLayerIsLoading(true);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            otherfPropSourceRef?.current?.clear();
+            //fPropSourceLabelRef?.current?.clear();
+            otherfPropSourceRef.current.addFeatures(features);
+            //fPropSourceLabelRef.current.addFeatures(features);
+            setotherfPropVectorLayerIsLoading(false);
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
+          }
+        }
+      });
+  }, []);
+
+  const otherassetLoaderFunc = useCallback((extent, resolution, projection) => {
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    setotherassetLayerIsLoading(true);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            otherassetSourceRef.current.clear();
+            otherassetSourceRef.current.addFeatures(features);
+            setotherassetLayerIsLoading(false);
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
+          }
+        }
+      });
+  }, []);
+
+  const othersyncClaimLinkLoaderFunc = useCallback(
+    (extent, resolution, projection) => {
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `/${extent.join("/")}`;
+      setotherclaimLinkVectorLayerIsLoading(true);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.data) {
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              claimLinkSourceRef.current.clear();
+              claimLinkSourceRef.current.addFeatures(features);
+              setotherclaimLinkVectorLayerIsLoading(false);
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    },
+    []
+  );
+
+  const othersyncPropLoaderFunc = useCallback(
+    (extent, resolution, projection) => {
+      console.log("qqqq1");
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
+        `/${extent.join("/")}`;
+      // console.log("url", url);
+      setothersyncPropVectorLayerIsLoading(true);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.data) {
+            console.log("qqqq");
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              othersyncPropSourceRef.current.clear();
+              othersyncPropSourceRef.current.addFeatures(features);
+              setothersyncPropVectorLayerIsLoading(false);
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    },
+    [othersyncPropSourceRef.current]
+  );
+
+  useEffect(() => {
+    otherfPropVectorLayerRef?.current
+      ?.getSource()
+      .on("addfeature", function (event) {
+        const feature = event.feature;
+        const svgtext2 = feature.get("hatch");
+        const img = new Image();
+
+        img.onload = function () {
+          feature.set("flag", img);
+        };
+
+        img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+      });
+
+    const style = new Style({});
+    style.setRenderer(propertyMApFPropertyVectorRendererFuncV2);
+
+    otherfPropVectorLayerRef.current?.setStyle(style);
+    otherfPropVectorLayerRef.current?.setVisible(false);
+    // other sync prop layer
+    othersyncPropVectorLayerRef.current?.setVisible(false);
+    otherassetLayerRef.current?.setVisible(false);
+    otherclaimLinkVectorLayerRef.current?.setVisible(false);
+  }, [otherfPropVectorLayerRef.current]);
+
+  const onClickToggleOtherFprops = () => {
+    const curVisible = otherfPropVectorLayerRef.current.getVisible();
+    otherfPropVectorLayerRef.current.setVisible(!curVisible);
+    othersyncPropVectorLayerRef.current.setVisible(!curVisible);
+    otherassetLayerRef.current.setVisible(!curVisible);
+    otherclaimLinkVectorLayerRef.current.setVisible(!curVisible);
+    settogglecurVisible(!curVisible);
+  };
 
   return (
     <div className="flex">
@@ -2150,6 +2380,35 @@ export const CompanyMap = () => {
                 />
               </Button>
             </Tooltip>
+            {togglecurVisible ? (
+              <Tooltip
+                showArrow={true}
+                color="primary"
+                content="Remove Layers"
+                placement="right"
+              >
+                <Button isIconOnly variant="bordered" className="bg-blue-900">
+                  <SiGooglenearby
+                    className={`text-white cursor-pointer h-6 w-6`}
+                    onClick={onClickToggleOtherFprops}
+                  />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip
+                showArrow={true}
+                color="primary"
+                content="Add Layers"
+                placement="right"
+              >
+                <Button isIconOnly variant="bordered" className="bg-blue-900">
+                  <MdNearbyOff
+                    className={`text-white cursor-pointer h-6 w-6`}
+                    onClick={onClickToggleOtherFprops}
+                  />
+                </Button>
+              </Tooltip>
+            )}
             {isTabletOrMobile && (
               <Popover placement="right-start" showArrow offset={10}>
                 <PopoverTrigger>
@@ -2279,6 +2538,16 @@ export const CompanyMap = () => {
               {`Long:${long}`}
             </Button>
           </ButtonGroup>
+        </div>
+        <div className=" absolute right-10 top-10 z-50 ">
+          {(otherassetLayerIsLoading ||
+            otherclaimLinkVectorLayerIsLoading ||
+            otherfPropVectorLayerIsLoading ||
+            othersyncPropVectorLayerIsLoading) && (
+            <div className="bg-white p-4">
+              <Spinner size="md" />
+            </div>
+          )}
         </div>
         <Draggable>
           <div
@@ -2410,6 +2679,14 @@ export const CompanyMap = () => {
               ></olSourceVector>
             )}
           </olLayerVector>
+          <olLayerVector ref={otherclaimLinkVectorLayerRef}>
+            <olSourceVector
+              ref={otherclaimLinkSourceRef}
+              strategy={bbox}
+              loader={othersyncClaimLinkLoaderFunc}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+            ></olSourceVector>
+          </olLayerVector>
           <olLayerVectorImage
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
@@ -2430,6 +2707,13 @@ export const CompanyMap = () => {
           <olLayerVector ref={fPropVectorLayerLabelRef}>
             <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
           </olLayerVector>
+          <olLayerVector ref={otherfPropVectorLayerRef}>
+            <olSourceVector
+              ref={otherfPropSourceRef}
+              strategy={bbox}
+              loader={otherfPropLoaderFunc}
+            ></olSourceVector>
+          </olLayerVector>
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
@@ -2439,6 +2723,16 @@ export const CompanyMap = () => {
             }
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
+          </olLayerVector>
+          <olLayerVector
+            ref={otherassetLayerRef}
+            style={areaMapAssetVectorLayerStyleFunction}
+          >
+            <olSourceVector
+              ref={otherassetSourceRef}
+              loader={otherassetLoaderFunc}
+              strategy={bbox}
+            ></olSourceVector>
           </olLayerVector>
           <olLayerVector
             ref={syncPropVectorLayerRef}
@@ -2451,6 +2745,22 @@ export const CompanyMap = () => {
             }
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
+          </olLayerVector>
+          <olLayerVector
+            ref={othersyncPropVectorLayerRef}
+            style={styleFunctionSyncProperties}
+            minResolution={0}
+            maxResolution={300}
+          >
+            {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
+
+            <olSourceVector
+              ref={othersyncPropSourceRef}
+              strategy={bbox}
+              loader={othersyncPropLoaderFunc}
+            >
+              {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+            </olSourceVector>
           </olLayerVector>
         </Map>
       </div>

@@ -507,7 +507,7 @@ const getMapResolution = (scale, unit) => {
   return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
 };
 
-export const LandingMap = () => {
+    export const LandingMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
