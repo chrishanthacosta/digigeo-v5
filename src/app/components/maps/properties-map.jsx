@@ -2277,11 +2277,14 @@ export const PropertiesMap = () => {
 
     otherfPropVectorLayerRef.current?.setStyle(style);
     otherfPropVectorLayerRef.current?.setVisible(false);
+    // other sync prop layer
+    othersyncPropVectorLayerRef.current?.setVisible(false);
   }, [otherfPropVectorLayerRef.current]);
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();
     otherfPropVectorLayerRef.current.setVisible(!curVisible);
+    othersyncPropVectorLayerRef.current.setVisible(!curVisible);
     settogglecurVisible(!curVisible);
   };
 
