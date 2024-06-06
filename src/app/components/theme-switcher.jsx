@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { BsMoonFill, BsFillSunFill } from "react-icons/bs";
 import { Button } from "@nextui-org/react";
+import { WiMoonThirdQuarter } from "react-icons/wi";
+import Image from "next/image";
 
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
@@ -33,7 +35,13 @@ export function ThemeSwitcher() {
           aria-label="Like"
           onClick={() => setTheme("dark")}
         >
-          <BsMoonFill className="h-[1.2rem] w-[1.2rem] text-white" />
+          <Image
+            src="./brightness_white.svg"
+            width={25}
+            height={10}
+            alt="prop"
+          />
+          {/* <WiMoonThirdQuarter className="h-[1.2rem] w-[1.2rem] text-white" /> */}
         </Button>
       )}
     </div>
