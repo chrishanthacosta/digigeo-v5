@@ -2314,6 +2314,10 @@ export const CompanyMap = () => {
   useEffect(() => {
     otherclaimLinkVectorLayerRef.current?.setVisible(false);
     
+    otherclaimLinkVectorLayerRef.current?.setOpacity(0.2);
+    otherclaimLinkVectorLayerRef.current?.setStyle(
+      companyMap_tbl_sync_claimlink_VectorLayerStyleFunction
+    );
     
    }, [otherclaimLinkVectorLayerRef.current])
 

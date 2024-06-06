@@ -2403,8 +2403,19 @@ export const PropertiesMap = () => {
     // other sync prop layer
     othersyncPropVectorLayerRef.current?.setVisible(false);
     otherassetLayerRef.current?.setVisible(false);
-    otherclaimLinkVectorLayerRef.current?.setVisible(false);
+  //  otherclaimLinkVectorLayerRef.current?.setVisible(false);
   }, [otherfPropVectorLayerRef.current]);
+
+  useEffect(() => {
+    otherclaimLinkVectorLayerRef.current?.setVisible(false);
+
+    otherclaimLinkVectorLayerRef.current?.setOpacity(0.2);
+    otherclaimLinkVectorLayerRef.current?.setStyle(
+      propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction
+    );
+
+  }, [otherclaimLinkVectorLayerRef.current])
+
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();
