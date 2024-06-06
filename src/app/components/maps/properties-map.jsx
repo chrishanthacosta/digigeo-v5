@@ -12,6 +12,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Tooltip,
 } from "@nextui-org/react";
 import {
@@ -401,6 +402,19 @@ export const PropertiesMap = () => {
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
+  const [otherfPropVectorLayerIsLoading, setotherfPropVectorLayerIsLoading] =
+    useState(false);
+  const [otherassetLayerIsLoading, setotherassetLayerIsLoading] =
+    useState(false);
+  const [
+    othersyncPropVectorLayerIsLoading,
+    setothersyncPropVectorLayerIsLoading,
+  ] = useState(false);
+  const [
+    otherclaimLinkVectorLayerIsLoading,
+    setotherclaimLinkVectorLayerIsLoading,
+  ] = useState(false);
+
   useEffect(() => {
     if (navigatedFPropId != 0) {
       if (fPropSourceRef.current) {
@@ -718,9 +732,13 @@ export const PropertiesMap = () => {
   const fPropVectorLayerLabelRef = useRef(null);
 
   const assetSourceRef = useRef(null);
+  const otherassetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
+  const otherassetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
+  const otherclaimLinkSourceRef = useRef(null);
   const claimLinkVectorLayerRef = useRef(null);
+  const otherclaimLinkVectorLayerRef = useRef(null);
   const claimVectorImgSourceRef = useRef(null);
   const claimVectorImgLayerRef = useRef(null);
   const areaBoundaryImgSourceRef = useRef(null);
@@ -1020,7 +1038,7 @@ export const PropertiesMap = () => {
   // aa//
 
   const styleFunctionSyncProperties = (feature, resolution) => {
-    console.log("resolutionss",resolution)
+    console.log("resolutionss", resolution);
     let t = "";
     if (resolution < 300)
       t =
@@ -1535,6 +1553,7 @@ export const PropertiesMap = () => {
       `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
+    setotherfPropVectorLayerIsLoading(true);
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1556,12 +1575,115 @@ export const PropertiesMap = () => {
             //fPropSourceLabelRef?.current?.clear();
             otherfPropSourceRef.current.addFeatures(features);
             //fPropSourceLabelRef.current.addFeatures(features);
-
+            setotherfPropVectorLayerIsLoading(false);
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
   }, []);
+
+  const otherassetLoaderFunc = useCallback((extent, resolution, projection) => {
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    setotherassetLayerIsLoading(true);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            otherassetSourceRef.current.clear();
+            otherassetSourceRef.current.addFeatures(features);
+            setotherassetLayerIsLoading(false);
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
+          }
+        }
+      });
+  }, []);
+
+  const othersyncClaimLinkLoaderFunc = useCallback(
+    (extent, resolution, projection) => {
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `/${extent.join("/")}`;
+      setotherclaimLinkVectorLayerIsLoading(true);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.data) {
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              claimLinkSourceRef.current.clear();
+              claimLinkSourceRef.current.addFeatures(features);
+              setotherclaimLinkVectorLayerIsLoading(false);
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    },
+    []
+  );
+
+  const othersyncPropLoaderFunc = useCallback(
+    (extent, resolution, projection) => {
+      console.log("qqqq1");
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
+        `/${extent.join("/")}`;
+      // console.log("url", url);
+      setothersyncPropVectorLayerIsLoading(true);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.data) {
+            console.log("qqqq");
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              othersyncPropSourceRef.current.clear();
+              othersyncPropSourceRef.current.addFeatures(features);
+              setothersyncPropVectorLayerIsLoading(false);
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    },
+    [othersyncPropSourceRef.current]
+  );
 
   const styleFunctionClaim = (feature, resolution) => {
     const colour = "#D3D3D3"; //feature.values_.colour;
@@ -2276,55 +2398,23 @@ export const PropertiesMap = () => {
     style.setRenderer(propertyMApFPropertyVectorRendererFuncV2);
 
     otherfPropVectorLayerRef.current?.setStyle(style);
+    //remove layer at init
+    otherfPropVectorLayerRef.current?.setVisible(false);
     otherfPropVectorLayerRef.current?.setVisible(false);
     // other sync prop layer
     othersyncPropVectorLayerRef.current?.setVisible(false);
+    otherassetLayerRef.current?.setVisible(false);
+    otherclaimLinkVectorLayerRef.current?.setVisible(false);
   }, [otherfPropVectorLayerRef.current]);
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();
     otherfPropVectorLayerRef.current.setVisible(!curVisible);
     othersyncPropVectorLayerRef.current.setVisible(!curVisible);
+    otherassetLayerRef.current.setVisible(!curVisible);
+    otherclaimLinkVectorLayerRef.current.setVisible(!curVisible);
     settogglecurVisible(!curVisible);
   };
-
-    const othersyncPropLoaderFunc = useCallback(
-      (extent, resolution, projection) => {
-         console.log("qqqq1");
-        const url =
-          `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
-          `/${extent.join("/")}`;
-        // console.log("url", url);
-        fetch(url, {
-          method: "GET", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            if (json.data) {
-              console.log("qqqq");
-              if (json.data[0].json_build_object.features) {
-                const features = new GeoJSON().readFeatures(
-                  json.data[0].json_build_object
-                );
-                //console.log("hit claims3")
-                othersyncPropSourceRef.current.clear();
-                othersyncPropSourceRef.current.addFeatures(features);
-
-                //console.log("bbsync uni tbl01_claims   features count", features.count);
-              }
-            }
-          });
-      },
-      [othersyncPropSourceRef.current]
-    );
-
- 
 
   return (
     <div className="flex">
@@ -2403,7 +2493,7 @@ export const PropertiesMap = () => {
               <Tooltip
                 showArrow={true}
                 color="primary"
-                content="Zoom Out"
+                content="Remove Layers"
                 placement="right"
               >
                 <Button isIconOnly variant="bordered" className="bg-blue-900">
@@ -2417,7 +2507,7 @@ export const PropertiesMap = () => {
               <Tooltip
                 showArrow={true}
                 color="primary"
-                content="Zoom Out"
+                content="Add Layers"
                 placement="right"
               >
                 <Button isIconOnly variant="bordered" className="bg-blue-900">
@@ -2557,7 +2647,16 @@ export const PropertiesMap = () => {
             </Button>
           </ButtonGroup>
         </div>
-
+        <div className=" absolute right-10 top-10 z-50 ">
+          {(otherassetLayerIsLoading ||
+            otherclaimLinkVectorLayerIsLoading ||
+            otherfPropVectorLayerIsLoading ||
+            othersyncPropVectorLayerIsLoading) && (
+            <div className="bg-white p-4">
+              <Spinner size="md" />
+            </div>
+          )}
+        </div>
         <Draggable>
           <div
             ref={setPopup}
@@ -2682,6 +2781,14 @@ export const PropertiesMap = () => {
               <olSourceVector ref={claimLinkSourceRef}></olSourceVector>
             )}
           </olLayerVector>
+          <olLayerVector ref={otherclaimLinkVectorLayerRef}>
+            <olSourceVector
+              ref={otherclaimLinkSourceRef}
+              strategy={bbox}
+              loader={othersyncClaimLinkLoaderFunc}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+            ></olSourceVector>
+          </olLayerVector>
           <olLayerVectorImage
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
@@ -2719,6 +2826,17 @@ export const PropertiesMap = () => {
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
+          <olLayerVector
+            ref={otherassetLayerRef}
+            style={areaMapAssetVectorLayerStyleFunction}
+          >
+            <olSourceVector
+              ref={otherassetSourceRef}
+              loader={otherassetLoaderFunc}
+              strategy={bbox}
+            ></olSourceVector>
+          </olLayerVector>
+
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={
