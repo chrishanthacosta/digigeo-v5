@@ -44,6 +44,7 @@ import {
   setsearchParamAssetTypeList,
   setsearchParamCommodityList,
   setpropertySearchQuery,
+  setpmapSelectedPropertyIds,
 } from "../../../store/properties-map/properties-map-slice";
 import LandingBottomSideComp from "./bottom-components/landing-bottom-side-component";
 
@@ -88,6 +89,9 @@ const SideNavbar = () => {
   //properties map redux variables
   const isPropertiesSideNavOpen = useSelector(
     (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
+  );
+  const pmapSelectedPropertyIds = useSelector(
+    (state) => state.propertiesMapReducer.pmapSelectedPropertyIds
   );
   const propertiesLyrs = useSelector(
     (state) => state.mapSelectorReducer.propertiesLyrs
@@ -163,6 +167,7 @@ const SideNavbar = () => {
       dispatch(setsearchParamMiningArea(""));
       dispatch(setsearchParamAssetTypeList([]));
       dispatch(setsearchParamCommodityList([]));
+      dispatch(setpmapSelectedPropertyIds([]));
 
       selectMapHandler("landing")
       // 
@@ -274,7 +279,7 @@ const SideNavbar = () => {
         <div className="w-full pb-1 pl-2 pr-2 pt-2">
           <div className="flex justify-center">
             {/* <Link href="/"> */}
-            {(areaName || propertySearchQuery || companyId ) ? <button
+            {(areaName || propertySearchQuery || companyId || pmapSelectedPropertyIds.length) ? <button
               className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
               onClick={resetAllFilters}
               active={true}
