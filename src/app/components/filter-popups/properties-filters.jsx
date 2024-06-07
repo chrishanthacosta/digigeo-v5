@@ -841,7 +841,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
           // transform: "translate(-50%, -50%)",
           backgroundColor: "transparent",
           border: "none",
-          width: "90%",
+          width: "100%",
         },
       });
     }

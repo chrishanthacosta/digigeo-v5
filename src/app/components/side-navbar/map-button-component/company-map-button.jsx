@@ -30,8 +30,11 @@ import {
   setcompanyName,
   setcompanyStockcode,
 } from "../../../../store/company-map/company-map-slice";
-import { updateWindowsHistory, updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
-import { setSelectedMap } from "@/store/map-selector/map-selector-slice";
+import {
+  updateWindowsHistory,
+  updateWindowsHistoryCmap,
+} from "@/app/utils/helpers/window-history-replace";
+import { setIsSideNavOpen, setSelectedMap } from "@/store/map-selector/map-selector-slice";
 
 const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
@@ -73,8 +76,7 @@ const CompanyMapButton = ({ onClick }) => {
 
   const closePopup = () => {
     setIsOpenIn(false);
-   // dispatch(setSelectedMap("landing"));
-
+    // dispatch(setSelectedMap("landing"));
   };
 
   const resetFilters = () => {
@@ -89,19 +91,19 @@ const CompanyMapButton = ({ onClick }) => {
     // window.history.replaceState({}, "", newUrl);
     //updateWindowsHistory(newUrl);
 
-      updateWindowsHistoryCmap({
-        isSideNavOpen,
-        lyrs: companyLyrs,
-        zoomLevel: companyZoomLevel,
-        initialCenter: companyInitialCenter,
-        companyId,
-      });
-
+    updateWindowsHistoryCmap({
+      isSideNavOpen,
+      lyrs: companyLyrs,
+      zoomLevel: companyZoomLevel,
+      initialCenter: companyInitialCenter,
+      companyId,
+    });
 
     dispatch(setIsCompanySideNavOpen(true));
   };
   const onClickLocal = () => {
     if (!companyId) {
+      dispatch(setIsSideNavOpen(false));
       setIsOpenIn(true);
     }
     onClick();

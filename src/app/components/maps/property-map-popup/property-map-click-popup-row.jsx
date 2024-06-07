@@ -1,14 +1,26 @@
-import  Link  from 'next/link';
+import Link from "next/link";
 
-const PropertyMapClickPopupRow = ({label, value, url="" }) => {
+const PropertyMapClickPopupRow = ({ label, value, url = "" }) => {
   return (
-      <div className='flex '>
-        <span className='w-48  p-1'>{label}</span>  
-      {url != "" ? (<Link className='w-64 p-1 underline text-blue-500 line-clamp-1' target="_blank" href={url}>{value}</Link>) : (<span className='w-64 p-1 line-clamp-1'>{value}</span>)}  
-       
+    <>
+      {value ? (
+        <div className="flex  max-w-[300px] flex-wrap sm:flex-nowrap sm:max-w-none max-sm:[&>*:nth-child(odd)]:bg-gray-200 max-sm:[&>*:nth-child(even)]:bg-gray-300">
+          <span className="w-80 sm:w-48 p-1">{label}</span>
+          {url != "" ? (
+            <Link
+            className="w-80 p-1 underline line-clamp-2 text-blue-500 "
+            target="_blank"
+            href={url}
+          >
+            {value}
+          </Link>
+        ) : (
+          <div className="w-80 p-1 line-clamp-2">{value}</div>
+          )}
+        </div>
+      ) : null}
+    </>
+  );
+};
 
-      </div>
-  )
-}
-
-export default PropertyMapClickPopupRow
+export default PropertyMapClickPopupRow;

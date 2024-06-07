@@ -2440,8 +2440,9 @@ export const PropertiesMap = () => {
             >
               <Button isIconOnly variant="bordered" className="bg-blue-900">
                 <BsFillArrowLeftSquareFill
-                  className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
-                    }`}
+                  className={`cursor-pointer text-white h-6 w-6 ${
+                    isSideNavOpen ? "" : "rotate-180"
+                  }`}
                   onClick={() => collapsibleBtnHandler()}
                 />
               </Button>
@@ -2533,7 +2534,7 @@ export const PropertiesMap = () => {
                   <Button isIconOnly variant="bordered" className="bg-blue-900">
                     <SlLayers
                       className={`text-white cursor-pointer h-6 w-6`}
-                    // onClick={onClickViewMinusZoom}
+                      // onClick={onClickViewMinusZoom}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -2550,28 +2551,31 @@ export const PropertiesMap = () => {
                         <ButtonGroup variant="faded" color="primary">
                           <Button
                             onClick={() => setLyrs("m")}
-                            className={`${propertiesLyrs == "m"
+                            className={`${
+                              propertiesLyrs == "m"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                              }  w-22`}
+                            }  w-22`}
                           >
                             Map
                           </Button>
                           <Button
                             onClick={() => setLyrs("s")}
-                            className={`${propertiesLyrs == "s"
+                            className={`${
+                              propertiesLyrs == "s"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                              }  w-22`}
+                            }  w-22`}
                           >
                             Satellite
                           </Button>
                           <Button
                             onClick={() => setLyrs("p")}
-                            className={`${propertiesLyrs == "p"
+                            className={`${
+                              propertiesLyrs == "p"
                                 ? "bg-blue-900 text-white"
                                 : "bg-blue-700 text-white"
-                              }  w-22`}
+                            }  w-22`}
                           >
                             Terrain
                           </Button>
@@ -2602,28 +2606,31 @@ export const PropertiesMap = () => {
             >
               <Button
                 onClick={() => setLyrs("m")}
-                className={`${propertiesLyrs == "m"
+                className={`${
+                  propertiesLyrs == "m"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                  }  w-22`}
+                }  w-22`}
               >
                 Map
               </Button>
               <Button
                 onClick={() => setLyrs("s")}
-                className={`${propertiesLyrs == "s"
+                className={`${
+                  propertiesLyrs == "s"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                  }  w-22`}
+                }  w-22`}
               >
                 Satellite
               </Button>
               <Button
                 onClick={() => setLyrs("p")}
-                className={`${propertiesLyrs == "p"
+                className={`${
+                  propertiesLyrs == "p"
                     ? "bg-blue-900 text-white"
                     : "bg-blue-700 text-white"
-                  }  w-22`}
+                }  w-22`}
               >
                 Terrain
               </Button>
@@ -2655,34 +2662,35 @@ export const PropertiesMap = () => {
             otherclaimLinkVectorLayerIsLoading ||
             otherfPropVectorLayerIsLoading ||
             othersyncPropVectorLayerIsLoading) && (
-              <div className="bg-white p-4">
-                <Spinner size="md" />
-              </div>
-            )}
+            <div className="bg-white p-4">
+              <Spinner size="md" />
+            </div>
+          )}
         </div>
         <Draggable>
           <div
             ref={setPopup}
-            style={{
-              textDecoration: "none",
-              position: "absolute",
-              top: "2px",
-              right: "8px",
-              backgroundColor: "white",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-              padding: "15px",
-              borderRadius: "10px",
-              border: "1px solid #cccccc",
-              minWidth: "280px",
-              color: "black",
-              // backgroundColor: "white",
-              // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-              // padding: "15px",
-              // borderRadius: "10px",
-              // border: "1px solid #cccccc",
-              // minWidth: "280px",
-              // color: "black",
-            }}
+            // style={{
+            //   textDecoration: "none",
+            //   position: "absolute",
+            //   top: "2px",
+            //   right: "8px",
+            //   backgroundColor: "white",
+            //   boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            //   padding: "15px",
+            //   borderRadius: "10px",
+            //   border: "1px solid #cccccc",
+            //   minWidth: "280px",
+            //   color: "black",
+            //   // backgroundColor: "white",
+            //   // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            //   // padding: "15px",
+            //   // borderRadius: "10px",
+            //   // border: "1px solid #cccccc",
+            //   // minWidth: "280px",
+            //   // color: "black",
+            // }}
+            className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
           >
             <button
               type="button"
@@ -2730,10 +2738,10 @@ export const PropertiesMap = () => {
                     : "calc(100vw - 576px)"
                   : "100vw"
                 : mapViewMode == "HEADED"
-                  ? isTabletOrMobile
-                    ? "calc(100vw - 208px)"
-                    : "calc(100vw - 288px)"
-                  : "100vw"
+                ? isTabletOrMobile
+                  ? "calc(100vw - 208px)"
+                  : "calc(100vw - 288px)"
+                : "100vw"
               : "100vw",
 
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
@@ -2789,7 +2797,7 @@ export const PropertiesMap = () => {
               ref={otherclaimLinkSourceRef}
               strategy={bbox}
               loader={othersyncClaimLinkLoaderFunc}
-            // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
             ></olSourceVector>
           </olLayerVector>
           <olLayerVectorImage

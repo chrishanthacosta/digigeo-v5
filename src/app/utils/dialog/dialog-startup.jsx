@@ -51,7 +51,7 @@ export default function DialogStartup({
       ref={dialogRef}
       className="fixed inset-0 z-10  rounded-xl backdrop:bg-gray-800/50 border-none"
     >
-      <div className="w-[500px] max-w-full bg-gray-200 flex flex-col overflow-hidden">
+      <div className="w-[300px] sm:w-[500px] max-w-full bg-gray-200 flex flex-col overflow-hidden">
         <div className="flex flex-row justify-between   pt-2 px-5 ">
           <h1 className="text-2xl">{title}</h1>
           {/* <AiOutlineCloseCircle

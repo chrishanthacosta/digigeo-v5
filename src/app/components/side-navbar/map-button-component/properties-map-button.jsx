@@ -29,6 +29,7 @@ import {
   setsearchParamAssetTypeList,
   setsearchParamCommodityList,
 } from "../../../../store/properties-map/properties-map-slice";
+import { setIsSideNavOpen } from "@/store/map-selector/map-selector-slice";
 // import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const PropertiesMapButton = ({ onClick }) => {
@@ -96,6 +97,7 @@ const PropertiesMapButton = ({ onClick }) => {
 
   const onClickLocal = () => {
     if (!propertySearchQuery) {
+      dispatch(setIsSideNavOpen(false));
       setIsOpenIn(true);
     }
     onClick();

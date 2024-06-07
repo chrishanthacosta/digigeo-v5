@@ -2563,26 +2563,27 @@ export const CompanyMap = () => {
         <Draggable>
           <div
             ref={setPopup}
-            style={{
-              textDecoration: "none",
-              position: "absolute",
-              top: "2px",
-              right: "8px",
-              backgroundColor: "white",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-              padding: "15px",
-              borderRadius: "10px",
-              border: "1px solid #cccccc",
-              minWidth: "280px",
-              color: "black",
-              // backgroundColor: "white",
-              // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-              // padding: "15px",
-              // borderRadius: "10px",
-              // border: "1px solid #cccccc",
-              // minWidth: "280px",
-              // color: "black",
-            }}
+            // style={{
+            //   textDecoration: "none",
+            //   position: "absolute",
+            //   top: "2px",
+            //   right: "8px",
+            //   backgroundColor: "white",
+            //   boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            //   padding: "15px",
+            //   borderRadius: "10px",
+            //   border: "1px solid #cccccc",
+            //   minWidth: "280px",
+            //   color: "black",
+            //   // backgroundColor: "white",
+            //   // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            //   // padding: "15px",
+            //   // borderRadius: "10px",
+            //   // border: "1px solid #cccccc",
+            //   // minWidth: "280px",
+            //   // color: "black",
+            // }}
+            className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
           >
             <button
               type="button"

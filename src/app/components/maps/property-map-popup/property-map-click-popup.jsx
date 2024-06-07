@@ -35,11 +35,11 @@ const PropertyMapClickPopup = ({}) => {
 
 
     // <div  className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}>
-      <Tabs aria-label="Options" color="primary" variant="solid">
+      <Tabs aria-label="Options" color="primary" variant="solid" >
       {syncPropObj && Object.keys(syncPropObj).length > 0 &&
         <Tab key="Property" title="Property">
           <PropertyMapClickPopupHeaderRow label="Property Info" />
-          <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
+          <div className="sm:[&>*:nth-child(odd)]:bg-gray-200 sm:[&>*:nth-child(even)]:bg-gray-300">
                 <PropertyMapClickPopupRow label={"Name:"} value={syncPropObj.prop_name}/>
                 <PropertyMapClickPopupRow label={"Owners:"} value={syncPropObj.owners}/>
                 <PropertyMapClickPopupRow label={"Area:"} value={syncPropObj.area}/>
@@ -61,7 +61,7 @@ const PropertyMapClickPopup = ({}) => {
             <PropertyMapClickPopupRow label={"Property Name:"} value={fpropObj.prop_name} />
               <PropertyMapClickPopupRow label={"Commodity:"} value={fpropObj.commo_ref}/>
               <PropertyMapClickPopupRow label={"Asset List:"} value={fpropObj.assets}/>
-              <PropertyMapClickPopupRow label={":"} value={fpropObj.resources}/>
+              <PropertyMapClickPopupRow label={"Resources:"} value={fpropObj.resources}/>
               <PropertyMapClickPopupRow label={"Map Area:"} value={fpropObj.map_area}/>
               <PropertyMapClickPopupRow label={"Map Event:"} value={fpropObj.sale_name} /> 
             <LandingMapClickPopupRowMultiValue label={"Ownership:"} value={fpropObj.owners} /> 
