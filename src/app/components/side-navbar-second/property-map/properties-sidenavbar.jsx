@@ -160,9 +160,9 @@ const PropertiesSideNavbar = () => {
       // setIsLoadingSyncAllProperties(true);
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(
-            ","
-          )}`,
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URL
+          }/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(",")}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -181,7 +181,7 @@ const PropertiesSideNavbar = () => {
         dispatch(setFPropertyFeatures(gj));
       } else if (propertySearchQuery) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fpropertygeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -211,7 +211,9 @@ const PropertiesSideNavbar = () => {
       setIsLoadingFeaturedCompanies(true);
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URL
+          }/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
             ","
           )}`,
           { cache: "no-store" }
@@ -227,7 +229,7 @@ const PropertiesSideNavbar = () => {
         setIsLoadingFeaturedCompanies(false);
       } else if (propertySearchQuery) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/hotplayfcompanylist_pmap/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -253,9 +255,9 @@ const PropertiesSideNavbar = () => {
       if (pmapSelectedPropertyIds.length > 0) {
         //
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/propertygeomlist/${pmapSelectedPropertyIds.join(
-            ","
-          )}`,
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URL
+          }/propertygeomlist/${pmapSelectedPropertyIds.join(",")}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -273,7 +275,7 @@ const PropertiesSideNavbar = () => {
         dispatch(setSyncPropertyFeatures(gj));
       } else if (propertySearchQuery) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertygeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -299,9 +301,9 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal_byids/${pmapSelectedPropertyIds.join(
-            ","
-          )}`,
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URL
+          }/pmapassetgeomuniversal_byids/${pmapSelectedPropertyIds.join(",")}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -319,7 +321,7 @@ const PropertiesSideNavbar = () => {
         dispatch(setAssetFeatures(gj));
       } else if (propertySearchQuery) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/pmapassetgeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -348,9 +350,9 @@ const PropertiesSideNavbar = () => {
       //pmapclinkgeomuniversal_byids
       if (pmapSelectedPropertyIds.length > 0) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal_byids/${pmapSelectedPropertyIds.join(
-            ","
-          )}`,
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URL
+          }/pmapclinkgeomuniversal_byids/${pmapSelectedPropertyIds.join(",")}`,
           { cache: "no-store" }
         );
         const d = await res.json();
@@ -368,7 +370,7 @@ const PropertiesSideNavbar = () => {
         dispatch(setsyncClaimLinkPropertyFeatures(gj));
       } else if (propertySearchQuery) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/pmapclinkgeomuniversal/${propertySearchQuery}`,
           { cache: "no-store" }
         );
         const d = await res.json();

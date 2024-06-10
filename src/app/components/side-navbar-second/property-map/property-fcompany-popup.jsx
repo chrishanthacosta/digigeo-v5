@@ -8,7 +8,7 @@ import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
-import Image from 'next/image'
+import Image from "next/image";
 import Link from "next/link";
 import PropertyFCompanyFProperties from "./property-fcompany-popup-properties";
 import PMapDialogComponent from "./property-fcompany-dialog";
@@ -55,13 +55,13 @@ const getStyledTexts = (name) => {
 
   const parts = addends.split(",");
   const spans = [];
-  const contents = []
+  const contents = [];
   //add comp name
   const sp = document.createElement("SPAN");
   const sptext = document.createTextNode(compName);
   sp.appendChild(sptext);
   sp.style.display = "block";
-  sp.style.fontSize = "1.5rem"
+  sp.style.fontSize = "1.5rem";
   spans.push(sp);
   //contents.push({text:compName,style:{} });
   let i = 0;
@@ -84,7 +84,10 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({ text: stockEx, style: { marginLeft: "0.25rem", color: "black" } });
+      contents.push({
+        text: stockEx,
+        style: { marginLeft: "0.25rem", color: "black" },
+      });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -97,7 +100,10 @@ const getStyledTexts = (name) => {
       sp2.style.fontWeight = 600;
       sp2.appendChild(sptext2);
       spans.push(sp2);
-      contents.push({ text: stockVal + trailingComma, style: { color: "blue", fontWeight: 600 } });
+      contents.push({
+        text: stockVal + trailingComma,
+        style: { color: "blue", fontWeight: 600 },
+      });
     }
 
     i++;
@@ -105,8 +111,7 @@ const getStyledTexts = (name) => {
   return contents;
 };
 
-
-const PropertyFCompanyPopup = ({ }) => {
+const PropertyFCompanyPopup = ({}) => {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -126,14 +131,12 @@ const PropertyFCompanyPopup = ({ }) => {
 
   useEffect(() => {
     clearForm();
-    setlogoLoaded(false)
+    setlogoLoaded(false);
     if (popupFcompanyId) {
       getCompanyDetails();
       getSponsorDetails();
     }
-
-  }, [popupFcompanyId])
-
+  }, [popupFcompanyId]);
 
   const customStyles = {
     overlay: {
@@ -168,19 +171,19 @@ const PropertyFCompanyPopup = ({ }) => {
   const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sponsor_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       if (d?.data?.length > 0) {
-        setTitle(d.data[0].company2)
+        setTitle(d.data[0].company2);
         const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-        setsponsorData(sponsorData)
+        setsponsorData(sponsorData);
 
-        setprofile(d.data[0]?.profile ?? "")
+        setprofile(d.data[0]?.profile ?? "");
       } else {
-        setprofile("")
-        setsponsorData("")
+        setprofile("");
+        setsponsorData("");
       }
     };
     f().catch(console.error);
@@ -188,7 +191,7 @@ const PropertyFCompanyPopup = ({ }) => {
   const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/company_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -197,33 +200,30 @@ const PropertyFCompanyPopup = ({ }) => {
         seturl(url);
         seturlPrefix(urlPrefix);
         const logo = d.data[0]?.logo;
-        setlogoLoaded(true)
+        setlogoLoaded(true);
         if (logo) {
           const logoext = d.data[0]?.logoext ?? "png";
           let urlimg =
             `data:image/${logoext};base64,` +
             btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
 
-          setlogoPath(urlimg)
+          setlogoPath(urlimg);
         }
       } else {
-        setlogoPath("")
-        seturl("")
+        setlogoPath("");
+        seturl("");
       }
-
     };
     f().catch(console.error);
   };
 
   const clearForm = () => {
-
-    setlogoPath("")
-    seturl("")
-  }
+    setlogoPath("");
+    seturl("");
+  };
 
   return (
     <div>
-
       {/* <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}
@@ -233,15 +233,14 @@ const PropertyFCompanyPopup = ({ }) => {
       > */}
       <PMapDialogComponent
         clearForm={clearForm}
-      // title=""
-      // // onClose={closePopup}
-      // //onOk={() => console.log("ok")}
-      // showDialog={isOpen}
-      // dialogStateCallBack={dialogStateCallBack}
-      // getDialogRef={getDialogRef}
+        // title=""
+        // // onClose={closePopup}
+        // //onOk={() => console.log("ok")}
+        // showDialog={isOpen}
+        // dialogStateCallBack={dialogStateCallBack}
+        // getDialogRef={getDialogRef}
       >
         <div className="bg-white rounded-lg min-w-[400px] flex flex-col justify-center items-center">
-
           {/* <div className="flex items-center justify-center   h-8 rounded-lg">
 
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
@@ -252,22 +251,30 @@ const PropertyFCompanyPopup = ({ }) => {
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
           </div> */}
-          <div style={{ display: "flex", flexDirection: "column", justify: "center", alignItems: "center", padding: "1rem", gap: "1rem", }}>
-
-
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justify: "center",
+              alignItems: "center",
+              padding: "1rem",
+              gap: "1rem",
+            }}
+          >
             <div>
               {!logoLoaded && <Spinner size="lg" />}
-              {logoPath && (<Image
-                src={logoPath}
-                width={200}
-                height={100}
-                alt="Logo"
-              />)}</div>
-            <span className="font-bold  text-black" >{title}</span>
+              {logoPath && (
+                <Image src={logoPath} width={200} height={100} alt="Logo" />
+              )}
+            </div>
+            <span className="font-bold  text-black">{title}</span>
             <span>
-              {sponsorData && sponsorData.map(sd => (
-                <span key={sd.text} style={sd.style}>{sd.text}</span>))
-              }
+              {sponsorData &&
+                sponsorData.map((sd) => (
+                  <span key={sd.text} style={sd.style}>
+                    {sd.text}
+                  </span>
+                ))}
             </span>
             {url && (
               <Link
@@ -288,11 +295,8 @@ const PropertyFCompanyPopup = ({ }) => {
               </Link>
             )}
 
-
             <PropertyFCompanyFProperties companyid={popupFcompanyId} />
-
           </div>
-
         </div>
       </PMapDialogComponent>
     </div>

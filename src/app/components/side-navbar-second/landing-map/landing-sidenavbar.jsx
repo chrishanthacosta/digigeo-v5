@@ -24,11 +24,9 @@ import AreaFilter from "../../filter-popups/area-filters";
 
 import {
   setIsLandingMapSideNavOpen,
-
   setlandingMapFpropLayerVisible,
   setlmapAreaLableVisible,
   setlmapFpropLableVisible,
-
 } from "../../../../store/landing-map/landing-map-slice";
 // import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
@@ -46,7 +44,7 @@ const LandingMapSideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -92,37 +90,39 @@ const LandingMapSideNavbar = () => {
     (state) => state.landingMapReducer.featuredPropertyFeatures
   );
 
-
-
-
   const [featuredCompanies, setFeaturedCompanies] = useState([]);
 
   useEffect(() => {
-    console.log("qq2-2sn-uef-enter-vfObjs?.length",  )
+    console.log("qq2-2sn-uef-enter-vfObjs?.length");
     if (featuredPropertyFeatures) {
       // const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
       // const a = Object.keys(result).map(k => result[k][0]);
       // setFeaturedCompanies(a);
-      const finalResult = []
-      const resultByArea = Object.groupBy(featuredPropertyFeatures, ({ map_area }) => map_area);
-      console.log("resultByArea", resultByArea,)
+      const finalResult = [];
+      const resultByArea = Object.groupBy(
+        featuredPropertyFeatures,
+        ({ map_area }) => map_area
+      );
+      console.log("resultByArea", resultByArea);
       for (const area in resultByArea) {
-
-        const resultByCompany = Object.groupBy(resultByArea[area], ({ companyid }) => companyid);
-        console.log("resultByCompany", resultByCompany,)
-        const a = Object.keys(resultByCompany).map(k => resultByCompany[k][0]);
-        finalResult.push({ map_area: area,companies:a})
+        const resultByCompany = Object.groupBy(
+          resultByArea[area],
+          ({ companyid }) => companyid
+        );
+        console.log("resultByCompany", resultByCompany);
+        const a = Object.keys(resultByCompany).map(
+          (k) => resultByCompany[k][0]
+        );
+        finalResult.push({ map_area: area, companies: a });
       }
-      console.log("finalResult",finalResult,)
+      console.log("finalResult", finalResult);
       //const a = Object.keys(result).map(k => result[k][0]);
 
-
       setFeaturedCompanies(finalResult);
-      console.log("qq2-3sn-uef-end-fclist set-vfObjs?.length",  )
-
+      console.log("qq2-3sn-uef-end-fclist set-vfObjs?.length");
     }
     // console.log("ppo",featuredPropertyFeatures)
-  }, [featuredPropertyFeatures])
+  }, [featuredPropertyFeatures]);
   //areal load
   //   useEffect(() => {
   //     if (areaName) {
@@ -142,7 +142,7 @@ const LandingMapSideNavbar = () => {
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
-    console.log("yy-hit-2sidenavbar-lmap-compo")
+    console.log("yy-hit-2sidenavbar-lmap-compo");
 
     let newUrl;
     if (areaName == "") {
@@ -159,7 +159,7 @@ const LandingMapSideNavbar = () => {
   //   const f = async () => {
   //     console.log("areaName", areaName);
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/hotplayfcompanylist/${areaName}`,
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
@@ -177,7 +177,7 @@ const LandingMapSideNavbar = () => {
   // const getClaimLinkPropertiesGeometry = async () => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_claimlink/${areaName}`,
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
@@ -202,7 +202,7 @@ const LandingMapSideNavbar = () => {
   //   //view_hotplay_table_with_sponsor_prop
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_table_with_sponsor/${areaName}`,
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
@@ -228,11 +228,10 @@ const LandingMapSideNavbar = () => {
   // const getSyncPropertiesGeometry = async () => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_area/${areaName}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_property_area/${areaName}`,
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
-
 
   //     const gj = {
   //       type: "FeatureCollection",
@@ -252,14 +251,12 @@ const LandingMapSideNavbar = () => {
   // const getAssetsGeometry = async () => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/assetgeomsbyarea/${areaName}`,
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
   //     // console.log("fps", d);
   //     console.log("assets", d.data);
-
-
 
   //     const gj = {
   //       type: "FeatureCollection",
@@ -282,7 +279,6 @@ const LandingMapSideNavbar = () => {
   );
 
   const setlandingMapFpropLayerVisibility = (e) => {
-    
     dispatch(setlandingMapFpropLayerVisible(!landingMapFpropLayerVisible));
   };
 
@@ -308,29 +304,31 @@ const LandingMapSideNavbar = () => {
   //     dispatch(setIsLandingMapSideNavOpen(true));
   //   }
 
-
   //  }, [landingMapFpropLayerVisible])
   return (
     <section className="flex gap-6 h-[90vh]">
       <div className={`duration-500 flex w-auto h-full`}>
         <div
           className={`
-          ${isLandingMapSideNavOpen && isSideNavOpen
+          ${
+            isLandingMapSideNavOpen && isSideNavOpen
               ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
               : ""
-            } 
+          } 
             
-          ${isLandingMapSideNavOpen && isSideNavOpen
+          ${
+            isLandingMapSideNavOpen && isSideNavOpen
               ? "w-80 sm:w-72 mr-2"
               : "w-0"
-            } 
+          } 
           duration-500`}
         >
           <div
-            className={`${isLandingMapSideNavOpen && isSideNavOpen
-              ? "py-0.1 flex flex-col  "
-              : "hidden"
-              }`}
+            className={`${
+              isLandingMapSideNavOpen && isSideNavOpen
+                ? "py-0.1 flex flex-col  "
+                : "hidden"
+            }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
               <div className="flex flex-col">
@@ -339,7 +337,9 @@ const LandingMapSideNavbar = () => {
                     {areaName}/{areaCountry}
                   </span>
                 )} */}
-                <span className="font-bold block dark:text-white text-black">Exploration Activities</span>
+                <span className="font-bold block dark:text-white text-black">
+                  Exploration Activities
+                </span>
               </div>
               {/* <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
@@ -364,21 +364,21 @@ const LandingMapSideNavbar = () => {
                     <div className="flex flex-col gap-1 overflow-y-scroll h-[75vh] mb-1">
                       {featuredCompanies?.map((ii) => (
                         <>
-                          <div className="font-semibold" >{ii.map_area}</div> 
-                          {ii.companies.map((i) => (<LmapFeaturedCompanyDetailDiv
-                            key={i.id}
-                            title={i.company2}
-                            // title={i.company2 + i.companyid + "-" +i.id }
-                            companyid={i.companyid}
-                          // onClick={() => console.log(featuredCompanies)}
-                          >
-                            <div
-                              className={`w-4 h-4`}
-                              style={{ backgroundColor: `${i.colour}` }}
-                            ></div>
-                          </LmapFeaturedCompanyDetailDiv>))
-                           
-                          }
+                          <div className="font-semibold">{ii.map_area}</div>
+                          {ii.companies.map((i) => (
+                            <LmapFeaturedCompanyDetailDiv
+                              key={i.id}
+                              title={i.company2}
+                              // title={i.company2 + i.companyid + "-" +i.id }
+                              companyid={i.companyid}
+                              // onClick={() => console.log(featuredCompanies)}
+                            >
+                              <div
+                                className={`w-4 h-4`}
+                                style={{ backgroundColor: `${i.colour}` }}
+                              ></div>
+                            </LmapFeaturedCompanyDetailDiv>
+                          ))}
                         </>
                       ))}
                     </div>
@@ -393,7 +393,6 @@ const LandingMapSideNavbar = () => {
                     </AccordionItemWithEye> */}
                 </div>
               </Accordion>
-
             </div>
           </div>
         </div>

@@ -30,52 +30,52 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
 
   const [resourcesFormated, setresourcesFormated] = useState([]);
 
-  useEffect(() => {
-    console.log("fpropObj2",fpropObj)
-    function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+  // useEffect(() => {
+  //   console.log("fpropObj2",fpropObj)
+  //   function numberWithCommas(x) {
+  //     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   }
 
-    const formatOunce = (amt) => {
-      const dotLoc = amt.search(".00");
-      if (dotLoc != -1) {
-        let val = amt.substr(0, dotLoc + 3);
-        val = numberWithCommas(val);
-        return val;
-      } else {
-        return amt;
-      }
-    };
-    const restext = fpropObj?.resources;
-    if (restext) {
-      const items = restext.split(" oz");
+  //   const formatOunce = (amt) => {
+  //     const dotLoc = amt.search(".00");
+  //     if (dotLoc != -1) {
+  //       let val = amt.substr(0, dotLoc + 3);
+  //       val = numberWithCommas(val);
+  //       return val;
+  //     } else {
+  //       return amt;
+  //     }
+  //   };
+  //   const restext = fpropObj?.resources;
+  //   if (restext) {
+  //     const items = restext.split(" oz");
 
-      const itemsTextFormated = items.map((i) => {
-        const contents = i.split(" ");
+  //     const itemsTextFormated = items.map((i) => {
+  //       const contents = i.split(" ");
 
-        let result = "";
-        switch (contents.length) {
-          case 1:
-            result = contents[0].length == 1 ? "" : contents[0];
-            break;
-          case 2:
-            result = contents[0] + " " + formatOunce(contents[1]) + " oz.";
-            break;
-          case 3:
-            result = contents[1] + " " + formatOunce(contents[2]) + " oz.";
-            break;
+  //       let result = "";
+  //       switch (contents.length) {
+  //         case 1:
+  //           result = contents[0].length == 1 ? "" : contents[0];
+  //           break;
+  //         case 2:
+  //           result = contents[0] + " " + formatOunce(contents[1]) + " oz.";
+  //           break;
+  //         case 3:
+  //           result = contents[1] + " " + formatOunce(contents[2]) + " oz.";
+  //           break;
 
-          default:
-            result = contents;
-            break;
-        }
-        return result;
-      });
+  //         default:
+  //           result = contents;
+  //           break;
+  //       }
+  //       return result;
+  //     });
 
-      setresourcesFormated(itemsTextFormated);
-      // console.log("pp1-itemsTextFormated", itemsTextFormated)
-    }
-  }, [fpropObj]);
+  //     setresourcesFormated(itemsTextFormated);
+  //     // console.log("pp1-itemsTextFormated", itemsTextFormated)
+  //   }
+  // }, [fpropObj]);
 
   return (
     <div

@@ -84,7 +84,10 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({ text: stockEx, style: { marginLeft: "0.25rem",color:"black" } });
+      contents.push({
+        text: stockEx,
+        style: { marginLeft: "0.25rem", color: "black" },
+      });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -127,7 +130,7 @@ const LmapFCompanyPopup = ({}) => {
   );
 
   useEffect(() => {
-    console.log("rr1-popupFcompanyId",popupFcompanyId,)
+    console.log("rr1-popupFcompanyId", popupFcompanyId);
     clearForm();
     setlogoLoaded(false);
     if (popupFcompanyId) {
@@ -169,7 +172,7 @@ const LmapFCompanyPopup = ({}) => {
   const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sponsor_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -192,7 +195,7 @@ const LmapFCompanyPopup = ({}) => {
   const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/company_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -279,7 +282,7 @@ const LmapFCompanyPopup = ({}) => {
             <span>
               {sponsorData.length > 0 &&
                 sponsorData.map((sd) => (
-                  <span key={sd.text} style={sd.style}  >
+                  <span key={sd.text} style={sd.style}>
                     {sd.text}
                   </span>
                 ))}

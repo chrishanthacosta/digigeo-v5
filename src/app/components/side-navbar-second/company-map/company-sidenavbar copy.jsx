@@ -38,13 +38,12 @@ import FeaturedCompanyDetailDiv from "../area-map/featured-company-detail-div";
 import { setIsPropertiesSideNavOpen } from "../../../../store/properties-map/properties-map-slice";
 import FeaturedPropertyDetailDiv from "./featured-property-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
-import Image from 'next/image';
+import Image from "next/image";
 import CompanyTreeView from "./company-tree-view";
-import CMapFCompanyAddlock from './company-fcompany-popup';
+import CMapFCompanyAddlock from "./company-fcompany-popup";
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
-
 
 const CompanySideNavbar = () => {
   let pathname = "";
@@ -52,7 +51,7 @@ const CompanySideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -60,10 +59,6 @@ const CompanySideNavbar = () => {
       pathname = pathname.substring(0, r);
     }
   }
-
-
-
-
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -93,15 +88,19 @@ const CompanySideNavbar = () => {
   const syncPropertyFeatures = useSelector(
     (state) => state.companyMapReducer.syncPropertyFeatures
   );
-  const companyName = useSelector((state) => state.companyMapReducer.companyName);
+  const companyName = useSelector(
+    (state) => state.companyMapReducer.companyName
+  );
   const companyId = useSelector((state) => state.companyMapReducer.companyId);
-  const companyStockcode = useSelector((state) => state.companyMapReducer.companyStockcode);
-
-
+  const companyStockcode = useSelector(
+    (state) => state.companyMapReducer.companyStockcode
+  );
 
   const [featuredPropertiesLocal, setFeaturedPropertiesLocal] = useState([]);
-  const [namedFeaturedPropertiesLocal, setnamedFeaturedPropertiesLocal] = useState([]);
-  const [unNamedFeaturedPropertiesLocal, setunNamedFeaturedPropertiesLocal] = useState([]);
+  const [namedFeaturedPropertiesLocal, setnamedFeaturedPropertiesLocal] =
+    useState([]);
+  const [unNamedFeaturedPropertiesLocal, setunNamedFeaturedPropertiesLocal] =
+    useState([]);
   //data load
   useEffect(() => {
     // console.log("companyId",companyId)
@@ -110,7 +109,6 @@ const CompanySideNavbar = () => {
     getSyncPropertiesGeometry();
     getClaimLinkPropertiesGeometry();
     getAssetsGeometry();
-
   }, [companyId]);
 
   const closeSecondNavBar = () => {
@@ -123,12 +121,10 @@ const CompanySideNavbar = () => {
     dispatch(setIsCompanySideNavOpen(false));
   };
 
-
   const getFeaturedPropertyGeom = async () => {
     const f = async () => {
-
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_company/${companyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -144,7 +140,6 @@ const CompanySideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
 
-
       dispatch(setFPropertyFeatures(gj));
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
@@ -154,41 +149,42 @@ const CompanySideNavbar = () => {
       dispatch(setFPropertyFeatures({}));
     } else {
       f().catch(console.error);
-
     }
   };
 
   useEffect(() => {
-
-
     if (featuredPropertyFeatures?.features) {
-      const result = []
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-      console.log("ee2-e",e)
+      const result = [];
+      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+      console.log("ee2-e", e);
       //groupby area
       function myCallback({ values_ }) {
-        return values_.map_area ;
+        return values_.map_area;
       }
 
       const resultByArea = Object.groupBy(e, myCallback);
       for (const area in resultByArea) {
         //groupby name no-name
-        const namedProps = resultByArea[area].filter(p => p.get("prop_name"))
-        namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+        const namedProps = resultByArea[area].filter((p) => p.get("prop_name"));
+        namedProps.sort((a, b) => {
+          return a.get("prop_name").toUpperCase() >
+            b.get("prop_name").toUpperCase()
+            ? 1
+            : -1;
+        });
 
-        const unnamedProps = resultByArea[area].filter(p => !p.get("prop_name"))
-        let blockno = 1
+        const unnamedProps = resultByArea[area].filter(
+          (p) => !p.get("prop_name")
+        );
+        let blockno = 1;
         for (let index = 0; index < unnamedProps.length; index++) {
           const element = unnamedProps[index];
-          element.set("prop_name", "Block-" + blockno)
+          element.set("prop_name", "Block-" + blockno);
           blockno++;
         }
 
-        result.push({ map_area: area, namedProps, unnamedProps })
-
-
+        result.push({ map_area: area, namedProps, unnamedProps });
       }
-
 
       // console.log("ee2-list", e,)
       // const namedp = e.filter(fp => fp.get("prop_name"))
@@ -196,7 +192,6 @@ const CompanySideNavbar = () => {
 
       // //sort namedp
       // namedp.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
-
 
       // //rename empty prop_names
       // let blockno = 1
@@ -209,14 +204,10 @@ const CompanySideNavbar = () => {
       setFeaturedPropertiesLocal(result);
       // setnamedFeaturedPropertiesLocal(namedp)
       // setunNamedFeaturedPropertiesLocal(unnamedp)
-
     } else {
       setFeaturedPropertiesLocal([]);
     }
-
-
-  }, [featuredPropertyFeatures])
-
+  }, [featuredPropertyFeatures]);
 
   // useEffect(() => {
 
@@ -247,14 +238,13 @@ const CompanySideNavbar = () => {
   //     setFeaturedPropertiesLocal([]);
   //   }
 
-
   // }, [featuredPropertyFeatures])
 
   const getSyncPropertiesGeometry = async () => {
     const f = async () => {
       // console.log("companyNames",companyName)
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sync_property_bycompany/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sync_property_bycompany/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -280,10 +270,8 @@ const CompanySideNavbar = () => {
       // console.log("gj", gj);
     };
     if (companyName == "") {
-
       dispatch(setSyncPropertyFeatures({}));
     } else {
-
       f().catch(console.error);
     }
   };
@@ -291,7 +279,7 @@ const CompanySideNavbar = () => {
   const getAssetsGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetgeom_bycompany/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assetgeom_bycompany/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -319,7 +307,6 @@ const CompanySideNavbar = () => {
     if (companyName == "") {
       dispatch(setAssetFeatures({}));
     } else {
-
       f().catch(console.error);
     }
   };
@@ -327,7 +314,7 @@ const CompanySideNavbar = () => {
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_company/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_claimlink_company/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -349,7 +336,6 @@ const CompanySideNavbar = () => {
     if (companyName == "") {
       dispatch(setsyncClaimLinkPropertyFeatures({}));
     } else {
-
       f().catch(console.error);
     }
   };
@@ -360,7 +346,7 @@ const CompanySideNavbar = () => {
 
   const setFpropLayerVisibility = (e) => {
     dispatch(setcompanyFpropLayerVisible(!companyFpropLayerVisible));
-  }
+  };
 
   const setcmapFpropLableVisibility = (state) => {
     dispatch(setcmapFpropLableVisible(state));
@@ -369,25 +355,26 @@ const CompanySideNavbar = () => {
     (state) => state.companyMapReducer.cmapFpropLableVisible
   );
 
-
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
         <div
           className={`
-        ${isCompanySideNavOpen && isSideNavOpen
-              ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
-              : ""
-            } 
+        ${
+          isCompanySideNavOpen && isSideNavOpen
+            ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
+            : ""
+        } 
           
         ${isCompanySideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
         >
           <div
-            className={`${isCompanySideNavOpen && isSideNavOpen
-              ? "py-0.1 flex flex-col "
-              : "hidden"
-              }`}
+            className={`${
+              isCompanySideNavOpen && isSideNavOpen
+                ? "py-0.1 flex flex-col "
+                : "hidden"
+            }`}
           >
             <div className="flex flex-col ">
               <div className="flex justify-end mx-2">
@@ -421,61 +408,58 @@ const CompanySideNavbar = () => {
                   setLabelState={setcmapFpropLableVisibility}
                 >
                   <div className="flex flex-col gap-1 overflow-y-auto overflow-x-hidden max-h-[40vh]">
-                    {featuredPropertiesLocal.map(
-                      (area) =>
-                        (<>
-                          <div className="font-semibold">{area.map_area}</div>
-                          {area.namedProps.map((i) => {
-                              return (
-                                <FeaturedPropertyDetailDiv
-                                  key={i.get("id")}
-                                  title={i.get("prop_name")}
-                                  propertyid={i.get("propertyid")}
-                                // onClick={() => console.log(featuredCompanies)}
-                                //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                                >
-                                  <Image
-                                    src={
-                                      "data:image/svg+xml;utf8," +
-                                      encodeURIComponent(i.get("hatch"))
-                                    }
-                                    className={`w-4 h-4`}
-                                    width={4}
-                                    height={4}
-                                    alt="prop"
-                                  />
-                                </FeaturedPropertyDetailDiv>
-                              )
-                            }
-                          )
-                          }
-                        <div className="font-semibold">{"Unnamed Properties"}</div>
-                          {area.unnamedProps.map((i) => {
-                            return (
-                              <FeaturedPropertyDetailDiv
-                                key={i.get("id")}
-                                title={i.get("prop_name")}
-                                propertyid={i.get("propertyid")}
+                    {featuredPropertiesLocal.map((area) => (
+                      <>
+                        <div className="font-semibold">{area.map_area}</div>
+                        {area.namedProps.map((i) => {
+                          return (
+                            <FeaturedPropertyDetailDiv
+                              key={i.get("id")}
+                              title={i.get("prop_name")}
+                              propertyid={i.get("propertyid")}
                               // onClick={() => console.log(featuredCompanies)}
                               //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                              >
-                                <Image
-                                  src={
-                                    "data:image/svg+xml;utf8," +
-                                    encodeURIComponent(i.get("hatch"))
-                                  }
-                                  className={`w-4 h-4`}
-                                  width={4}
-                                  height={4}
-                                  alt="prop"
-                                />
-                              </FeaturedPropertyDetailDiv>
-                            )
-                          }
-                          )
-                          }
-                        </>)
-                    )}
+                            >
+                              <Image
+                                src={
+                                  "data:image/svg+xml;utf8," +
+                                  encodeURIComponent(i.get("hatch"))
+                                }
+                                className={`w-4 h-4`}
+                                width={4}
+                                height={4}
+                                alt="prop"
+                              />
+                            </FeaturedPropertyDetailDiv>
+                          );
+                        })}
+                        <div className="font-semibold">
+                          {"Unnamed Properties"}
+                        </div>
+                        {area.unnamedProps.map((i) => {
+                          return (
+                            <FeaturedPropertyDetailDiv
+                              key={i.get("id")}
+                              title={i.get("prop_name")}
+                              propertyid={i.get("propertyid")}
+                              // onClick={() => console.log(featuredCompanies)}
+                              //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                            >
+                              <Image
+                                src={
+                                  "data:image/svg+xml;utf8," +
+                                  encodeURIComponent(i.get("hatch"))
+                                }
+                                className={`w-4 h-4`}
+                                width={4}
+                                height={4}
+                                alt="prop"
+                              />
+                            </FeaturedPropertyDetailDiv>
+                          );
+                        })}
+                      </>
+                    ))}
                     {/* {unNamedFeaturedPropertiesLocal.length > 0 && <div className="w-full bg-blue-800 text-white mx-2 px-2">Un-named Properties</div>}
                     {unNamedFeaturedPropertiesLocal.map(
                       (i) =>
@@ -500,11 +484,7 @@ const CompanySideNavbar = () => {
                           </FeaturedPropertyDetailDiv>
                         )
                     )} */}
-
                   </div>
-
-
-
                 </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">

@@ -8,10 +8,9 @@ import { Button, Chip } from "@nextui-org/react";
 // import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../../common-comp/next-text-input-fields";
 // import { useDispatch, useSelector } from "react-redux";
-import Image from 'next/image'
+import Image from "next/image";
 import Link from "next/link";
 // import AreaFCompanyFProperties from "./company-fcompany-popup-properties";
-
 
 const formatUrl = (url) => {
   //remove https:
@@ -54,13 +53,13 @@ const getStyledTexts = (name) => {
 
   const parts = addends.split(",");
   const spans = [];
-  const contents = []
+  const contents = [];
   //add comp name
   const sp = document.createElement("SPAN");
   const sptext = document.createTextNode(compName);
   sp.appendChild(sptext);
   sp.style.display = "block";
-  sp.style.fontSize = "1.5rem"
+  sp.style.fontSize = "1.5rem";
   spans.push(sp);
   //contents.push({text:compName,style:{} });
   let i = 0;
@@ -96,14 +95,16 @@ const getStyledTexts = (name) => {
       sp2.style.fontWeight = 600;
       sp2.appendChild(sptext2);
       spans.push(sp2);
-      contents.push({ text: stockVal + trailingComma, style: { color: "blue", fontWeight: 600 } });
+      contents.push({
+        text: stockVal + trailingComma,
+        style: { color: "blue", fontWeight: 600 },
+      });
     }
 
     i++;
   });
   return contents;
 };
-
 
 const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
   // const dispatch = useDispatch();
@@ -133,7 +134,6 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-
     },
   };
 
@@ -154,19 +154,19 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
   const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${companyid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sponsor_details/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       //console.log("d", d)
       if (d.data.length > 0) {
         const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-        setsponsorData(sponsorData)
+        setsponsorData(sponsorData);
 
-        setprofile(d.data[0]?.profile ?? "")
+        setprofile(d.data[0]?.profile ?? "");
       } else {
-        setprofile("")
-        setsponsorData("")
+        setprofile("");
+        setsponsorData("");
       }
     };
 
@@ -175,7 +175,7 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
   const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/company_details/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -183,8 +183,8 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
       let { url, urlPrefix, profile } = formatUrl(d.data[0]?.url ?? "");
       setpreurl(urlPrefix);
       //console.log("ppp", urlPrefix + url)
-     // seturl(urlPrefix + url)
-      seturl(  url)
+      // seturl(urlPrefix + url)
+      seturl(url);
       const logo = d.data[0]?.logo;
       if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
@@ -192,54 +192,74 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
           `data:image/${logoext};base64,` +
           btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
 
-        setlogoPath(urlimg)
+        setlogoPath(urlimg);
       } else {
-        setlogoPath("")
+        setlogoPath("");
       }
-
     };
     f().catch(console.error);
   };
 
-
-
   return (
-    <div className={companyid == 0 ? "hidden" : "block"} >
-
+    <div className={companyid == 0 ? "hidden" : "block"}>
       <div className="bg-white rounded-lg   flex-col justify-center items-center">
-
-
-        <div style={{ display: "flex", flexDirection: "column", justify: "center", alignItems: "center" }}>
-          <div> {logoPath && (<Image
-            src={logoPath}
-            width={200}
-            height={100}
-
-            alt="Logo"
-
-          />)} </div>
-          <div className="flex justify-center p-2 w-full"><p className="mx-auto  max-w-[15rem] text-center font-bold">{title}</p> </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justify: "center",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            {" "}
+            {logoPath && (
+              <Image src={logoPath} width={200} height={100} alt="Logo" />
+            )}{" "}
+          </div>
+          <div className="flex justify-center p-2 w-full">
+            <p className="mx-auto  max-w-[15rem] text-center font-bold">
+              {title}
+            </p>{" "}
+          </div>
           <span>
-            {sponsorData && sponsorData.map(sd => (
-              <span key={sd.text} style={sd.style}>{sd.text}</span>))
-            }
+            {sponsorData &&
+              sponsorData.map((sd) => (
+                <span key={sd.text} style={sd.style}>
+                  {sd.text}
+                </span>
+              ))}
           </span>
           {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
-          {profile && (<Link href={preurl  + url} target="_blank" className="rounded-lg border border-solid p-1 " >
-
-            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem] hover:font-bold " > {url}</p>
-          </Link>)}
-          {profile && (<Link href={profile} target="_blank" className="text-black rounded-lg border border-solid underline hover:font-bold" >
-
-            {"Read More"}
-          </Link>)}
-          {!profile && <span className="text-gray-400 italic">(This is not a featured Company)</span>}
+          {profile && (
+            <Link
+              href={preurl + url}
+              target="_blank"
+              className="rounded-lg border border-solid p-1 "
+            >
+              <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem] hover:font-bold ">
+                {" "}
+                {url}
+              </p>
+            </Link>
+          )}
+          {profile && (
+            <Link
+              href={profile}
+              target="_blank"
+              className="text-black rounded-lg border border-solid underline hover:font-bold"
+            >
+              {"Read More"}
+            </Link>
+          )}
+          {!profile && (
+            <span className="text-gray-400 italic">
+              (This is not a featured Company)
+            </span>
+          )}
           {/* <AreaFCompanyFProperties companyid={companyid} /> */}
-
         </div>
-
       </div>
-
     </div>
   );
 };

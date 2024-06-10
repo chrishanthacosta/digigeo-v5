@@ -158,7 +158,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   // useEffect(() => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/areas/${company}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/areas/${company}`,
   //       { cache: "force-cache" }
   //     );
   //     const d = await res.json();
@@ -206,21 +206,20 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   };
 
   useEffect(() => {
-    
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/companylist/${search}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/companylist/${search}`,
         {
           cache: "force-cache",
         }
       );
       const d = await res.json();
-       console.log("companyList", d.data);
+      console.log("companyList", d.data);
       setCompanyList(d.data);
       setStockcodeList(d.data);
     };
     if (debouncedSearch) {
-      console.log("debouncedSearch", debouncedSearch,"pppp",search);
+      console.log("debouncedSearch", debouncedSearch, "pppp", search);
       f().catch(console.error);
     }
   }, [debouncedSearch]);
@@ -228,7 +227,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/stockcodelist/${searchStockcode}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/stockcodelist/${searchStockcode}`,
         {
           cache: "no-store",
         }
@@ -302,7 +301,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                       selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                         console.log("e1", e);
+                        console.log("e1", e);
                         setStockcode("");
                         setCompanyidLocal(0);
                         setSearch(e);
@@ -323,15 +322,16 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       classNames={customClassNames}
                       inputProps={{ className: "dark:text-white text-black" }}
                     >
-                      {companyList.length > 0 && companyList.map((companyObj) => (
-                        <AutocompleteItem
-                          key={companyObj.companyid}
-                          value={companyObj.name}
-                          className="dark:text-white text-black"
-                        >
-                          {companyObj.name}
-                        </AutocompleteItem>
-                      ))}
+                      {companyList.length > 0 &&
+                        companyList.map((companyObj) => (
+                          <AutocompleteItem
+                            key={companyObj.companyid}
+                            value={companyObj.name}
+                            className="dark:text-white text-black"
+                          >
+                            {companyObj.name}
+                          </AutocompleteItem>
+                        ))}
                     </Autocomplete>
                     <span className="block">Filter By Stock Code</span>
                     <Autocomplete

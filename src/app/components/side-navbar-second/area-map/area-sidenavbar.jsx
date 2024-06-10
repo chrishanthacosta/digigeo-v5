@@ -136,7 +136,7 @@ const AreaSideNavbar = () => {
       setFeaturedCompaniesLoading(true);
       console.log("areaName", areaName);
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/hotplayfcompanylist/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -181,7 +181,7 @@ const AreaSideNavbar = () => {
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_claimlink/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -206,7 +206,7 @@ const AreaSideNavbar = () => {
     //view_hotplay_table_with_sponsor_prop
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_table_with_sponsor/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -232,7 +232,7 @@ const AreaSideNavbar = () => {
   const getSyncPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_area/${areaName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_property_area/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -263,7 +263,7 @@ const AreaSideNavbar = () => {
   const getAssetsGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assetgeomsbyarea/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();

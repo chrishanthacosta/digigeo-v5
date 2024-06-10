@@ -36,7 +36,6 @@ import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace
 import { useMediaQuery } from "react-responsive";
 import { setIsSideNavOpen } from "../../../store/map-selector/map-selector-slice";
 
-
 const buildSqlWhereClause = (conditions) => {
   // const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
   // console.log("conditions",conditions)
@@ -174,7 +173,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     (state) => state.propertiesMapReducer.searchParamCommodityList
   );
 
-
   // useEffect(()=>{
   //   //console.log("selectedItems",selectedItems)
   //   setSearchPropertyName(searchParamPropertyName);
@@ -185,7 +183,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/countrylist`,
         {
           cache: "no-store",
         }
@@ -199,7 +197,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     //load commodity master setcommodityMasterList
     const fcommo = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/commoditylist`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/commoditylist`,
         {
           cache: "no-store",
         }
@@ -255,7 +253,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     //   // console.log("currentPage2",currentPage) assetlistuniversal
     //    console.log("searchQuery2",searchQuery)
     //   const res = await fetch(
-    //     `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+    //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
     //     {
     //       cache: "no-store",
     //     }
@@ -270,7 +268,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       // console.log("currentPage2",currentPage) assetlistuniversal
       // console.log("searchQuery2",searchQuery)
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${
+        `${
+          process.env.NEXT_PUBLIC_BACKEND_URL
+        }/assetlistuniversal/${searchQuery}/${itemsPerPage}/${
           (currentPage - 1) * itemsPerPage
         }`,
         {
@@ -300,7 +300,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   // useEffect(() => {
   // const f = async () => {
   //   const res = await fetch(
-  //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/countrylist`,
   //     {
   //       cache: "force-cache",
   //     }
@@ -383,15 +383,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     // updateWindowsHistory(newUrl);
 
     // dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
-   
 
     if (isTabletOrMobile) {
-       dispatch(setIsPropertiesSideNavOpen(false));
+      dispatch(setIsPropertiesSideNavOpen(false));
       dispatch(setIsSideNavOpen(false));
     } else {
-       dispatch(setIsPropertiesSideNavOpen(true));
+      dispatch(setIsPropertiesSideNavOpen(true));
     }
-
 
     if (selectedItems.length > 0) {
       dispatch(setpmapSelectedPropertyIds(selectedItems));
@@ -445,7 +443,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     const fGetPropertyAssetNameBasedOnSearchParams = async () => {
       if (searchPropertyName) {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylist/${searchPropertyName}`,
           {
             cache: "no-store",
           }
@@ -490,7 +488,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
     //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
     //   const res = await fetch(
-    //     `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
+    //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylist/${searchPropertyName}`,
     //     {
     //       cache: "no-store",
     //     }
@@ -661,7 +659,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       //load state prov
       const f = async () => {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/stateprovlist/${country}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/stateprovlist/${country}`,
           {
             cache: "no-store",
           }
@@ -674,7 +672,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       //load  areas
       const farea = async () => {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/arealist/${country}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/arealist/${country}`,
           {
             cache: "force-cache",
           }
@@ -725,7 +723,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     //   const fall = async () => {
     //      if(q){
     //         const res = await fetch(
-    //           `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${q}/10/0`,
+    //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylistuniversal/${q}/10/0`,
     //           {
     //             cache: "force-cache",
     //           }
@@ -772,7 +770,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     // const fall = async () => {
     //      if(q){
     //         const res = await fetch(
-    //           `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${q}/10/0`,
+    //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylistuniversal/${q}/10/0`,
     //           {
     //             cache: "force-cache",
     //           }

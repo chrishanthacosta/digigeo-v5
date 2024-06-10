@@ -8,11 +8,11 @@ import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
-import Image from 'next/image'
+import Image from "next/image";
 import Link from "next/link";
 import AreaFCompanyFProperties from "./area-fcompany-popup-properties";
-import AMapDialogComponent from './area-fcompany-dialog';
-import {Spinner} from "@nextui-org/react";
+import AMapDialogComponent from "./area-fcompany-dialog";
+import { Spinner } from "@nextui-org/react";
 import Draggable from "react-draggable";
 
 const formatUrl = (url) => {
@@ -49,20 +49,20 @@ const getStyledTexts = (name) => {
     // const sp = document.createElement("SPAN");
     // const sptext = document.createTextNode(name ?? "");
     // sp.appendChild(sptext);
-    return [{ text:  "", style: {} }];
+    return [{ text: "", style: {} }];
   }
   const compName = name.substr(0, stBracketIndex);
   const addends = name.substr(stBracketIndex, name.length - stBracketIndex);
 
   const parts = addends.split(",");
   const spans = [];
-  const contents = []
+  const contents = [];
   //add comp name
   const sp = document.createElement("SPAN");
   const sptext = document.createTextNode(compName);
   sp.appendChild(sptext);
   sp.style.display = "block";
-  sp.style.fontSize = "1.5rem"
+  sp.style.fontSize = "1.5rem";
   spans.push(sp);
   //contents.push({text:compName,style:{} });
   let i = 0;
@@ -75,7 +75,7 @@ const getStyledTexts = (name) => {
       const sptext = document.createTextNode(str + ",");
       sp.appendChild(sptext);
       spans.push(sp);
-       contents.push({text:str + ",",style:{} });
+      contents.push({ text: str + ",", style: {} });
     } else {
       const stockEx = str.substr(1, indexColon - 1);
       const stockVal = str.substr(indexColon, str.length - indexColon - 1);
@@ -85,7 +85,10 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({ text: stockEx, style: { marginLeft: "0.25rem", color: "black" } });
+      contents.push({
+        text: stockEx,
+        style: { marginLeft: "0.25rem", color: "black" },
+      });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -98,7 +101,10 @@ const getStyledTexts = (name) => {
       sp2.style.fontWeight = 600;
       sp2.appendChild(sptext2);
       spans.push(sp2);
-      contents.push({text:stockVal + trailingComma,style:{color: "blue",fontWeight : 600} });
+      contents.push({
+        text: stockVal + trailingComma,
+        style: { color: "blue", fontWeight: 600 },
+      });
     }
 
     i++;
@@ -106,10 +112,9 @@ const getStyledTexts = (name) => {
   return contents;
 };
 
-
-const AreaFCompanyPopup = ({ }) => {
+const AreaFCompanyPopup = ({}) => {
   const dispatch = useDispatch();
-  
+
   const [isOpen, setIsOpen] = useState("n");
   const [title, setTitle] = useState("");
   const [logoPath, setlogoPath] = useState("");
@@ -121,21 +126,18 @@ const AreaFCompanyPopup = ({ }) => {
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
-   const popupFcompanyId = useSelector(
-      (state) => state.areaMapReducer.popupFcompanyId
+  const popupFcompanyId = useSelector(
+    (state) => state.areaMapReducer.popupFcompanyId
   );
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     clearForm();
-    setlogoLoaded(false)
-    if(popupFcompanyId){
-         getCompanyDetails();
-        getSponsorDetails();
-    } 
-
-  },[popupFcompanyId])
-
-  
+    setlogoLoaded(false);
+    if (popupFcompanyId) {
+      getCompanyDetails();
+      getSponsorDetails();
+    }
+  }, [popupFcompanyId]);
 
   const customStyles = {
     overlay: {
@@ -151,7 +153,7 @@ const AreaFCompanyPopup = ({ }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-      overflowY:"hidden" ,
+      overflowY: "hidden",
     },
   };
 
@@ -162,87 +164,78 @@ const AreaFCompanyPopup = ({ }) => {
   // }, [sponsorData]);
 
   // useEffect(() => {
-    // setTitle(titleIn);
+  // setTitle(titleIn);
   //   getCompanyDetails();
   //   getSponsorDetails();
   // }, [titleIn]);
 
- const getSponsorDetails = async () => {
+  const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sponsor_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-       
-      if(d?.data?.length>0){
-         setTitle(d.data[0].company2)
-          
-      const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-       
-      setsponsorData(sponsorData)
-      
-      setprofile(d.data[0]?.profile ?? "")
-      }else{
-         
-        setprofile("")
-        setsponsorData("")
+
+      if (d?.data?.length > 0) {
+        setTitle(d.data[0].company2);
+
+        const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
+
+        setsponsorData(sponsorData);
+
+        setprofile(d.data[0]?.profile ?? "");
+      } else {
+        setprofile("");
+        setsponsorData("");
       }
-       
     };
     f().catch(console.error);
   };
- const getCompanyDetails = async () => {
+  const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${popupFcompanyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/company_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-      console.log("aaa1" ); 
-          if(d?.data?.length>0){  
-                // await new Promise((resolve) => setTimeout(resolve, 3000));
-               
-              let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
-              seturl(url)
-              seturlPrefix(urlPrefix);
-              const logo = d.data[0]?.logo;
-              setlogoLoaded(true)
-              if(logo){
-              const logoext = d.data[0]?.logoext ?? "png";
-              
-              let urlimg =
-              `data:image/${logoext};base64,` +
-              btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
-                
-              setlogoPath(urlimg)
-              }else{
-                
-                 setlogoPath("")
-                 seturl("")
-                   
-              }
-         }else{
-          console.log("aaa6" ); 
-             setlogoPath("")
-             seturl("")
-         }
+      console.log("aaa1");
+      if (d?.data?.length > 0) {
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
 
+        let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
+        seturl(url);
+        seturlPrefix(urlPrefix);
+        const logo = d.data[0]?.logo;
+        setlogoLoaded(true);
+        if (logo) {
+          const logoext = d.data[0]?.logoext ?? "png";
+
+          let urlimg =
+            `data:image/${logoext};base64,` +
+            btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+
+          setlogoPath(urlimg);
+        } else {
+          setlogoPath("");
+          seturl("");
+        }
+      } else {
+        console.log("aaa6");
+        setlogoPath("");
+        seturl("");
+      }
     };
     f().catch(console.error);
   };
 
   const clearForm = () => {
-     
-     setlogoPath("")
-             seturl("")
-  }
-
-
+    setlogoPath("");
+    seturl("");
+  };
 
   return (
-   
-    <div >
+    <div>
       {/* <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}
@@ -317,8 +310,7 @@ const AreaFCompanyPopup = ({ }) => {
           </div>
         </div>
       </AMapDialogComponent>
-      </div>
-    
+    </div>
   );
 };
 export default AreaFCompanyPopup;

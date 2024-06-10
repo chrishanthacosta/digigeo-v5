@@ -1,15 +1,15 @@
 import Image from "next/image";
-import { useEffect, useState,useMemo,useRef } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
-import { setpropertyMapFlyToLocation,setnavigatedFPropId } from "../../../../store/properties-map/properties-map-slice";
+import {
+  setpropertyMapFlyToLocation,
+  setnavigatedFPropId,
+} from "../../../../store/properties-map/properties-map-slice";
 
 // import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
 
 const PropertyFCompanyFProperties = ({ companyid }) => {
-
-  
-
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [featuredPropertyFeatures, setfeaturedPropertyFeatures] = useState();
   const [mapAreas, setmapAreas] = useState([]);
@@ -18,45 +18,39 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
   const [loadData, setloadData] = useState(false);
-  const  blocknoRef   = useRef(0)
-  const pidRef = useRef(0)
-  
+  const blocknoRef = useRef(0);
+  const pidRef = useRef(0);
 
   // const featuredPropertyFeatures = useSelector(
   //   (state) => state.propertiesMapReducer.featuredPropertyFeatures
   // );
- 
+
   const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     getCompanyHotPlayProperties();
-
-
-
-  },[])
+  }, []);
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
-    useEffect(()=>{
+  useEffect(() => {
     //setunNamedFeatureObjects([]);
-    setloadData((t)=> !t)
-    
-    }, [companyid])
+    setloadData((t) => !t);
+  }, [companyid]);
 
   useEffect(() => {
-    console.log("featuredPropertyFeatures",featuredPropertyFeatures)
-    if(featuredPropertyFeatures?.features){
+    console.log("featuredPropertyFeatures", featuredPropertyFeatures);
+    if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      
-    setfeaturesObjects(e);
-      //set areas
-       
-      let areas = e.map(f => f.get("map_area"))
-      // console.log("areas",areas)
-    const setArea = new Set(areas)
-    areas  = Array.from(setArea); 
-    areas.sort();
-    setmapAreas(areas);
 
+      setfeaturesObjects(e);
+      //set areas
+
+      let areas = e.map((f) => f.get("map_area"));
+      // console.log("areas",areas)
+      const setArea = new Set(areas);
+      areas = Array.from(setArea);
+      areas.sort();
+      setmapAreas(areas);
     }
   }, [featuredPropertyFeatures]);
 
@@ -76,14 +70,14 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
     dispatch(setnavigatedFPropId(feature.get("id")));
   };
 
-   const getCompanyHotPlayProperties = async () => {
+  const getCompanyHotPlayProperties = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_company/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-         const gj = {
+      const gj = {
         type: "FeatureCollection",
         crs: {
           type: "name",
@@ -93,78 +87,68 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
         },
         features: d.data[0].json_build_object.features,
       };
-      setfeaturedPropertyFeatures(gj)
-
-
+      setfeaturedPropertyFeatures(gj);
     };
     f().catch(console.error);
   };
 
   const domElements = useMemo(() => {
-   
-    const r = (
-      mapAreas.map(area => {
-            console.log("mapAreas",mapAreas);
-            let blockno = 0;
-                    return (<>
-                      <span key={area} className="bg-blue-600 text-white w-full pl-2 " > {area}</span>
-                        {featureObjects.map((fp) => {
-                           
-                          // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
-                          // console.log("companyid",companyid,"pname",fp.properties )
-                          if (area == fp.get("map_area")) {
-                                  if (!fp.get("prop_name")) {
-                                    blockno++
-                                    
-                                    }
-                                     
-                            
-                            return (
-                              <div
-                                key={fp.get("id")}
-                                className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2 text-black"
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  width: "100%",
-                                }}
-                             
-                              >
-                                <div className="flex">
-                                  <Image
-                                    src="./sync-prop.svg"
-                                    width={25}
-                                    height={10}
-                                    alt="prop"
-                                  />
-                                  <div> {fp.get("prop_name") ?? "Block" + blockno }</div>
-                                </div>
-                                <Image
-                                  src="./navigation.svg"
-                                  width={15}
-                                  height={10}
-                                  alt="prop"
-                                  className=" cursor-pointer hover:scale-125 "
-                                     onClick={(e) => {
-                                  flytoHandler(fp);
-                                }}
-                                />
-                              </div>
-                            );
-                          }
+    const r = mapAreas.map((area) => {
+      console.log("mapAreas", mapAreas);
+      let blockno = 0;
+      return (
+        <>
+          <span key={area} className="bg-blue-600 text-white w-full pl-2 ">
+            {" "}
+            {area}
+          </span>
+          {featureObjects.map((fp) => {
+            // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
+            // console.log("companyid",companyid,"pname",fp.properties )
+            if (area == fp.get("map_area")) {
+              if (!fp.get("prop_name")) {
+                blockno++;
+              }
 
-                        })}
-                              </>
-                            )
-                  })
+              return (
+                <div
+                  key={fp.get("id")}
+                  className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2 text-black"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <div className="flex">
+                    <Image
+                      src="./sync-prop.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
+                    <div> {fp.get("prop_name") ?? "Block" + blockno}</div>
+                  </div>
+                  <Image
+                    src="./navigation.svg"
+                    width={15}
+                    height={10}
+                    alt="prop"
+                    className=" cursor-pointer hover:scale-125 "
+                    onClick={(e) => {
+                      flytoHandler(fp);
+                    }}
+                  />
+                </div>
+              );
+            }
+          })}
+        </>
+      );
+    });
 
-    )
-
-
-
-    return r;              
-
+    return r;
   }, [mapAreas]);
 
   return (
@@ -177,7 +161,9 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div  className="bg-blue-800 text-white w-[18rem] mx-2 px-2">{"Featured Properties"}</div>
+      <div className="bg-blue-800 text-white w-[18rem] mx-2 px-2">
+        {"Featured Properties"}
+      </div>
       <div
         className="bg-slate-100 mx-2"
         style={{
@@ -188,13 +174,11 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
           maxHeight: "18.5rem",
           overflowY: "auto",
           width: "18rem",
-         
         }}
       >
         {
           // mapAreas.map(area => )
-        domElements
-        
+          domElements
         }
       </div>
     </div>

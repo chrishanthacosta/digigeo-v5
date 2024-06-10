@@ -48,7 +48,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     const getFeaturedProperties = async () => {
       const f = async () => {
         const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_company/${companyid}`,
           { cache: "no-store" }
         );
 

@@ -1538,7 +1538,7 @@ export const CompanyMap = () => {
   // const claimLoaderFunc1 = (extent, resolution, projection)=> {
   //  // console.log("hit claims",extent)
   //   const url =
-  //     `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
   //     `/${extent.join("/")}`;
   //  // console.log("url", url);
   //   fetch(url, {
@@ -1647,7 +1647,7 @@ export const CompanyMap = () => {
   };
 
   const areaLoaderFunc = useCallback((extent, resolution, projection) => {
-    const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1741,7 +1741,7 @@ export const CompanyMap = () => {
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     fetch(url, {
@@ -1888,7 +1888,7 @@ export const CompanyMap = () => {
           prop_name,
           commo_ref,
           assets,
-          resources,
+          resources: resources.split(","),
           map_area,
           owners,
           prop_exturl,
@@ -1918,7 +1918,7 @@ export const CompanyMap = () => {
         //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
         syncPropertyObject = {
           prop_name,
-          owners,
+          owners: owners.split(","),
           name: name1,
           state_prov,
           country,
@@ -1981,7 +1981,7 @@ export const CompanyMap = () => {
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
             prop_name,
-            owners,
+            owners: owners.split(","),
             name: name1,
             state_prov,
             country,
@@ -2149,7 +2149,7 @@ export const CompanyMap = () => {
   const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
     console.log("fprop-loading");
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     setotherfPropVectorLayerIsLoading(true);
@@ -2183,7 +2183,7 @@ export const CompanyMap = () => {
 
   const otherassetLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     setotherassetLayerIsLoading(true);
@@ -2216,7 +2216,7 @@ export const CompanyMap = () => {
   const othersyncClaimLinkLoaderFunc = useCallback(
     (extent, resolution, projection) => {
       const url =
-        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncclaimlink_byextent` +
         `/${extent.join("/")}`;
       setotherclaimLinkVectorLayerIsLoading(true);
       fetch(url, {
@@ -2251,7 +2251,7 @@ export const CompanyMap = () => {
     (extent, resolution, projection) => {
       console.log("qqqq1");
       const url =
-        `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncprop_byextent` +
         `/${extent.join("/")}`;
       // console.log("url", url);
       setothersyncPropVectorLayerIsLoading(true);
@@ -2307,19 +2307,16 @@ export const CompanyMap = () => {
     // other sync prop layer
     othersyncPropVectorLayerRef.current?.setVisible(false);
     otherassetLayerRef.current?.setVisible(false);
-  
   }, [otherfPropVectorLayerRef.current]);
-
 
   useEffect(() => {
     otherclaimLinkVectorLayerRef.current?.setVisible(false);
-    
+
     otherclaimLinkVectorLayerRef.current?.setOpacity(0.2);
     otherclaimLinkVectorLayerRef.current?.setStyle(
       companyMap_tbl_sync_claimlink_VectorLayerStyleFunction
     );
-    
-   }, [otherclaimLinkVectorLayerRef.current])
+  }, [otherclaimLinkVectorLayerRef.current]);
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();

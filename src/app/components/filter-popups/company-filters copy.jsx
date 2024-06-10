@@ -174,7 +174,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   // useEffect(() => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/areas/${company}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/areas/${company}`,
   //       { cache: "force-cache" }
   //     );
   //     const d = await res.json();
@@ -224,7 +224,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/companylist/${search}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/companylist/${search}`,
         {
           cache: "force-cache",
         }
@@ -241,7 +241,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/stockcodelist/${searchStockcode}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/stockcodelist/${searchStockcode}`,
         {
           cache: "no-store",
         }

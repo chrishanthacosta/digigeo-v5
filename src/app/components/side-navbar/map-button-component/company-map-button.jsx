@@ -34,7 +34,11 @@ import {
   updateWindowsHistory,
   updateWindowsHistoryCmap,
 } from "@/app/utils/helpers/window-history-replace";
-import { setIsSideNavOpen, setSelectedMap } from "@/store/map-selector/map-selector-slice";
+import {
+  setIsSideNavOpen,
+  setSelectedMap,
+} from "@/store/map-selector/map-selector-slice";
+import { useMediaQuery } from "react-responsive";
 
 const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
@@ -101,10 +105,13 @@ const CompanyMapButton = ({ onClick }) => {
 
     dispatch(setIsCompanySideNavOpen(true));
   };
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
   const onClickLocal = () => {
     if (!companyId) {
-      dispatch(setIsSideNavOpen(false));
       setIsOpenIn(true);
+      if (isTabletOrMobile) {
+        dispatch(setIsSideNavOpen(false));
+      }
     }
     onClick();
   };

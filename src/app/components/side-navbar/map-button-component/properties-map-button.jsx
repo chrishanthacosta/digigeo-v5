@@ -30,6 +30,7 @@ import {
   setsearchParamCommodityList,
 } from "../../../../store/properties-map/properties-map-slice";
 import { setIsSideNavOpen } from "@/store/map-selector/map-selector-slice";
+import { useMediaQuery } from "react-responsive";
 // import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const PropertiesMapButton = ({ onClick }) => {
@@ -94,11 +95,13 @@ const PropertiesMapButton = ({ onClick }) => {
     // updateWindowsHistory(newUrl);
     dispatch(setIsPropertiesSideNavOpen(true));
   };
-
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 480px)" });
   const onClickLocal = () => {
     if (!propertySearchQuery) {
-      dispatch(setIsSideNavOpen(false));
       setIsOpenIn(true);
+      if (isTabletOrMobile) {
+        dispatch(setIsSideNavOpen(false));
+      }
     }
     onClick();
   };
@@ -115,9 +118,7 @@ const PropertiesMapButton = ({ onClick }) => {
           } text-sm sm:text-sm hover:bg-blue-900 text-black hover:text-white py-2 transition duration-150 ease-in`}
         >
           <BsFillBuildingsFill className="h-6 w-6 ml-2 " />
-          <span className="uppercase ml-2 font-semibold ">
-            Properties
-          </span>
+          <span className="uppercase ml-2 font-semibold ">Properties</span>
         </button>
         {isOpenIn ? (
           <PropertiesFilter isOpenIn={isOpenIn} closePopup={closePopup} />

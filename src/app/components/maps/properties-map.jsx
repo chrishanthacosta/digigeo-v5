@@ -344,7 +344,7 @@ export const PropertiesMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -693,7 +693,7 @@ export const PropertiesMap = () => {
 
   useEffect(() => {
     if (propertyFlyToLocation?.length > 0) {
-      flyTo(mapViewRef?.current, propertyFlyToLocation, () => { });
+      flyTo(mapViewRef?.current, propertyFlyToLocation, () => {});
     }
   }, [propertyFlyToLocation]);
 
@@ -1013,8 +1013,9 @@ export const PropertiesMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     // updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
@@ -1042,7 +1043,7 @@ export const PropertiesMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1493,7 +1494,7 @@ export const PropertiesMap = () => {
     return s;
   };
   const areaLoaderFunc = useCallback((extent, resolution, projection) => {
-    const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1521,7 +1522,7 @@ export const PropertiesMap = () => {
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     fetch(url, {
@@ -1549,7 +1550,7 @@ export const PropertiesMap = () => {
   const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
     console.log("fprop-loading");
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     setotherfPropVectorLayerIsLoading(true);
@@ -1583,7 +1584,7 @@ export const PropertiesMap = () => {
 
   const otherassetLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     setotherassetLayerIsLoading(true);
@@ -1616,7 +1617,7 @@ export const PropertiesMap = () => {
   const othersyncClaimLinkLoaderFunc = useCallback(
     (extent, resolution, projection) => {
       const url =
-        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncclaimlink_byextent` +
         `/${extent.join("/")}`;
       setotherclaimLinkVectorLayerIsLoading(true);
       fetch(url, {
@@ -1651,7 +1652,7 @@ export const PropertiesMap = () => {
     (extent, resolution, projection) => {
       console.log("qqqq1");
       const url =
-        `https://atlas.ceyinfo.cloud/matlas/syncprop_byextent` +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncprop_byextent` +
         `/${extent.join("/")}`;
       // console.log("url", url);
       setothersyncPropVectorLayerIsLoading(true);
@@ -1875,7 +1876,7 @@ export const PropertiesMap = () => {
           prop_name,
           commo_ref,
           assets,
-          resources,
+          resources: resources.split(","),
           map_area,
           owners,
           prop_exturl,
@@ -1905,7 +1906,7 @@ export const PropertiesMap = () => {
         //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
         syncPropertyObject = {
           prop_name,
-          owners,
+          owners: owners.split(","),
           name: name1,
           state_prov,
           country,
@@ -1968,7 +1969,7 @@ export const PropertiesMap = () => {
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
             prop_name,
-            owners,
+            owners: owners.split(","),
             name: name1,
             state_prov,
             country,
@@ -2403,7 +2404,7 @@ export const PropertiesMap = () => {
     // other sync prop layer
     othersyncPropVectorLayerRef.current?.setVisible(false);
     otherassetLayerRef.current?.setVisible(false);
-  //  otherclaimLinkVectorLayerRef.current?.setVisible(false);
+    //  otherclaimLinkVectorLayerRef.current?.setVisible(false);
   }, [otherfPropVectorLayerRef.current]);
 
   useEffect(() => {
@@ -2413,9 +2414,7 @@ export const PropertiesMap = () => {
     otherclaimLinkVectorLayerRef.current?.setStyle(
       propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction
     );
-
-  }, [otherclaimLinkVectorLayerRef.current])
-
+  }, [otherclaimLinkVectorLayerRef.current]);
 
   const onClickToggleOtherFprops = () => {
     const curVisible = otherfPropVectorLayerRef.current.getVisible();

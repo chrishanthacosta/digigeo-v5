@@ -1466,7 +1466,7 @@ export const AreaMap = () => {
   // const claimLoaderFunc1 = (extent, resolution, projection)=> {
   //  // console.log("hit claims",extent)
   //   const url =
-  //     `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
   //     `/${extent.join("/")}`;
   //  // console.log("url", url);
   //   fetch(url, {
@@ -1531,7 +1531,7 @@ export const AreaMap = () => {
   );
 
   const areaLoaderFunc = useCallback((extent, resolution, projection) => {
-    const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1631,7 +1631,7 @@ export const AreaMap = () => {
     // }
     //  console.log("yy-extent2", extent, resolution,areaMapViewScales.claimscale)
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -1776,7 +1776,7 @@ export const AreaMap = () => {
           prop_name,
           commo_ref,
           assets,
-          resources,
+          resources: resources.split(","),
           map_area,
           owners,
           prop_exturl,
@@ -1807,7 +1807,7 @@ export const AreaMap = () => {
         //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
         const syncPropertyObject1 = {
           prop_name,
-          owners,
+          owners: owners.split(","),
           name: name1,
           state_prov,
           country,
@@ -1869,7 +1869,7 @@ export const AreaMap = () => {
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
             prop_name,
-            owners,
+            owners: owners.split(","),
             name: name1,
             state_prov,
             country,
@@ -2364,7 +2364,7 @@ export const AreaMap = () => {
             //   minWidth: "400px",
             //   color: "black",
             // }}
-             className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
+            className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
           >
             <button
               type="button"
@@ -2377,7 +2377,7 @@ export const AreaMap = () => {
               onTouchStart={(e) => {
                 setCoordinates(undefined);
                 e.target.blur();
-                console.log("touchstart",e);
+                console.log("touchstart", e);
                 return false;
               }}
               style={{

@@ -23,6 +23,7 @@ import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { useMediaQuery } from "react-responsive";
 
 const AreaMapButton = ({ onClick }) => {
   let pathname = "";
@@ -87,7 +88,7 @@ const AreaMapButton = ({ onClick }) => {
   //      setIsOpenIn(true)
   //   }
   // },[]);
-
+ 
   const onClickLocal = () => {
     if (!areaState) {
       setIsOpenIn(true);

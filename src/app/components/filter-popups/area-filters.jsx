@@ -72,7 +72,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //   const fproperty = async () => {
 
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
   //       {
   //         cache: "no-store",
   //       }
@@ -150,7 +150,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     //load areas
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/areas/${country}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/areas/${country}`,
         { cache: "force-cache" }
       );
       const d = await res.json();
@@ -169,7 +169,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     //   const fproperty = async () => {
 
     //   const res = await fetch(
-    //     `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+    //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
     //     {
     //       cache: "no-store",
     //     }
@@ -203,7 +203,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //   const fproperty = async () => {
 
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
   //       {
   //         cache: "no-store",
   //       }
@@ -256,7 +256,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
     // const f = async () => {
     //   const res = await fetch(
-    //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+    //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/countrylist`,
     //     {
     //       cache: "force-cache",
     //     }
@@ -270,7 +270,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     //load area list
     const fareas = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/allarealist`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/allarealist`,
         {
           cache: "no-store",
         }

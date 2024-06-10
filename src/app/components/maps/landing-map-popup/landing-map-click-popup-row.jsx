@@ -2,6 +2,13 @@
 import  Link  from 'next/link';
 
 const LandingMapClickPopupRow = ({label, value, url=""    }) => {
+
+   const isUrl = (url) => {
+     if (url) {
+       const removeHttp = url.replace(/(^\w+:|^)\/\//, "");
+       return removeHttp;
+     }
+   };
   return (
     <>
       {value ? (
@@ -13,10 +20,10 @@ const LandingMapClickPopupRow = ({label, value, url=""    }) => {
               target="_blank"
               href={url}
             >
-              {value}
+              {isUrl(value)}
             </Link>
           ) : (
-            <span className="w-80 p-1 line-clamp-2">{value}</span>
+            <p className="w-80 p-1 ">{value}</p>
           )}
         </div>
       ) : null}

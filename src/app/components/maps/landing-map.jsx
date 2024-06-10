@@ -507,7 +507,7 @@ const getMapResolution = (scale, unit) => {
   return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
 };
 
-    export const LandingMap = () => {
+export const LandingMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
@@ -621,11 +621,10 @@ const getMapResolution = (scale, unit) => {
 
   const syncClaimLinkLoaderFunc = useCallback(
     (extent, resolution, projection) => {
-     
       const url =
-        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncclaimlink_byextent` +
         `/${extent.join("/")}`;
-      
+
       fetch(url, {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
@@ -657,7 +656,7 @@ const getMapResolution = (scale, unit) => {
   const getSyncPropertiesGeometry = useCallback(async () => {
     const f = async (limit, offset) => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/all_tbl_sync_property`,
         { cache: "force-cache" }
       );
       const d = await res.json();
@@ -683,7 +682,7 @@ const getMapResolution = (scale, unit) => {
   const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
     console.log("fprop-loading");
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     fetch(url, {
@@ -717,7 +716,7 @@ const getMapResolution = (scale, unit) => {
 
   const assetLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets_byextent` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     fetch(url, {
@@ -1233,9 +1232,7 @@ const getMapResolution = (scale, unit) => {
     // }
   }, [syncClaimLinkPropertyFeatures]);
 
- 
   useEffect(() => {
-  
     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
       const e = new GeoJSON().readFeatures(assetFeatures);
@@ -1652,7 +1649,7 @@ const getMapResolution = (scale, unit) => {
   // const claimLoaderFunc1 = (extent, resolution, projection)=> {
   //  // console.log("hit claims",extent)
   //   const url =
-  //     `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
   //     `/${extent.join("/")}`;
   //  // console.log("url", url);
   //   fetch(url, {
@@ -1716,7 +1713,7 @@ const getMapResolution = (scale, unit) => {
   };
 
   const areaLoaderFunc = useCallback((extent, resolution, projection) => {
-    const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1810,7 +1807,7 @@ const getMapResolution = (scale, unit) => {
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
-      `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
     // console.log("url", url);
     fetch(url, {
@@ -1938,7 +1935,7 @@ const getMapResolution = (scale, unit) => {
         //console.log("dd",dd)
         const d = dd?.[0];
 
-        const sponsoredowners = dd?.map(d => d.sponsor ?? "") ;
+        const sponsoredowners = dd?.map((d) => d.sponsor ?? "");
 
         // const sponsoredowners = d?.sponsor ?? "";
         let commo_ref = d?.commo_ref ?? "";
@@ -1955,7 +1952,7 @@ const getMapResolution = (scale, unit) => {
           prop_name,
           commo_ref,
           assets,
-          resources,
+          resources:resources.split(","),
           map_area,
           owners,
           prop_exturl,
@@ -1986,7 +1983,7 @@ const getMapResolution = (scale, unit) => {
         //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
         const syncPropertyObject1 = {
           prop_name,
-          owners,
+          owners: owners.split(","),
           name: name1,
           state_prov,
           country,
@@ -2046,7 +2043,7 @@ const getMapResolution = (scale, unit) => {
           //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
           const syncPropertyObject1 = {
             prop_name,
-            owners,
+            owners: owners.split(","),
             name: name1,
             state_prov,
             country,
@@ -2523,7 +2520,7 @@ const getMapResolution = (scale, unit) => {
             //   minWidth: "400px",
             //   color: "black",
             // }}
-                  className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
+            className="absolute top-[2px] right-2 bg-white p-[15px] border-1 border-gray-300 text-black rounded-lg sm:min-w-[400px]"
           >
             <button
               type="button"

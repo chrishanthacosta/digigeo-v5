@@ -1,7 +1,7 @@
-"use server"
+"use server";
 
 // export const loadAreaBoundaries = async () => {
-//     const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+//     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_tbl40mapareas`;
 //     fetch(url, {
 //         method: "GET", // *GET, POST, PUT, DELETE, etc.
 //         mode: "cors", // no-cors, *cors, same-origin
@@ -25,11 +25,11 @@
 //                 console.log("else area map area boundry not loading ");
 //             }
 //         });
-    
+
 // }
 
 // router.get("/view_tbl40mapareas", async (req, resp, next) => {
- 
+
 //   try {
 //     const clientPg1 = await poolPgLocal.connect();
 

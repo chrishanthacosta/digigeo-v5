@@ -27,7 +27,10 @@ import {
   setareaSelectedAreaId,
 } from "../../../store/area-map/area-map-slice";
 // import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
-import { setIsPropertiesSideNavOpen, setsearchParamMiningArea } from "../../../store/properties-map/properties-map-slice";
+import {
+  setIsPropertiesSideNavOpen,
+  setsearchParamMiningArea,
+} from "../../../store/properties-map/properties-map-slice";
 import {
   setcompanyId,
   setcompanyName,
@@ -119,18 +122,18 @@ export const LandingPage = () => {
           break;
         case "company":
           //https://atlas.ceyinfo.cloud/matlas/company_details/33
-          if(companyId){
-          const res = await fetch(
-            `https://atlas.ceyinfo.cloud/matlas/company_details/${companyId}`,
-            { cache: "no-store" }
-          );
-          const d = await res.json();
-          const companyName = d?.data?.[0]?.name ?? "";
+          if (companyId) {
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/company_details/${companyId}`,
+              { cache: "no-store" }
+            );
+            const d = await res.json();
+            const companyName = d?.data?.[0]?.name ?? "";
 
-          dispatch(setcompanyName(companyName));
-        }else{
-          dispatch(setcompanyName(""));
-        }
+            dispatch(setcompanyName(companyName));
+          } else {
+            dispatch(setcompanyName(""));
+          }
 
           if (isTabletOrMobile) {
             dispatch(setIsCompanySideNavOpen(false));
@@ -179,10 +182,10 @@ export const LandingPage = () => {
           dispatch(setsearchParamMiningArea(mArea));
           dispatch(setsearchParamAssetTypeList(atype));
           dispatch(setsearchParamCommodityList(commodity));
-          if(selprops){
-              dispatch(setpmapSelectedPropertyIds(selprops));
-          }else{
-              dispatch(setpmapSelectedPropertyIds(""));
+          if (selprops) {
+            dispatch(setpmapSelectedPropertyIds(selprops));
+          } else {
+            dispatch(setpmapSelectedPropertyIds(""));
           }
           break;
 
@@ -224,6 +227,8 @@ export const LandingPage = () => {
       }
     }
   };
+
+  console.log("backend", process.env.NEXT_PUBLIC_BACKEND_URL);
 
   return (
     <div className="w-screen flex bg-white   h-[90vh] ">

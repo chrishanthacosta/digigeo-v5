@@ -137,7 +137,7 @@ const CompanySideNavbar = () => {
     const f = async () => {
       setIsLoadingFeaturedProperties(true);
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_company/${companyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -268,7 +268,7 @@ const CompanySideNavbar = () => {
     const f = async () => {
       // console.log("companyNames",companyName)
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sync_property_bycompany/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sync_property_bycompany/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -304,7 +304,7 @@ const CompanySideNavbar = () => {
   const getAssetsGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetgeom_bycompany/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assetgeom_bycompany/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -339,7 +339,7 @@ const CompanySideNavbar = () => {
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_company/${companyName}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/tbl_sync_claimlink_company/${companyName}`,
         { cache: "no-store" }
       );
       const d = await res.json();

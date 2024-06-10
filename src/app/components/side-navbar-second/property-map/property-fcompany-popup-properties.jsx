@@ -76,7 +76,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   const getCompanyHotPlayProperties = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/view_hotplay_company/${companyid}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -300,7 +300,11 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
             })}
             {
               <div className="flex flex-col w-full">
-                {areaObj.unnamedProps.length >0 && <div className="text-xs  font-bold">{"Unnamed properties"}</div>}
+                {areaObj.unnamedProps.length > 0 && (
+                  <div className="text-xs  font-bold">
+                    {"Unnamed properties"}
+                  </div>
+                )}
                 {areaObj.unnamedProps.map((fp, index) => {
                   return (
                     <div
