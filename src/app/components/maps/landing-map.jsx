@@ -760,8 +760,8 @@ export const LandingMap = () => {
               json.data[0].json_build_object
             );
             //console.log("hit claims3")
-            fPropSourceRef?.current?.clear();
-            fPropSourceLabelRef?.current?.clear();
+            // fPropSourceRef?.current?.clear();
+            // fPropSourceLabelRef?.current?.clear();
             fPropSourceRef.current.addFeatures(features);
             fPropSourceLabelRef.current.addFeatures(features);
             setfPropRenderCount((p) => p + 1);
