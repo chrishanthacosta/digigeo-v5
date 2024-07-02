@@ -73,6 +73,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Draggable from "react-draggable";
 import { useMediaQuery } from "react-responsive";
 import { SlLayers } from "react-icons/sl";
+import { fPropertyVectorRendererFuncv2 } from "./landing-map";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -955,7 +956,8 @@ export const AreaMap = () => {
   //set styles
   useEffect(() => {
     const style = new Style({});
-    style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+    style.setRenderer(fPropertyVectorRendererFuncv2);
+    // style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
@@ -2202,7 +2204,7 @@ export const AreaMap = () => {
                         className="text-small font-bold text-foreground"
                         {...titleProps}
                       >
-                        Layers
+                        Map Views
                       </p>
                       <div className="mt-2 flex   gap-2 w-full">
                         <ButtonGroup variant="faded" color="primary">

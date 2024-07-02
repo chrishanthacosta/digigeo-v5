@@ -301,6 +301,64 @@ const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
 
   context.restore();
 };
+export const fPropertyVectorRendererFuncv2 = (pixelCoordinates, state) => {
+  //  console.log("state", state);
+  // console.log("pixcor", pixelCoordinates);
+  const context = state.context;
+  const geometry = state.geometry.clone();
+  geometry.setCoordinates(pixelCoordinates);
+  const extent = geometry.getExtent();
+  const width = getWidth(extent);
+  const height = getHeight(extent);
+
+  const hatchimg = state.feature.get("flag");
+  if (!hatchimg || height < 1 || width < 1) {
+    return;
+  }
+  //let colour = "#0000FF";
+  let colour = state.feature.get("colour");
+  let hatch = state.feature.get("hatch");
+  //console.log("colour",colour,)
+  let isHatch = false;
+  if (hatch?.search(/pattern/) != -1) {
+    isHatch = true;
+    //console.log("xxhatch found");
+    colour = "#FFFFFF";
+  }
+
+
+
+
+  const fill = new Fill({
+    color: colour,
+    opacity: 0.3,
+  });
+
+  context.save();
+
+  const renderContext = toContext(context, {
+    pixelRatio: 1,
+  });
+
+  renderContext.setFillStrokeStyle(fill, stroke);
+  renderContext.drawGeometry(geometry);
+
+  if (isHatch) {
+    context.clip();
+    // Fill transparent country with the hatchimg image
+    const bottomLeft = getBottomLeft(extent);
+    const left = bottomLeft[0];
+    const bottom = bottomLeft[1];
+    const hf = width / (height * 8);
+
+    let colour1 = state.feature.get("colour");
+
+    // console.log("widthaa", width, extent, colour1);
+    context.drawImage(hatchimg, left, bottom, width * 20, height * hf * 20);
+  }
+
+  context.restore();
+};
 
 const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
@@ -1157,7 +1215,8 @@ export const LandingMap = () => {
   //set styles
   useEffect(() => {
     const style = new Style({});
-    style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+    // style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+    style.setRenderer(fPropertyVectorRendererFuncv2);
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
@@ -2384,7 +2443,7 @@ export const LandingMap = () => {
                         className="text-small font-bold text-foreground"
                         {...titleProps}
                       >
-                        Layers
+                        Map Views
                       </p>
                       <div className="mt-2 flex   gap-2 w-full">
                         <ButtonGroup variant="faded" color="primary">

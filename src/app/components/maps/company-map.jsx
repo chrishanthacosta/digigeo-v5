@@ -69,6 +69,7 @@ import { useMediaQuery } from "react-responsive";
 import CompanySideNavbar2 from "../side-navbar-second/company-map/company-sidenavbar copy 2";
 import { SiGooglenearby } from "react-icons/si";
 import { MdNearbyOff } from "react-icons/md";
+import { fPropertyVectorRendererFuncv2 } from "./landing-map";
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -951,7 +952,7 @@ export const CompanyMap = () => {
     // console.log("ue2")
     //set style
     const style = new Style({});
-    style.setRenderer(companyMApPropertyVectorRendererFuncV2);
+    style.setRenderer(fPropertyVectorRendererFuncv2);
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
@@ -2434,7 +2435,7 @@ export const CompanyMap = () => {
                         className="text-small font-bold text-foreground"
                         {...titleProps}
                       >
-                        Layers
+                        Map Views
                       </p>
                       <div className="mt-2 flex   gap-2 w-full">
                         <ButtonGroup variant="faded" color="primary">

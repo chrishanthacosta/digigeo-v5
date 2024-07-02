@@ -73,6 +73,7 @@ import { SlLayers } from "react-icons/sl";
 
 import { SiGooglenearby } from "react-icons/si";
 import { MdNearbyOff } from "react-icons/md";
+import { fPropertyVectorRendererFuncv2 } from "./landing-map";
 
 const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -785,7 +786,7 @@ export const PropertiesMap = () => {
   useEffect(() => {
     //set style
     const style = new Style({});
-    style.setRenderer(propertyMApFPropertyVectorRendererFuncV2);
+    style.setRenderer(fPropertyVectorRendererFuncv2);
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
@@ -2544,7 +2545,7 @@ export const PropertiesMap = () => {
                         className="text-small font-bold text-foreground"
                         {...titleProps}
                       >
-                        Layers
+                        Map Views
                       </p>
                       <div className="mt-2 flex   gap-2 w-full">
                         <ButtonGroup variant="faded" color="primary">
