@@ -27,7 +27,7 @@ export default function LMapDialogComponent({
     );
 
     useEffect(()=>{
-      console.log("rr1-popupFcompanyId2",popupFcompanyId,)
+      //console.log("rr1-popupFcompanyId2",popupFcompanyId,)
        if(popupFcompanyId && !dialogRef.current.open){
          dialogRef.current?.show();
        }

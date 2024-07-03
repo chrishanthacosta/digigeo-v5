@@ -138,7 +138,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   }, [isOpenIn]);
   useEffect(() => {
     // dispatch(setcompanyId(companyidLocal));
-    console.log("companyList", companyList);
+    //console.log("companyList", companyList);
     const c = companyList.find((c) => c.companyid == companyidLocal);
     if (c) {
       setStockcode(c.stockcode);
@@ -214,12 +214,12 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         }
       );
       const d = await res.json();
-      console.log("companyList", d.data);
+     // console.log("companyList", d.data);
       setCompanyList(d.data);
       setStockcodeList(d.data);
     };
     if (debouncedSearch) {
-      console.log("debouncedSearch", debouncedSearch, "pppp", search);
+     // console.log("debouncedSearch", debouncedSearch, "pppp", search);
       f().catch(console.error);
     }
   }, [debouncedSearch]);

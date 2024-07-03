@@ -738,7 +738,7 @@ export const LandingMap = () => {
   }, []);
 
   const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("fprop-loading");
+    //console.log("fprop-loading");
     const url =
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
@@ -1083,7 +1083,7 @@ export const LandingMap = () => {
 
   useEffect(() => {
     if (fPropVectorLayerRef?.current?.isVisible()) {
-      console.log("qq2-scale-uef-");
+     // console.log("qq2-scale-uef-");
       //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
@@ -1101,7 +1101,7 @@ export const LandingMap = () => {
           map_area: f.get("map_area"),
         };
       });
-      console.log("qq2-1lmap-", vfObjs.length);
+      //console.log("qq2-1lmap-", vfObjs.length);
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0 && !isTabletOrMobile) {
@@ -1447,7 +1447,7 @@ export const LandingMap = () => {
   // };
 
   const collapsibleBtnHandler = () => {
-    console.log("yy-lmap-url2");
+    //console.log("yy-lmap-url2");
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;

@@ -25,17 +25,17 @@ const CompanyFCompanyFProperties = ({companyid}) => {
 
 
     useEffect(() => {
-      console.log("werty")
+     // console.log("werty")
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
       const y = e.filter(f=> f.get("propertyid") ==null)
-      console.warn("no propertyid- company map ", y)
+      //console.warn("no propertyid- company map ", y)
 
       //sort
       e.sort((a, b) => {
         return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
       })
 
-      console.log("ff1-e cmap",e)
+     // console.log("ff1-e cmap",e)
       setfeaturesObjects(e)
        
     }, [featuredPropertyFeatures])
@@ -44,7 +44,7 @@ const CompanyFCompanyFProperties = ({companyid}) => {
   //flyto
   
   const flytoHandler = (feature) => {
-     console.log("fp added11" )
+    // console.log("fp added11" )
 
     const polygon = feature.getGeometry();
     let loc = [];
@@ -54,7 +54,7 @@ const CompanyFCompanyFProperties = ({companyid}) => {
     }  
     //flyTo
     dispatch(setcompanyFlyToLocation(loc));
-      console.log("fp added12" )
+     // console.log("fp added12" )
       dispatch(setnavigatedFPropId(feature.get("id")));
        
   };

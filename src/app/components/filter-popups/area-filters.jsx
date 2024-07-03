@@ -315,7 +315,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   };
 
   const areaIdHandler = (areaid) => {
-    console.log("yy-areaIdHandler-filter", areaid);
+   // console.log("yy-areaIdHandler-filter", areaid);
     dispatch(setareaSelectedAreaId(areaid));
     setareaId(areaid);
     // const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaid)

@@ -22,7 +22,7 @@ const PropertyPropertyNode = ({ propertyName,location }) => {
   return (
     <div>
       <div className="flex justify-between hover:bg-slate-200 cursor-pointer" style={{ marginLeft: "20px" }} onClick={() => {
-       console.log("poli")
+      // console.log("poli")
        handlePropertyNodeClick(location)
       }}>
        

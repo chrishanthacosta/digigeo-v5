@@ -37,7 +37,7 @@ const dispatch = useDispatch();
     //flyto
   
   const flytoHandler = (propertyid) => {
-     console.log("propertyidww", propertyid,)
+    // console.log("propertyidww", propertyid,)
     const feature= featureObjects.find(f=> f.get("propertyid")== propertyid  )
     if(!feature){
       console.warn("Not found featured poly for propertyid:",propertyid)

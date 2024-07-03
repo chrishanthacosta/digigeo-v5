@@ -38,7 +38,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   }, [companyid]);
 
   useEffect(() => {
-    console.log("featuredPropertyFeatures", featuredPropertyFeatures);
+   // console.log("featuredPropertyFeatures", featuredPropertyFeatures);
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
 
@@ -94,7 +94,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
 
   const domElements = useMemo(() => {
     const r = mapAreas.map((area) => {
-      console.log("mapAreas", mapAreas);
+     // console.log("mapAreas", mapAreas);
       let blockno = 0;
       return (
         <>

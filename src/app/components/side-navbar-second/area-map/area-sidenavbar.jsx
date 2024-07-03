@@ -255,7 +255,7 @@ const AreaSideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
       dispatch(setSyncPropertyFeatures(gj));
-      console.log("gj", gj);
+     // console.log("gj", gj);
     };
 
     f().catch(console.error);
@@ -268,7 +268,7 @@ const AreaSideNavbar = () => {
       );
       const d = await res.json();
       // console.log("fps", d);
-      console.log("assets", d.data);
+    //  console.log("assets", d.data);
 
       // setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
@@ -296,7 +296,7 @@ const AreaSideNavbar = () => {
   );
 
   const setareaFpropLayerVisibility = (e) => {
-    console.log("setareaFpropLayerVisibility");
+   // console.log("setareaFpropLayerVisibility");
     dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
   };
 

@@ -68,7 +68,7 @@ const CompanyTreeView = ({
   };
 
   const buildTreeViewData = (syncPropFeatures) => {
-    console.log("syncPropFeatues", syncPropFeatures);
+   // console.log("syncPropFeatues", syncPropFeatures);
     if (syncPropFeatures?.features?.length > 0) {
       const features = new GeoJSON().readFeatures(syncPropFeatures);
       features.sort((a, b) => {

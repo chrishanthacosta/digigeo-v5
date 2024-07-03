@@ -12,11 +12,11 @@ import CompanyPropertyNode from "./company-property-tree-node";
     setIsOpen(!isOpen);
   };
 
- useEffect(() => {
-   console.log("propnodes",propertyNodes)
+//  useEffect(() => {
+//    //console.log("propnodes",propertyNodes)
  
    
- }, [propertyNodes])
+//  }, [propertyNodes])
  
 
   return (

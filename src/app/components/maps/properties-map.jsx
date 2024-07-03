@@ -935,7 +935,7 @@ export const PropertiesMap = () => {
             closestArea = { area: a, d };
           }
         });
-        console.log("popl23-closestArea.area", closestArea.area);
+        //console.log("popl23-closestArea.area", closestArea.area);
         dispatch(setpropertyMapViewScales(closestArea.area));
 
         setcurcenteredareaid(closestArea.area.area_id);
@@ -1039,7 +1039,7 @@ export const PropertiesMap = () => {
   // aa//
 
   const styleFunctionSyncProperties = (feature, resolution) => {
-    console.log("resolutionss", resolution);
+   // console.log("resolutionss", resolution);
     let t = "";
     if (resolution < 300)
       t =
@@ -1549,7 +1549,7 @@ export const PropertiesMap = () => {
   }, []);
 
   const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("fprop-loading");
+    //console.log("fprop-loading");
     const url =
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
@@ -1651,7 +1651,7 @@ export const PropertiesMap = () => {
 
   const othersyncPropLoaderFunc = useCallback(
     (extent, resolution, projection) => {
-      console.log("qqqq1");
+     // console.log("qqqq1");
       const url =
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncprop_byextent` +
         `/${extent.join("/")}`;
@@ -1669,7 +1669,7 @@ export const PropertiesMap = () => {
         .then((response) => response.json())
         .then((json) => {
           if (json.data) {
-            console.log("qqqq");
+          //  console.log("qqqq");
             if (json.data[0].json_build_object.features) {
               const features = new GeoJSON().readFeatures(
                 json.data[0].json_build_object
@@ -1788,7 +1788,7 @@ export const PropertiesMap = () => {
       //first look for asset features
       const selAssetFeatures =
         assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-      console.log("qqq2");
+      //console.log("qqq2");
       if (selAssetFeatures.length > 0) {
         clickedOnFeatureTmp = true;
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
@@ -1958,7 +1958,7 @@ export const PropertiesMap = () => {
 
           const clinkDetails = await getClinkData(propId);
 
-          console.log("clinkDetails", clinkDetails, propId);
+         // console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";

@@ -1659,7 +1659,7 @@ export const AreaMap = () => {
 
   //single click -
   useEffect(() => {
-    console.log("aaaaa");
+    //console.log("aaaaa");
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
       let extentDim;
@@ -1954,7 +1954,7 @@ export const AreaMap = () => {
 
       //set style of selected area
       const afs = areaBoundaryImgSourceRef.current?.getFeatures();
-      console.log("ww1-afs", afs);
+     // console.log("ww1-afs", afs);
       const selAreaF = afs?.find(
         (af) => af.get("area_id") == areaSelectedAreaId
       );
@@ -2373,13 +2373,13 @@ export const AreaMap = () => {
               onClick={(e) => {
                 setCoordinates(undefined);
                 e.target.blur();
-                console.log("click", e);
+                //console.log("click", e);
                 return false;
               }}
               onTouchStart={(e) => {
                 setCoordinates(undefined);
                 e.target.blur();
-                console.log("touchstart", e);
+                //console.log("touchstart", e);
                 return false;
               }}
               style={{

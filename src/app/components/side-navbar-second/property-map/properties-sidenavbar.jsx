@@ -548,10 +548,10 @@ const PropertiesSideNavbar = () => {
                     ) : Object.keys(featuredCompaniesLocal).length > 0 ? (
                       Object.keys(featuredCompaniesLocal).map((areaName) => {
                         const fc = featuredCompaniesLocal[areaName];
-                        console.log(
-                          Object.keys(featuredCompaniesLocal).length,
-                          "Object.keys(featuredCompaniesLocal)"
-                        );
+                        // console.log(
+                        //   Object.keys(featuredCompaniesLocal).length,
+                        //   "Object.keys(featuredCompaniesLocal)"
+                        // );
                         return (
                           <div key={areaName}>
                             <div className="text-xs font-medium text-black">

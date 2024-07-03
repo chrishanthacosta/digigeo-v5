@@ -96,7 +96,7 @@ const buildSqlWhereClause = (conditions) => {
 
     return acc ? acc + (clause ? " and " + clause : "") : clause;
   }, "");
-  console.log("q", q);
+ // console.log("q", q);
   return q;
 };
 

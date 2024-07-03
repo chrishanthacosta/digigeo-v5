@@ -223,7 +223,7 @@ const LandingBottomSideComp = () => {
 
 
   useEffect(() => {
-    console.log("xx1-landingCurrentScale", landingCurrentScale, landingMapViewScales)
+    //console.log("xx1-landingCurrentScale", landingCurrentScale, landingMapViewScales)
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (landingMapViewScales) {
       //console.log("xx-if bot-compo-landingMapViewScales")

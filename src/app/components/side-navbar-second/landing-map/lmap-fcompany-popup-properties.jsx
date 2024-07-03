@@ -36,14 +36,14 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
   useEffect(() => {
-    console.log("ff1-companyid", companyid);
+   // console.log("ff1-companyid", companyid);
     setunNamedFeatureObjects([]);
     setloadData((t) => !t);
   }, [companyid]);
 
   //set unnmaed props
   useEffect(() => {
-    console.log("unNamedFeatureObjects2", unNamedFeatureObjects);
+   // console.log("unNamedFeatureObjects2", unNamedFeatureObjects);
     let gj;
     const getFeaturedProperties = async () => {
       const f = async () => {
@@ -65,7 +65,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         };
 
         if (gj?.features?.length > 0) {
-          console.log("ff1-gj");
+         // console.log("ff1-gj");
           const e = new GeoJSON().readFeatures(gj);
           let b = 0;
           const unNamedPs = [];
@@ -92,7 +92,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           // e.sort((a, b) => {
           //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
           // })
-          console.log("ff1-esorted", e);
+        //  console.log("ff1-esorted", e);
           setdataLoaded(false);
           setfeaturesObjects(e);
         } else {
@@ -116,7 +116,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    console.log("ff1-loc", loc);
+   // console.log("ff1-loc", loc);
     dispatch(setlandingMapFlyToLocation(loc));
 
     //set style
@@ -170,7 +170,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     };
     //console.log("hotplayid",hotplayid)
     const dd = await getData(hotplayid);
-    console.log("dd", dd);
+   // console.log("dd", dd);
     const d = dd?.[0];
 
     const sponsoredowners = d?.sponsor ?? "";

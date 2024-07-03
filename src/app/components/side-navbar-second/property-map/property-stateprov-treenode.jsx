@@ -13,7 +13,7 @@ import PropertyPropertyNode from "./property-property-tree-node";
   };
 
  useEffect(() => {
-   console.log("propnodes",propertyNodes)
+   //console.log("propnodes",propertyNodes)
  
    
  }, [propertyNodes])

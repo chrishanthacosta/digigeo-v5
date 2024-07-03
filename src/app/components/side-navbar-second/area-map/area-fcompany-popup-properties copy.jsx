@@ -38,7 +38,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   //set unnmaed props
   useEffect(() => {
-      console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
+     // console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
     
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
@@ -134,7 +134,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         };
         //console.log("hotplayid",hotplayid)
         const dd = await getData(hotplayid) 
-        console.log("dd",dd)
+       // console.log("dd",dd)
         const d= dd?.[0] 
 
         const sponsoredowners = d?.sponsor ?? "";

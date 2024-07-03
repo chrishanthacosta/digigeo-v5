@@ -103,20 +103,20 @@ const LandingMapSideNavbar = () => {
         featuredPropertyFeatures,
         ({ map_area }) => map_area
       );
-      console.log("resultByArea", resultByArea);
+     // console.log("resultByArea", resultByArea);
       for (const area in resultByArea) {
         const resultByCompany = Object.groupBy(
           resultByArea[area],
           ({ companyid }) => companyid
         );
-        console.log("resultByCompany", resultByCompany);
+       // console.log("resultByCompany", resultByCompany);
         const a = Object.keys(resultByCompany).map(
           (k) => resultByCompany[k][0]
         );
-        console.log("a",a,)
+       // console.log("a",a,)
         finalResult.push({ map_area: area, companies: a });
       }
-      console.log("finalResult", finalResult);
+     // console.log("finalResult", finalResult);
       //const a = Object.keys(result).map(k => result[k][0]);
 
       setFeaturedCompanies(finalResult);
@@ -128,9 +128,7 @@ const LandingMapSideNavbar = () => {
   }, [featuredPropertyFeatures]);
 
 
-  useEffect(() => {
-    console.log("featuredCompanies",featuredCompanies,)
-   }, [featuredCompanies])
+ 
   //areal load
   //   useEffect(() => {
   //     if (areaName) {
@@ -150,7 +148,7 @@ const LandingMapSideNavbar = () => {
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
-    console.log("yy-hit-2sidenavbar-lmap-compo");
+   // console.log("yy-hit-2sidenavbar-lmap-compo");
 
     let newUrl;
     if (areaName == "") {

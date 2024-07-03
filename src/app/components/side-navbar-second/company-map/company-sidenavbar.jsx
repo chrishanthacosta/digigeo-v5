@@ -171,7 +171,7 @@ const CompanySideNavbar = () => {
     if (featuredPropertyFeatures?.features) {
       const result = [];
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      console.log("ee2-e", e);
+     // console.log("ee2-e", e);
       //groupby area
       function myCallback({ values_ }) {
         return values_.map_area;

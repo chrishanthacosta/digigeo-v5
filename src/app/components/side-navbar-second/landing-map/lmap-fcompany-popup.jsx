@@ -199,7 +199,7 @@ const LmapFCompanyPopup = ({}) => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      console.log("aaa1");
+      //console.log("aaa1");
       if (d?.data?.length > 0) {
         // await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -221,7 +221,7 @@ const LmapFCompanyPopup = ({}) => {
           seturl("");
         }
       } else {
-        console.log("aaa6");
+       // console.log("aaa6");
         setlogoPath("");
         seturl("");
       }

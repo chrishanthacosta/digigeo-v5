@@ -1129,9 +1129,9 @@ export const CompanyMap = () => {
 
   const handleMoveEnd = useCallback(() => {
     const map = mapRef.current;
-    console.log("companyId", companyId);
+    //console.log("companyId", companyId);
     const tmpZoomLevel = map.getView().getZoom();
-    console.log("tmpZoomLevel", tmpZoomLevel);
+    //console.log("tmpZoomLevel", tmpZoomLevel);
 
     const tmpinitialCenter = map.getView().getCenter();
     dispatch(setCompanyZoomLevel(tmpZoomLevel));
@@ -2148,7 +2148,7 @@ export const CompanyMap = () => {
     return st;
   };
   const otherfPropLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("fprop-loading");
+    //console.log("fprop-loading");
     const url =
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/fprops_byextent` +
       `/${extent.join("/")}`;
@@ -2268,7 +2268,7 @@ export const CompanyMap = () => {
         .then((response) => response.json())
         .then((json) => {
           if (json.data) {
-            console.log("qqqq");
+           // console.log("qqqq");
             if (json.data[0].json_build_object.features) {
               const features = new GeoJSON().readFeatures(
                 json.data[0].json_build_object

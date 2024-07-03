@@ -144,7 +144,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   const domElements = useMemo(() => {
     //  console.log("qqqw1", featureObjects)
     if (featureObjects) {
-      console.log("qqqw2", featureObjects);
+     // console.log("qqqw2", featureObjects);
       const result = [];
 
       function myCallback({ values_ }) {
@@ -162,12 +162,12 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
             ? 1
             : -1;
         });
-        console.log("qqqw2-namedProps", namedProps);
+       // console.log("qqqw2-namedProps", namedProps);
         const unnamedProps = resultByArea[area].filter(
           (p) => !p.get("prop_name")
         );
 
-        console.log("qqqw2-unnamedProps", unnamedProps);
+      //  console.log("qqqw2-unnamedProps", unnamedProps);
         let blockno = 1;
         // for (let index = 0; index < unnamedProps.length; index++) {
         //   const element = unnamedProps[index];

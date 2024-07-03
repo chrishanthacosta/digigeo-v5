@@ -137,7 +137,7 @@ const SideNavbar = () => {
       //updateWindowsHistory(newUrl);
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-      console.log("ff2-updateWindowsHistoryCmap", companyInitialCenter, companyZoomLevel)
+     // console.log("ff2-updateWindowsHistoryCmap", companyInitialCenter, companyZoomLevel)
       updateWindowsHistoryCmap({ isSideNavOpen, lyrs: companyLyrs, zoom: companyZoomLevel, center: companyInitialCenter, sidenav2: isCompanySideNavOpen, companyId: 0 });
 
     } else {

@@ -82,7 +82,7 @@ export const LandingPage = () => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
 
-  console.log("isTabletOrMobile", isTabletOrMobile);
+  //console.log("isTabletOrMobile", isTabletOrMobile);
 
   useEffect(() => {
     dispatch(fetchmapViewScales());

@@ -217,14 +217,14 @@ const PropertiesBottomSideComp = () => {
   // },[propertyMapViewScales])
 
   useEffect(() => {
-    console.log(
-      "popl23-pCurrentScale",
-      propertyCurrentScale,
-      propertyMapViewScales
-    );
+    // console.log(
+    //   "popl23-pCurrentScale",
+    //   propertyCurrentScale,
+    //   propertyMapViewScales
+    // );
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (propertyMapViewScales) {
-      console.log("popl23-succ-pMapViewScales", propertyMapViewScales);
+     // console.log("popl23-succ-pMapViewScales", propertyMapViewScales);
       propertyMapViewScales.claimscale > propertyCurrentScale
         ? setclaimsVisibilityState(true)
         : setclaimsVisibilityState(false);

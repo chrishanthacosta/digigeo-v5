@@ -185,10 +185,10 @@ const AreaBottomSideComp = () => {
   );
 
   useEffect(() => {
-    console.log("xx1-areaCurrentScale", areaCurrentScale, areaMapViewScales);
+   // console.log("xx1-areaCurrentScale", areaCurrentScale, areaMapViewScales);
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (areaMapViewScales) {
-      console.log("xx-if bot-compo-areaMapViewScales");
+     // console.log("xx-if bot-compo-areaMapViewScales");
       areaMapViewScales.claimscale > areaCurrentScale
         ? setclaimsVisibilityState(true)
         : setclaimsVisibilityState(false);
