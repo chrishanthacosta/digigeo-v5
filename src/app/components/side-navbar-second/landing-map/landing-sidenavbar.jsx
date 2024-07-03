@@ -93,7 +93,7 @@ const LandingMapSideNavbar = () => {
   const [featuredCompanies, setFeaturedCompanies] = useState([]);
 
   useEffect(() => {
-    console.log("qq2-2sn-uef-enter-vfObjs?.length");
+   
     if (featuredPropertyFeatures) {
       // const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
       // const a = Object.keys(result).map(k => result[k][0]);
@@ -113,16 +113,24 @@ const LandingMapSideNavbar = () => {
         const a = Object.keys(resultByCompany).map(
           (k) => resultByCompany[k][0]
         );
+        console.log("a",a,)
         finalResult.push({ map_area: area, companies: a });
       }
       console.log("finalResult", finalResult);
       //const a = Object.keys(result).map(k => result[k][0]);
 
       setFeaturedCompanies(finalResult);
-      console.log("qq2-3sn-uef-end-fclist set-vfObjs?.length");
+      
     }
+
+    return () => setFeaturedCompanies([])
     // console.log("ppo",featuredPropertyFeatures)
   }, [featuredPropertyFeatures]);
+
+
+  useEffect(() => {
+    console.log("featuredCompanies",featuredCompanies,)
+   }, [featuredCompanies])
   //areal load
   //   useEffect(() => {
   //     if (areaName) {
@@ -367,7 +375,7 @@ const LandingMapSideNavbar = () => {
                           <div className="font-semibold">{ii.map_area}</div>
                           {ii.companies.map((i) => (
                             <LmapFeaturedCompanyDetailDiv
-                              key={i.id}
+                              key={i.companyid}
                               title={i.company2}
                               // title={i.company2 + i.companyid + "-" +i.id }
                               companyid={i.companyid}
