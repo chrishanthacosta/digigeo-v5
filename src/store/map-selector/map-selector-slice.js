@@ -16,7 +16,8 @@ const initialState = {
   companyInitialCenter: [-10694872.010699773, 7434223.337137634],
   propertiesInitialCenter: [-10694872.010699773, 7434223.337137634],
   landingMapInitialCenter: [-10694872.010699773, 7434223.337137634],
-  mapViewMode:"HEADED",
+  mapViewMode: "HEADED",
+  isCompanyUrlSearch: false,
 };
 
 const mapSelectorSlice = createSlice({
@@ -71,6 +72,9 @@ const mapSelectorSlice = createSlice({
     setmapViewMode: (state, action) => {
       state.mapViewMode = action.payload;
     },
+    setIsCompanyUrlSearch: (state, action) => {
+      state.isCompanyUrlSearch = action.payload;
+    },
   },
 });
 
@@ -90,6 +94,7 @@ export const {
   setPropertiesInitialCenter,
   setLandingMapInitialCenter,
   setmapViewMode,
+  setIsCompanyUrlSearch,
 } = mapSelectorSlice.actions;
 
 export default mapSelectorSlice.reducer;

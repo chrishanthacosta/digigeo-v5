@@ -18,6 +18,7 @@ import {
   setPropertiesZoomLevel,
   setSelectedMap,
   setmapViewMode,
+  setIsCompanyUrlSearch,
 } from "../../../store/map-selector/map-selector-slice";
 import {
   setAreaCountry,
@@ -154,7 +155,9 @@ export const LandingPage = () => {
           dispatch(setCompanyZoomLevel(mapZoom));
           const tmpMapCenter3 = mapCenter.split(",").map(Number);
           dispatch(setCompanyInitialCenter(tmpMapCenter3));
+          console.log("tmpMapCenter3", tmpMapCenter3);
 
+          dispatch(setIsCompanyUrlSearch(true));
           break;
         case "properties":
           dispatch(

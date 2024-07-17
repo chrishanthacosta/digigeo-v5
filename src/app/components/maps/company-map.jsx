@@ -20,6 +20,7 @@ import {
   setCompanyZoomLevel,
   setCompanyInitialCenter,
   setCompanyLyrs,
+  setIsCompanyUrlSearch,
 } from "../../../store/map-selector/map-selector-slice";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
@@ -510,8 +511,6 @@ export const CompanyMap = () => {
   } catch (error) {}
 
   const router = useRouter();
-  const [center, setCenter] = useState("");
-  const [zoom, setZoom] = useState("");
   const [claimObject, setclaimObject] = useState(undefined);
   const [mapUnits, setmapUnits] = useState("m");
 
@@ -593,6 +592,10 @@ export const CompanyMap = () => {
 
   const cmapNavigationExtent = useSelector(
     (state) => state.companyMapReducer.cmapNavigationExtent
+  );
+
+  const isCompanyUrlSearch = useSelector(
+    (state) => state.mapSelectorReducer.isCompanyUrlSearch
   );
 
   const [coordinates, setCoordinates] = useState(undefined);
@@ -969,14 +972,20 @@ export const CompanyMap = () => {
       syncPropSourceRef?.current?.addFeatures(e);
     }
 
-    if (syncPropSourceRef.current) {
-      const p1 = syncPropSourceRef.current?.getExtent()[0];
-      if (p1 != Infinity) {
-        mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-          padding: [200, 200, 200, 200],
-          duration: 3000,
-        });
+    if (!isCompanyUrlSearch) {
+      if (syncPropSourceRef.current) {
+        const p1 = syncPropSourceRef.current?.getExtent()[0];
+        if (p1 != Infinity) {
+          mapRef.current
+            ?.getView()
+            ?.fit(syncPropSourceRef.current?.getExtent(), {
+              padding: [200, 200, 200, 200],
+              duration: 3000,
+            });
+        }
       }
+      console.log("setIsCompanyUrlSearch");
+      dispatch(setIsCompanyUrlSearch(false));
     }
   }, [syncPropertyFeatures]);
 
@@ -1042,7 +1051,9 @@ export const CompanyMap = () => {
   }, [assetFeatures]);
 
   useEffect(() => {
-    mouseScrollEvent();
+    if (companyId !== 0) {
+      mouseScrollEvent();
+    }
   }, [mapViewScaleReducer.mapViewScales, companyId]);
 
   useEffect(() => {
@@ -1131,13 +1142,13 @@ export const CompanyMap = () => {
     const map = mapRef.current;
     //console.log("companyId", companyId);
     const tmpZoomLevel = map.getView().getZoom();
-    //console.log("tmpZoomLevel", tmpZoomLevel);
+    console.log("tmpZoomLevel", tmpZoomLevel);
 
     const tmpinitialCenter = map.getView().getCenter();
+    console.log("tmpinitialCenter", tmpinitialCenter);
+
     dispatch(setCompanyZoomLevel(tmpZoomLevel));
     dispatch(setCompanyInitialCenter(tmpinitialCenter));
-    setZoom(tmpZoomLevel);
-    setCenter(tmpinitialCenter);
 
     setCenteredAreaViewScales(tmpinitialCenter);
 
@@ -2268,7 +2279,7 @@ export const CompanyMap = () => {
         .then((response) => response.json())
         .then((json) => {
           if (json.data) {
-           // console.log("qqqq");
+            // console.log("qqqq");
             if (json.data[0].json_build_object.features) {
               const features = new GeoJSON().readFeatures(
                 json.data[0].json_build_object
