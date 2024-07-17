@@ -1846,6 +1846,14 @@ export const CompanyMap = () => {
         let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
         let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
+        const extent2 = selFPropertyFeatures?.[0]?.getGeometry()?.getExtent();
+        console.log(
+          "d-legnth",
+          Math.sqrt(
+            Math.pow(extent2[0] - extent2[2], 2) +
+              Math.pow(extent2[1] - extent2[3], 2)
+          )
+        );
         // const sponsoredowners = await getSponsorListFromRESTAPI(
         //   features[0].get("id")
         // );
