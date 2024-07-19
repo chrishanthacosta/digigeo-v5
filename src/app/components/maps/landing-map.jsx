@@ -249,7 +249,13 @@ const createTextStyle = function (feature, resolution) {
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
-
+    fill: new Fill({
+      color: "black",
+    }),
+    stroke: new Stroke({
+      color: "white",
+      width: 3,
+    }),
     offsetX: 0,
     offsetY: +25,
   });
@@ -2204,6 +2210,11 @@ export const LandingMap = () => {
         text: lmapsyncPropLableVisible ? propName : "",
         // fill: new Fill({ color: fillColor }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        
+        stroke: new Stroke({
+          color: "#fff", 
+          width: 3, 
+        }),
         offsetX: 2,
         offsetY: -19,
         // placement: placement,

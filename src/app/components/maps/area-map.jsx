@@ -222,7 +222,13 @@ const createTextStyle = function (feature, resolution) {
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
-
+    fill: new Fill({
+      color: "black",
+    }),
+    stroke: new Stroke({
+      color: "white",
+      width: 3,
+    }),
     offsetX: 0,
     offsetY: +25,
   });
@@ -1294,6 +1300,10 @@ export const AreaMap = () => {
         text: amapsyncPropLableVisible ? t.toString() : "",
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
         offsetX: 0,
+        stroke: new Stroke({
+          color: "#fff",
+          width: 3,
+        }),
         offsetY: -10,
         font: "14px serif",
       }),

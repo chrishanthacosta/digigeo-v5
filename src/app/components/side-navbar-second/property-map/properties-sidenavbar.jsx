@@ -125,6 +125,8 @@ const PropertiesSideNavbar = () => {
     (state) => state.propertiesMapReducer.pmapSelectedPropertyIds
   );
 
+  console.log(pmapSelectedPropertyIds, "pmapSelectedPropertyIds");
+
   useEffect(() => {
     if (searchParamAssetTypeList?.length > 0) {
       setselectedAssetTypes(searchParamAssetTypeList.join(","));
@@ -159,6 +161,7 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       // setIsLoadingSyncAllProperties(true);
       if (pmapSelectedPropertyIds.length > 0) {
+        console.log(pmapSelectedPropertyIds, "pmapSelectedPropertyIds");
         const res = await fetch(
           `${
             process.env.NEXT_PUBLIC_BACKEND_URL
@@ -166,7 +169,7 @@ const PropertiesSideNavbar = () => {
           { cache: "no-store" }
         );
         const d = await res.json();
-
+        console.log(d, "d log");
         const gj = {
           type: "FeatureCollection",
           crs: {
@@ -180,24 +183,28 @@ const PropertiesSideNavbar = () => {
 
         dispatch(setFPropertyFeatures(gj));
       } else if (propertySearchQuery) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fpropertygeomuniversal/${propertySearchQuery}`,
-          { cache: "no-store" }
-        );
-        const d = await res.json();
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/fpropertygeomuniversal/${propertySearchQuery}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
 
-        const gj = {
-          type: "FeatureCollection",
-          crs: {
-            type: "name",
-            properties: {
-              name: "EPSG:3857",
+          const gj = {
+            type: "FeatureCollection",
+            crs: {
+              type: "name",
+              properties: {
+                name: "EPSG:3857",
+              },
             },
-          },
-          features: d.data[0].json_build_object.features,
-        };
+            features: d.data[0].json_build_object.features,
+          };
 
-        dispatch(setFPropertyFeatures(gj));
+          dispatch(setFPropertyFeatures(gj));
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         dispatch(setFPropertyFeatures({}));
       }
@@ -210,37 +217,47 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       setIsLoadingFeaturedCompanies(true);
       if (pmapSelectedPropertyIds.length > 0) {
-        const res = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_BACKEND_URL
-          }/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
-            ","
-          )}`,
-          { cache: "no-store" }
-        );
-        const d = await res.json();
-        let i = 0;
-        for (const o of d.data) {
-          o.id = i;
-          i++;
-        }
+        try {
+          const res = await fetch(
+            `${
+              process.env.NEXT_PUBLIC_BACKEND_URL
+            }/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(
+              ","
+            )}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
+          let i = 0;
+          for (const o of d.data) {
+            o.id = i;
+            i++;
+          }
 
-        setFeaturedCompanies(d.data);
-        setIsLoadingFeaturedCompanies(false);
+          setFeaturedCompanies(d.data);
+          setIsLoadingFeaturedCompanies(false);
+        } catch (error) {
+          console.log(error);
+          setIsLoadingFeaturedCompanies(false);
+        }
       } else if (propertySearchQuery) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/hotplayfcompanylist_pmap/${propertySearchQuery}`,
-          { cache: "no-store" }
-        );
-        const d = await res.json();
-        let i = 0;
-        for (const o of d.data) {
-          o.id = i;
-          i++;
-        }
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/hotplayfcompanylist_pmap/${propertySearchQuery}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
+          let i = 0;
+          for (const o of d.data) {
+            o.id = i;
+            i++;
+          }
 
-        setFeaturedCompanies(d.data);
-        setIsLoadingFeaturedCompanies(false);
+          setFeaturedCompanies(d.data);
+          setIsLoadingFeaturedCompanies(false);
+        } catch (error) {
+          console.log(error);
+          setIsLoadingFeaturedCompanies(false);
+        }
       } else {
         setFeaturedCompanies([]);
         setIsLoadingFeaturedCompanies(false);
@@ -254,25 +271,29 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
       if (pmapSelectedPropertyIds.length > 0) {
         //
-        const res = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_BACKEND_URL
-          }/propertygeomlist/${pmapSelectedPropertyIds.join(",")}`,
-          { cache: "no-store" }
-        );
-        const d = await res.json();
+        try {
+          const res = await fetch(
+            `${
+              process.env.NEXT_PUBLIC_BACKEND_URL
+            }/propertygeomlist/${pmapSelectedPropertyIds.join(",")}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
 
-        const gj = {
-          type: "FeatureCollection",
-          crs: {
-            type: "name",
-            properties: {
-              name: "EPSG:3857",
+          const gj = {
+            type: "FeatureCollection",
+            crs: {
+              type: "name",
+              properties: {
+                name: "EPSG:3857",
+              },
             },
-          },
-          features: d.data[0].json_build_object.features,
-        };
-        dispatch(setSyncPropertyFeatures(gj));
+            features: d.data[0].json_build_object.features,
+          };
+          dispatch(setSyncPropertyFeatures(gj));
+        } catch (error) {
+          console.log(error);
+        }
       } else if (propertySearchQuery) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/propertygeomuniversal/${propertySearchQuery}`,

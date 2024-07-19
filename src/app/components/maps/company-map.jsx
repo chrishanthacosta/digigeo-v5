@@ -219,7 +219,13 @@ const createTextStyle = function (feature, resolution) {
   return new Text({
     font: "bold 14px serif",
     text: getText(feature, resolution),
-
+    fill: new Fill({
+      color: "black",
+    }),
+    stroke: new Stroke({
+      color: "white",
+      width: 3,
+    }),
     offsetX: 0,
     offsetY: +25,
   });
@@ -542,6 +548,13 @@ export const CompanyMap = () => {
     otherclaimLinkVectorLayerIsLoading,
     setotherclaimLinkVectorLayerIsLoading,
   ] = useState(false);
+
+  console.log(otherassetLayerIsLoading, "otherassetLayerIsLoading");
+  console.log(otherfPropVectorLayerIsLoading, "otherfPropVectorLayerIsLoading");
+  console.log(
+    othersyncPropVectorLayerIsLoading,
+    "othersyncClaimLinkLoaderFunc"
+  );
 
   const mapRef = useRef();
   const mapViewRef = useRef();
@@ -1363,6 +1376,13 @@ export const CompanyMap = () => {
       text: new Text({
         text: cmapsyncPropLableVisible ? t.toString() : "",
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
+        fill: new Fill({
+          color: "black",
+        }),
+        stroke: new Stroke({
+          color: "white",
+          width: 3,
+        }),
         offsetX: 0,
         offsetY: -10,
         font: "14px serif",
@@ -1682,6 +1702,9 @@ export const CompanyMap = () => {
         } else {
           console.log("else area map area boundry not loading ");
         }
+      })
+      .catch((err) => {
+        console.log("error", err);
       });
   }, []);
 
@@ -2198,6 +2221,13 @@ export const CompanyMap = () => {
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setotherfPropVectorLayerIsLoading(false);
+      })
+      .finally(() => {
+        setotherfPropVectorLayerIsLoading(false);
       });
   }, []);
 
@@ -2226,10 +2256,18 @@ export const CompanyMap = () => {
             //console.log("hit claims3")
             otherassetSourceRef.current.clear();
             otherassetSourceRef.current.addFeatures(features);
-            setotherassetLayerIsLoading(false);
             //console.log("bbsync uni tbl01_claims   features count", features.count);
+            setotherassetLayerIsLoading(false);
           }
+          setotherassetLayerIsLoading(false);
         }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setotherassetLayerIsLoading(false);
+      })
+      .finally(() => {
+        setotherassetLayerIsLoading(false);
       });
   }, []);
 
@@ -2258,10 +2296,18 @@ export const CompanyMap = () => {
               //console.log("hit claims3")
               otherclaimLinkSourceRef.current.clear();
               otherclaimLinkSourceRef.current.addFeatures(features);
-              setotherclaimLinkVectorLayerIsLoading(false);
               //console.log("bbsync uni tbl01_claims   features count", features.count);
+              setotherclaimLinkVectorLayerIsLoading(false);
             }
+            setotherclaimLinkVectorLayerIsLoading(false);
           }
+        })
+        .catch((error) => {
+          console.log("error", error);
+          setotherclaimLinkVectorLayerIsLoading(false);
+        })
+        .finally(() => {
+          setotherclaimLinkVectorLayerIsLoading(false);
         });
     },
     []
@@ -2295,10 +2341,18 @@ export const CompanyMap = () => {
               //console.log("hit claims3")
               othersyncPropSourceRef.current.clear();
               othersyncPropSourceRef.current.addFeatures(features);
-              setothersyncPropVectorLayerIsLoading(false);
               //console.log("bbsync uni tbl01_claims   features count", features.count);
+              setothersyncPropVectorLayerIsLoading(false);
             }
+            setothersyncPropVectorLayerIsLoading(false);
           }
+        })
+        .catch((error) => {
+          console.log("error", error);
+          setothersyncPropVectorLayerIsLoading(false);
+        })
+        .finally(() => {
+          setothersyncPropVectorLayerIsLoading(false);
         });
     },
     [othersyncPropSourceRef.current]
