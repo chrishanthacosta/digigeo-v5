@@ -718,7 +718,12 @@ export const LandingMap = () => {
     const f = async (limit, offset) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/all_tbl_sync_property`,
-        { cache: "force-cache" }
+        {
+          cache: "force-cache",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       const d = await res.json();
 

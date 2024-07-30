@@ -5,7 +5,7 @@ import propertiesMapReducer from "./properties-map/properties-map-slice";
 import companyMapReducer from "./company-map/company-map-slice";
 import landingMapReducer from "./landing-map/landing-map-slice";
 import mapViewScaleReducer from "./map-view-settings/map-view-setting-slice";
-
+import tokenReducer from "./token/token-slice";
 
 const rootReducer = combineReducers({
   mapSelectorReducer,
@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
   companyMapReducer,
   landingMapReducer,
   mapViewScaleReducer,
+  tokenReducer,
 });
 
 export default rootReducer;
