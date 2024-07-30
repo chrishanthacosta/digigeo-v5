@@ -77,3 +77,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #012b57;
 }
+
+.ol-zoom{
+  display: none;
+}

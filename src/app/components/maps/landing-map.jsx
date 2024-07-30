@@ -332,9 +332,6 @@ export const fPropertyVectorRendererFuncv2 = (pixelCoordinates, state) => {
     colour = "#FFFFFF";
   }
 
-
-
-
   const fill = new Fill({
     color: colour,
     opacity: 0.3,
@@ -1089,7 +1086,7 @@ export const LandingMap = () => {
 
   useEffect(() => {
     if (fPropVectorLayerRef?.current?.isVisible()) {
-     // console.log("qq2-scale-uef-");
+      // console.log("qq2-scale-uef-");
       //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
@@ -2017,7 +2014,7 @@ export const LandingMap = () => {
           prop_name,
           commo_ref,
           assets,
-          resources:resources.split(","),
+          resources: resources.split(","),
           map_area,
           owners,
           prop_exturl,
@@ -2210,10 +2207,10 @@ export const LandingMap = () => {
         text: lmapsyncPropLableVisible ? propName : "",
         // fill: new Fill({ color: fillColor }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-        
+
         stroke: new Stroke({
-          color: "#fff", 
-          width: 3, 
+          color: "#fff",
+          width: 3,
         }),
         offsetX: 2,
         offsetY: -19,
@@ -2518,7 +2515,7 @@ export const LandingMap = () => {
         </div>
 
         <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full flex-wrap ">
-          <div className="hidden sm:block">
+          <div className="hidden sm:block gap-1">
             <ButtonGroup variant="faded" color="primary">
               <Button
                 onClick={() => setLyrs("m")}
@@ -2553,7 +2550,7 @@ export const LandingMap = () => {
             </ButtonGroup>
           </div>
           <div>
-            <p className="bg-white py-2 px-1 text-black rounded-lg bg-opacity-30">
+            <p className="bg-white sm:py-2 px-1 text-black rounded-lg bg-opacity-30 text-[10px] sm:text-[12px] py-1">
               {copyRight}
             </p>
           </div>
