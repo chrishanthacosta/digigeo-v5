@@ -38,8 +38,10 @@ const initialState = {
   amapAssetLableVisible: true,
   amapClaimLableVisible: true,
   amapAreaLableVisible: true,
-  amapNavigationExtent:[],
-  amapNavigationHighlightFProps:[]
+  amapNavigationExtent: [],
+  amapNavigationHighlightFProps: [],
+  isFeaturedPropertyLoaded: false,
+  navigatePropertyId: 0,
 };
 
 const areaMapSlice = createSlice({
@@ -163,6 +165,12 @@ const areaMapSlice = createSlice({
     setamapAreaLableVisible: (state, action) => {
       state.amapAreaLableVisible = action.payload;
     },
+    setisFeaturedPropertyLoaded: (state, action) => {
+      state.isFeaturedPropertyLoaded = action.payload;
+    },
+    setnavigatePropertyId: (state, action) => {
+      state.navigatePropertyId = action.payload;
+    },
   },
 });
 
@@ -205,6 +213,8 @@ export const {
   setamapAssetLableVisible,
   setamapClaimLableVisible,
   setamapAreaLableVisible,
+  setisFeaturedPropertyLoaded,
+  setnavigatePropertyId,
 } = areaMapSlice.actions;
 
 export default areaMapSlice.reducer;

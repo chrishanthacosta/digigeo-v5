@@ -1,20 +1,22 @@
-"use client"
+"use client";
 
 // components/Accordion.js
 
-import  { useState } from "react";
+import { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
 import AreaFCompanyPopup from "./area-fcompany-popup";
 import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 
 const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
- // console.log("companyid",companyid)
+  // console.log("companyid",companyid)
   const [isOpenIn, setIsOpenIn] = useState();
   const dispatch = useDispatch();
- 
+
+  const isFeaturedPropertyLoaded = useSelector(
+    (state) => state.areaMapReducer.isFeaturedPropertyLoaded
+  );
 
   return (
     <div>
@@ -34,22 +36,24 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
           {/* <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
-          <span className="">
-            <MdInfoOutline
-              className="cursor-pointer h-4 w-4 hover:scale-125"
-              onClick={() => {
-                dispatch(setpopupFcompanyId(companyid))
-                // setIsOpenIn("y")}}
-              }}
-            />
-          </span>
-          {isOpenIn=="y" ? (
+          {isFeaturedPropertyLoaded && (
+            <span className="">
+              <MdInfoOutline
+                className="cursor-pointer h-4 w-4 hover:scale-125"
+                onClick={() => {
+                  dispatch(setpopupFcompanyId(companyid));
+                  // setIsOpenIn("y")}}
+                }}
+              />
+            </span>
+          )}
+          {isOpenIn == "y" ? (
             <AreaFCompanyPopup
               isOpenIn={isOpenIn}
               // closePopup={closeDialog}
               titleIn={title}
               companyid={companyid}
-               dialogStateCallBack={dialogStateCallBack}
+              dialogStateCallBack={dialogStateCallBack}
               getDialogRef={getDialogRef}
             />
           ) : null}

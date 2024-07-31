@@ -19,7 +19,8 @@ const AreaTreeView = ({
     buildTreeViewData(syncPropFeatues);
   }, [syncPropFeatues]);
 
-  const addNode = (nodes, company, prop_name, location) => {
+  const addNode = (nodes, company, prop_name, location, propertyid) => {
+    console.log("propertyidn", propertyid);
     const companyNode = nodes.find((n) => n.label == company);
     if (companyNode) {
       companyNode.children.push({
@@ -27,6 +28,7 @@ const AreaTreeView = ({
         location,
         childrem: [],
         nodetype: "property",
+        propertyid,
       });
 
       return companyNode;
@@ -41,6 +43,7 @@ const AreaTreeView = ({
             location,
             children: [],
             nodetype: "property",
+            propertyid,
           },
         ],
       };
@@ -67,7 +70,13 @@ const AreaTreeView = ({
           loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
         }
 
-        addNode(nodes, f.get("name"), f.get("prop_name"), loc);
+        addNode(
+          nodes,
+          f.get("name"),
+          f.get("prop_name"),
+          loc,
+          f.get("propertyid")
+        );
       });
 
       //sort according to property names
@@ -152,6 +161,7 @@ const AreaTreeView = ({
             key={node.label}
             comapanyName={node.label}
             propertyNodes={node.children}
+            propertyid={node.propertyid}
           />
         ))
       ) : (

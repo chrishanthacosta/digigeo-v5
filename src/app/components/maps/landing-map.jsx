@@ -720,9 +720,9 @@ export const LandingMap = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/all_tbl_sync_property`,
         {
           cache: "force-cache",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+          // },
         }
       );
       const d = await res.json();

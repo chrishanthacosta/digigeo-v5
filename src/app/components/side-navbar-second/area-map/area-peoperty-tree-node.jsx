@@ -1,23 +1,26 @@
 // import React from "react";
 
-import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
+import {
+  setareaFlyToLocation,
+  setnavigatePropertyId,
+} from "@/store/area-map/area-map-slice";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-const AreaPropertyNode = ({ propertyName,location }) => {
+const AreaPropertyNode = ({ propertyName, location, propertyid }) => {
   const [isOpen, setIsOpen] = useState(false);
   // const hasChildren = node.children && node.children.length > 0;
 
   // const handleToggle = () => {
   //   setIsOpen(!isOpen);
-  // 
-   const dispatch = useDispatch()
-
-    const handlePropertyNodeClick = (location) => {
+  //
+  const dispatch = useDispatch();
+// console.log(propertyid, "propertyida");
+  const handlePropertyNodeClick = (location) => {
     dispatch(setareaFlyToLocation(location));
-    }
-
+    dispatch(setnavigatePropertyId(propertyid));
+  };
 
   return (
     <div>
@@ -32,8 +35,12 @@ const AreaPropertyNode = ({ propertyName,location }) => {
           <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
           {propertyName}
         </div>
-        <Image src="./navigation.svg" width={15} height={15} alt="prop" 
-        className=" cursor-pointer hover:scale-125 "
+        <Image
+          src="./navigation.svg"
+          width={15}
+          height={15}
+          alt="prop"
+          className=" cursor-pointer hover:scale-125 "
         />
       </div>
 

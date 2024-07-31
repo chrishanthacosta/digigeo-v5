@@ -31,6 +31,7 @@ import {
   setclicksyncPropertyObject,
   setareaCurrentScale,
   setareaMapViewScales,
+  setisFeaturedPropertyLoaded,
 } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
@@ -523,6 +524,8 @@ export const AreaMap = () => {
   const [zoom, setZoom] = useState("");
   const [prevSelAreaFeature, setprevSelAreaFeature] = useState();
   const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
+  const [prevSelPropsId, setprevSelPropsId] = useState([]);
+
   // const [unselectFProps, setunselectFProps] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
@@ -543,6 +546,11 @@ export const AreaMap = () => {
   const navigatedFPropId = useSelector(
     (state) => state.areaMapReducer.navigatedFPropId
   );
+
+  const navigatePropertyId = useSelector(
+    (state) => state.areaMapReducer.navigatePropertyId
+  );
+
   const areaSyncPropLayerAlwaysVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerAlwaysVisible
   );
@@ -628,6 +636,45 @@ export const AreaMap = () => {
       }
     }
   }, [navigatedFPropId]);
+  console.log(navigatePropertyId, "navigatePropertyId");
+
+  useEffect(() => {
+    if (navigatePropertyId != 0) {
+      if (syncPropSourceRef.current) {
+        //set prev selected styles to null
+        for (const fidd of prevSelPropsId) {
+          const fpx = syncPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("propertyid") == fidd);
+          console.log(fpx, "fpx");
+          fpx?.setStyle(undefined);
+          mapRef.current.render();
+        }
+        setprevSelPropsId([]);
+
+        //highlight
+        const fp = syncPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("propertyid") == navigatePropertyId);
+        console.log(fp, "fp");
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          // fp?.setStyle(undefined);
+
+          const selectStyle = new Style({ zIndex: 100 });
+          selectStyle.setRenderer(
+            areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          );
+
+          fp.setStyle(selectStyle);
+          mapRef.current.render();
+          console.log("working");
+          setprevSelPropsId([navigatePropertyId]);
+        }
+      }
+    }
+  }, [navigatePropertyId]);
 
   useEffect(() => {
     //unselect prev styles
@@ -1025,7 +1072,7 @@ export const AreaMap = () => {
 
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
-
+      dispatch(setisFeaturedPropertyLoaded(true));
       if (!syncPropSourceRef?.current?.getFeatures().length) {
         const p2 = fPropSourceRef.current?.getExtent();
         if (p2[0] != Infinity) {
@@ -1964,7 +2011,7 @@ export const AreaMap = () => {
 
       //set style of selected area
       const afs = areaBoundaryImgSourceRef.current?.getFeatures();
-     // console.log("ww1-afs", afs);
+      // console.log("ww1-afs", afs);
       const selAreaF = afs?.find(
         (af) => af.get("area_id") == areaSelectedAreaId
       );

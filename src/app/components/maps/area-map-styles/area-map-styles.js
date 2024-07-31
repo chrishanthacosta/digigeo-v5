@@ -263,11 +263,14 @@ export const areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight = (
 };
 
 
+
+
+
 export const areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited = (
   feature,
   resolution
 ) => {
-  //console.log("feature:", feature);
+  console.log("feature:", feature);
   //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
   //  spanClaim1.textContent = "visibility";
   // const r = Math.random() * 255;
