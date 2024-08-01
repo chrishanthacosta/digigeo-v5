@@ -270,7 +270,8 @@ export const areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited = (
   feature,
   resolution
 ) => {
-  console.log("feature:", feature);
+  console.log("featuree", feature);
+  console.log("haiuhfi");
   //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
   //  spanClaim1.textContent = "visibility";
   // const r = Math.random() * 255;
@@ -471,6 +472,8 @@ export const areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited = (
     text: propName,
     fill,
   });
+
+  console.log(propName, "propName");
   // console.log("st", st);
   return st;
 };

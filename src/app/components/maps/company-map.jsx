@@ -611,8 +611,13 @@ export const CompanyMap = () => {
     (state) => state.mapSelectorReducer.isCompanyUrlSearch
   );
 
+  const navigateComPropertyId = useSelector(
+    (state) => state.companyMapReducer.navigateComPropertyId
+  );
+
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
+  const [prevSelPropsId, setprevSelPropsId] = useState([]);
 
   useEffect(() => {
     if (navigatedFPropId != 0) {
@@ -646,7 +651,46 @@ export const CompanyMap = () => {
       }
     }
   }, [navigatedFPropId]);
+  useEffect(() => {
+    console.log("navigateComPropertyId", navigateComPropertyId);
+    if (navigateComPropertyId != 0) {
+      if (syncPropSourceRef.current) {
+        //set prev selected styles to null
+        for (const fidd of prevSelPropsId) {
+          const fpx = syncPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("propertyid") == fidd);
+          console.log(fpx, "fpx");
+          fpx?.setStyle(undefined);
+          mapRef.current.render();
+        }
+        setprevSelPropsId([]);
 
+        //highlight
+        const fp = syncPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("propertyid") == navigateComPropertyId);
+        console.log(fp, "fp");
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          // fp?.setStyle(undefined);
+
+          // const selectStyle = new Style({ zIndex: 100 });
+          // selectStyle.setRenderer(
+          //   areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          // );
+
+          fp.setStyle(
+            areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          );
+          mapRef.current.render();
+          console.log("working");
+          setprevSelPropsId([navigateComPropertyId]);
+        }
+      }
+    }
+  }, [navigateComPropertyId]);
   useEffect(() => {
     //unselect prev styles
     for (const fid of prevSelFeaturedProps) {

@@ -38,6 +38,7 @@ const initialState = {
   cmapAreaLableVisible: true,
   cmapNavigationExtent: [],
   cmapNavigationHighlightFProps: [],
+  navigateComPropertyId: 0,
 };
 
 const companyMapSlice = createSlice({
@@ -159,6 +160,9 @@ const companyMapSlice = createSlice({
     setcmapAreaLableVisible: (state, action) => {
       state.cmapAreaLableVisible = action.payload;
     },
+    setNavigateComPropertyId: (state, action) => {
+      state.navigateComPropertyId = action.payload;
+    },
   },
 });
 
@@ -200,6 +204,7 @@ export const {
   setcmapAssetLableVisible,
   setcmapClaimLableVisible,
   setcmapAreaLableVisible,
+  setNavigateComPropertyId,
 } = companyMapSlice.actions;
 
 export default companyMapSlice.reducer;

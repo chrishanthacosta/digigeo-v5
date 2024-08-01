@@ -15,17 +15,37 @@ const PropertyTreeView = ({
     buildTreeViewData(syncPropFeatures);
   }, [syncPropFeatures]);
 
-  const addNode = (nodes, country, stateprovName, propertyName, location) => {
+  const addNode = (
+    nodes,
+    country,
+    stateprovName,
+    propertyName,
+    location,
+    propertyid
+  ) => {
     const countryNode = nodes.find((n) => n.label == country);
     if (countryNode) {
-      addStateProvNode(countryNode, stateprovName, propertyName, location);
+      addStateProvNode(
+        countryNode,
+        stateprovName,
+        propertyName,
+        location,
+        propertyid
+      );
     } else {
       const newcountryNode = {
         label: country,
         nodetype: "country",
         children: [],
+        propertyid,
       };
-      addStateProvNode(newcountryNode, stateprovName, propertyName, location);
+      addStateProvNode(
+        newcountryNode,
+        stateprovName,
+        propertyName,
+        location,
+        propertyid
+      );
       nodes.push(newcountryNode);
     }
   };
@@ -34,7 +54,8 @@ const PropertyTreeView = ({
     countryNode,
     stateprovName,
     propertyName,
-    location
+    location,
+    propertyid
   ) => {
     const stateprovNode = countryNode.children.find(
       (n) => n.label == stateprovName
@@ -45,6 +66,7 @@ const PropertyTreeView = ({
         location,
         children: [],
         nodetype: "property",
+        propertyid,
       });
 
       // return countryNode;
@@ -59,6 +81,7 @@ const PropertyTreeView = ({
             location,
             children: [],
             nodetype: "property",
+            propertyid,
           },
         ],
       };
@@ -90,7 +113,8 @@ const PropertyTreeView = ({
           f.get("country"),
           f.get("state_prov"),
           f.get("prop_name"),
-          loc
+          loc,
+          f.get("propertyid")
         );
       });
 
@@ -157,7 +181,7 @@ const PropertyTreeView = ({
       //   },
       // ];
       setTreeViewData(nodes);
-      setIsLoadingSyncAllProperties(false);      
+      setIsLoadingSyncAllProperties(false);
     } else {
       setTreeViewData([]);
     }
@@ -181,6 +205,7 @@ const PropertyTreeView = ({
             key={node.label}
             countryName={node.label}
             stateProvNodes={node.children}
+            propertyid={node.propertyid}
           />
         ))
       ) : (

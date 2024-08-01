@@ -16,17 +16,36 @@ const CompanyTreeView = ({
     buildTreeViewData(syncPropFeatures);
   }, [syncPropFeatures]);
 
-  const addNode = (nodes, country, stateprovName, propertyName, location) => {
+  const addNode = (
+    nodes,
+    country,
+    stateprovName,
+    propertyName,
+    location,
+    propertyid
+  ) => {
     const countryNode = nodes.find((n) => n.label == country);
     if (countryNode) {
-      addStateProvNode(countryNode, stateprovName, propertyName, location);
+      addStateProvNode(
+        countryNode,
+        stateprovName,
+        propertyName,
+        location,
+        propertyid
+      );
     } else {
       const newcountryNode = {
         label: country,
         nodetype: "country",
         children: [],
       };
-      addStateProvNode(newcountryNode, stateprovName, propertyName, location);
+      addStateProvNode(
+        newcountryNode,
+        stateprovName,
+        propertyName,
+        location,
+        propertyid
+      );
       nodes.push(newcountryNode);
     }
   };
@@ -35,7 +54,8 @@ const CompanyTreeView = ({
     countryNode,
     stateprovName,
     propertyName,
-    location
+    location,
+    propertyid
   ) => {
     const stateprovNode = countryNode.children.find(
       (n) => n.label == stateprovName
@@ -46,6 +66,7 @@ const CompanyTreeView = ({
         location,
         childrem: [],
         nodetype: "property",
+        propertyid,
       });
 
       // return countryNode;
@@ -60,6 +81,7 @@ const CompanyTreeView = ({
             location,
             children: [],
             nodetype: "property",
+            propertyid,
           },
         ],
       };
@@ -68,7 +90,7 @@ const CompanyTreeView = ({
   };
 
   const buildTreeViewData = (syncPropFeatures) => {
-   // console.log("syncPropFeatues", syncPropFeatures);
+    // console.log("syncPropFeatues", syncPropFeatures);
     if (syncPropFeatures?.features?.length > 0) {
       const features = new GeoJSON().readFeatures(syncPropFeatures);
       features.sort((a, b) => {
@@ -91,7 +113,8 @@ const CompanyTreeView = ({
           f.get("country"),
           f.get("state_prov"),
           f.get("prop_name"),
-          loc
+          loc,
+          f.get("propertyid")
         );
       });
 
@@ -186,6 +209,7 @@ const CompanyTreeView = ({
             key={node.label}
             countryName={node.label}
             stateProvNodes={node.children}
+            propertyid={node.propertyid}
           />
         ))
       ) : (

@@ -662,12 +662,14 @@ export const AreaMap = () => {
 
           // fp?.setStyle(undefined);
 
-          const selectStyle = new Style({ zIndex: 100 });
-          selectStyle.setRenderer(
+          // const selectStyle = new Style({ zIndex: 100 });
+          // selectStyle.setRenderer(
+          //   areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          // );
+
+          fp.setStyle(
             areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
           );
-
-          fp.setStyle(selectStyle);
           mapRef.current.render();
           console.log("working");
           setprevSelPropsId([navigatePropertyId]);

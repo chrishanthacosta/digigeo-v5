@@ -27,7 +27,14 @@ import PropertyStateProvNode from "./property-stateprov-treenode";
         <div className="odd:bg-slate-600"  style={{ marginLeft: "20px" }}>
           {stateProvNodes.map((child) => {
             // console.log("child", child)
-            return (  < PropertyStateProvNode  key = { child.label } stateProvName = { child.label } propertyNodes = { child.children } />)
+            return (
+              <PropertyStateProvNode
+                key={child.label}
+                stateProvName={child.label}
+                propertyNodes={child.children}
+                propertyid={child.propertyid}
+              />
+            );
     })}
         </div>
       )}

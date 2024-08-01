@@ -46,6 +46,7 @@ const initialState = {
   pmapSelectedPropertyIds: [],
   pmapNavigationExtent: [],
   pmapNavigationHighlightFProps: [],
+  navigateProPropertyId: 0,
 };
 
 const propertiesMapSlice = createSlice({
@@ -192,6 +193,9 @@ const propertiesMapSlice = createSlice({
     setpmapAreaLableVisible: (state, action) => {
       state.pmapAreaLableVisible = action.payload;
     },
+    setNavigateProPropertyId: (state, action) => {
+      state.navigateProPropertyId = action.payload;
+    },
   },
 });
 
@@ -241,6 +245,7 @@ export const {
   setpmapClaimLableVisible,
   setpmapAreaLableVisible,
   setpmapSelectedPropertyIds,
+  setNavigateProPropertyId,
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

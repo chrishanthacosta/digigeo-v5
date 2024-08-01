@@ -393,6 +393,9 @@ export const PropertiesMap = () => {
   const pmapNavigationExtent = useSelector(
     (state) => state.propertiesMapReducer.pmapNavigationExtent
   );
+  const navigateProPropertyId = useSelector(
+    (state) => state.propertiesMapReducer.navigateProPropertyId
+  );
 
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -463,6 +466,50 @@ export const PropertiesMap = () => {
       }
     }
   }, [navigatedFPropId]);
+
+  const [prevSelPropsId, setprevSelPropsId] = useState([]);
+
+  useEffect(() => {
+    console.log("navigateComPropertyId", navigateProPropertyId);
+    if (navigateProPropertyId != 0) {
+      console.log(navigateProPropertyId, "navigateProPropertyId22");
+      if (syncPropSourceRef.current) {
+        //set prev selected styles to null
+        for (const fidd of prevSelPropsId) {
+          const fpx = syncPropSourceRef.current
+            .getFeatures()
+            .find((f) => f.get("propertyid") == fidd);
+          console.log(fpx, "fpx");
+          fpx?.setStyle(undefined);
+          mapRef.current.render();
+        }
+        setprevSelPropsId([]);
+
+        //highlight
+        const fp = syncPropSourceRef.current
+          .getFeatures()
+          .find((f) => f.get("propertyid") == navigateProPropertyId);
+        console.log(fp, "fp");
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          // fp?.setStyle(undefined);
+
+          // const selectStyle = new Style({ zIndex: 100 });
+          // selectStyle.setRenderer(
+          //   areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          // );
+
+          console.log("working");
+           fp.setStyle(
+             areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+           );
+          mapRef.current.render();
+          setprevSelPropsId([navigateProPropertyId]);
+        }
+      }
+    }
+  }, [navigateProPropertyId]);
 
   useEffect(() => {
     //unselect prev styles
@@ -1045,7 +1092,7 @@ export const PropertiesMap = () => {
   // aa//
 
   const styleFunctionSyncProperties = (feature, resolution) => {
-   // console.log("resolutionss", resolution);
+    // console.log("resolutionss", resolution);
     let t = "";
     if (resolution < 300)
       t =
@@ -1056,7 +1103,7 @@ export const PropertiesMap = () => {
       text: new Text({
         text: t.toString(),
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
-        
+
         offsetX: 0,
         offsetY: -10,
         font: "14px serif",
@@ -1658,7 +1705,7 @@ export const PropertiesMap = () => {
 
   const othersyncPropLoaderFunc = useCallback(
     (extent, resolution, projection) => {
-     // console.log("qqqq1");
+      // console.log("qqqq1");
       const url =
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncprop_byextent` +
         `/${extent.join("/")}`;
@@ -1676,7 +1723,7 @@ export const PropertiesMap = () => {
         .then((response) => response.json())
         .then((json) => {
           if (json.data) {
-          //  console.log("qqqq");
+            //  console.log("qqqq");
             if (json.data[0].json_build_object.features) {
               const features = new GeoJSON().readFeatures(
                 json.data[0].json_build_object
@@ -1965,7 +2012,7 @@ export const PropertiesMap = () => {
 
           const clinkDetails = await getClinkData(propId);
 
-         // console.log("clinkDetails", clinkDetails, propId);
+          // console.log("clinkDetails", clinkDetails, propId);
 
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
