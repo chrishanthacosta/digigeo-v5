@@ -214,7 +214,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                 return (
                   <div
                     key={fp.get("id")}
-                    className="flex justify-between  w-full hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2 text-black"
+                    className="flex justify-between  w-full hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2 text-black "
                   >
                     <div className="flex  items-center ">
                       <Image
@@ -353,7 +353,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div className="bg-blue-800 text-white w-[18rem] mx-2 px-2">
+      <div className="bg-blue-800 text-white w-[18rem] mx-2 px-2 rounded-t-md">
         {"Featured Properties"}
       </div>
       <div

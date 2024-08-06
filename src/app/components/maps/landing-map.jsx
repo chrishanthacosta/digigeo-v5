@@ -2170,7 +2170,7 @@ export const LandingMap = () => {
     dispatch(setIsLandingMapSideNavOpen(false));
   };
 
-  const copyRight = `©2024 The Northern Miner`;
+  const copyRight = `©2024 TNM`;
 
   const lmapsyncPropLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapsyncPropLableVisible

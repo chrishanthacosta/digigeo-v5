@@ -636,7 +636,7 @@ export const AreaMap = () => {
       }
     }
   }, [navigatedFPropId]);
-  console.log(navigatePropertyId, "navigatePropertyId");
+  // console.log(navigatePropertyId, "navigatePropertyId");
 
   useEffect(() => {
     if (navigatePropertyId != 0) {
@@ -2059,7 +2059,7 @@ export const AreaMap = () => {
     }
   }, [areaSelectedAreaId, mapViewScales]);
 
-  const copyRight = `©2024 The Northern Miner`;
+  const copyRight = `©2024 TNM`;
 
   const amapAssetLableVisible = useSelector(
     (state) => state.areaMapReducer.amapAssetLableVisible

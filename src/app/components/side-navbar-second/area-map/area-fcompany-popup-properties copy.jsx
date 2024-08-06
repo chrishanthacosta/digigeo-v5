@@ -326,8 +326,12 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{areaName}</div>
-      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{"Featured Properties"}</div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center rounded-t-md">
+        {areaName}
+      </div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">
+        {"Featured Properties"}
+      </div>
       <div
         className="bg-slate-100"
         style={{
@@ -346,7 +350,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           onClose={() => console.log("close")}
           onOk={() => console.log("ok")}
           showDialog={showDlg}
-          dialogStateCallBack ={dialogStateCallBack}
+          dialogStateCallBack={dialogStateCallBack}
         >
           <AreaMapClickPopup
             claimObj={{}}

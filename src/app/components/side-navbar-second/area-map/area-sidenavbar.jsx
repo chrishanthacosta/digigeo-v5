@@ -365,13 +365,13 @@ const AreaSideNavbar = () => {
               <div
                 className={
                   accordionItemWithOutEyeIsOpen
-                    ? `flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh]`
-                    : "flex flex-col gap-1 overflow-y-auto max-h-[70vh] "
+                    ? `flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh] px-1`
+                    : "flex flex-col gap-1 overflow-y-auto max-h-[70vh] px-1 "
                 }
               >
                 {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
                 {featuredCompaniesLoading ? (
-                  <div className="text-black text-center text-sm">
+                  <div className="text-black text-center text-sm py-1">
                     <Spinner size="sm" />
                   </div>
                 ) : featuredCompanies?.length > 0 ? (

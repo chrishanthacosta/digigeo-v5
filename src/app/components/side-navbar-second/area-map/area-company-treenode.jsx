@@ -20,7 +20,7 @@ export const AreaCompanyNode = ({
     <div>
       <div
         onClick={handleToggle}
-        className="flex hover:bg-slate-200 cursor-pointer bg-white"
+        className="flex hover:bg-slate-200 cursor-pointer bg-white px-1"
       >
         {<span>{isOpen ? "-" : "+"}</span>}
 

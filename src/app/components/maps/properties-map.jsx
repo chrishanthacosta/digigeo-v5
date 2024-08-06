@@ -501,9 +501,9 @@ export const PropertiesMap = () => {
           // );
 
           console.log("working");
-           fp.setStyle(
-             areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
-           );
+          fp.setStyle(
+            areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          );
           mapRef.current.render();
           setprevSelPropsId([navigateProPropertyId]);
         }
@@ -2091,7 +2091,7 @@ export const PropertiesMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 The Northern Miner`;
+  const copyRight = `©2024 TNM`;
 
   const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction = (
     feature,
@@ -2947,4 +2947,4 @@ export const PropertiesMap = () => {
 }
 //     <olSourceXYZ args={{ url: "https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}", }} > map=m terr=p satt=s
 //   </olSourceXYZ>
-// </olLayerTile> */}
+// </olLayerTile> */}strokeLinejoin

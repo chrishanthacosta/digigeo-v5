@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -10,15 +9,13 @@ import { MdEmail } from "react-icons/md";
 import { ThemeSwitcher } from "../theme-switcher";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import Image from 'next/image'
+import Image from "next/image";
 import DialogCommonComponent from "../../utils/dialog/dialog-common";
 import { MapViewMode } from "@/store/types";
 
-
 const HomeNavbar = () => {
-
-  const [disclaimerStatus, setdisclaimerStatus] = useState(false)
-  const [helpDialogStatus, sethelpDialogStatus] = useState(false)
+  const [disclaimerStatus, setdisclaimerStatus] = useState(false);
+  const [helpDialogStatus, sethelpDialogStatus] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //get pathname
@@ -26,7 +23,7 @@ const HomeNavbar = () => {
 
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -39,10 +36,9 @@ const HomeNavbar = () => {
 
   const router = useRouter();
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
-  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
-
-
-
+  const mapViewMode = useSelector(
+    (state) => state.mapSelectorReducer.mapViewMode
+  );
 
   // useEffect(() => {
   //   const button = document.querySelector("#menu-button");
@@ -78,25 +74,27 @@ const HomeNavbar = () => {
     dropCommonStyle + "bg-white text-xs p-4 border border-gray-100 shadow-md";
 
   const showDisclaimer = () => {
-     
-    setdisclaimerStatus(true)
-    
-  }
+    setdisclaimerStatus(true);
+  };
   const showHelp = () => {
     //InvestorMappingHelpFile.docx
     // router.push("/help/InvestorMappingHelpFile.docx.html")
-    router.push("/help")
-    sethelpDialogStatus(true)
-  }
+    router.push("/help");
+    sethelpDialogStatus(true);
+  };
 
   const onMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <div className="flex bg-black justify-between items-center w-screen relative p-1 border-b-8  border-navbar-border h-[10vh]">
       <div id="left-tnm-logo">
-        <Link href="https://northernminer.com" target="_blank" className="flex items-center hidden md:block ml-2">
+        <Link
+          href="https://northernminer.com"
+          target="_blank"
+          className="flex items-center hidden md:block ml-2"
+        >
           <Image
             src="/TNM_logo_large.webp"
             width={200}
@@ -113,7 +111,11 @@ const HomeNavbar = () => {
       </div>
 
       <div id="right-menu-list" className="flex items-center">
-        <Link href="https://digigeodata.com" target="_blank" className="flex items-center hidden md:block mr-8">
+        <Link
+          href="https://digigeodata.com"
+          target="_blank"
+          className="flex items-center hidden md:block mr-8"
+        >
           <Image
             src="/DigiGeoData_powered_by_white.webp"
             width={140}
@@ -122,8 +124,7 @@ const HomeNavbar = () => {
           />
         </Link>
         <ul
-          className={
-              `pt-4
+          className={`pt-4
                text-base text-gray-700
                md:flex 
                md:justify-between 
@@ -131,7 +132,11 @@ const HomeNavbar = () => {
                md:flex-row
                flex gap-6
                z-40
-               ${isMenuOpen ? "flex-col absolute top-20 left-0 w-full text-center bg-black gap-2" : "hidden"}`}
+               ${
+                 isMenuOpen
+                   ? "flex-col absolute top-20 left-0 w-full text-center bg-black gap-2"
+                   : "hidden"
+               }`}
         >
           <li className="hover:bg-gray-600">
             <Button
@@ -146,14 +151,16 @@ const HomeNavbar = () => {
                 )
               }
             >
-              <Link href="https://digigeodata.com/digigeomaps-landing-page" target="_blank">
+              <Link
+                href="https://digigeodata.com/digigeomaps-landing-page"
+                target="_blank"
+              >
                 <AiFillHome className="h-6 w-6 dark:text-white text-white" />
               </Link>
             </Button>
           </li>
           <li className="hover:bg-gray-600">
             <Button
-              
               isIconOnly
               variant="light"
               color="primary"
@@ -165,7 +172,6 @@ const HomeNavbar = () => {
           </li>
           <li className="hover:bg-gray-600">
             <Button
-              
               isIconOnly
               variant="light"
               color="primary"
@@ -177,7 +183,7 @@ const HomeNavbar = () => {
             </Button>
           </li>
           <li className="hover:bg-gray-600">
-            <Button  variant="light" color="primary" onClick={showDisclaimer}>
+            <Button variant="light" color="primary" onClick={showDisclaimer}>
               <span className="font-semibold dark:text-white text-white">
                 Disclaimer
               </span>
@@ -187,7 +193,11 @@ const HomeNavbar = () => {
             <ThemeSwitcher />
           </li>
         </ul>
-        <div id="hamburger" onClick={onMenuClick} className={`${isMenuOpen ? "hidden" : "block"} m-2`}>
+        <div
+          id="hamburger"
+          onClick={onMenuClick}
+          className={`${isMenuOpen ? "hidden" : "block"} m-2`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             id="menu-button"
@@ -204,15 +214,43 @@ const HomeNavbar = () => {
             />
           </svg>
         </div>
-        <div id="hamburger" onClick={onMenuClick} className={`${isMenuOpen ? "block" : "hidden"} m-2`}>
-          <svg className="h-6 w-6 cursor-pointer md:hidden block"  width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokWidth="0" ></g>
-            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier">
-              <g id="Menu / Close_MD"> <path id="Vector" d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="#f3f2f2" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+        <div
+          id="hamburger"
+          onClick={onMenuClick}
+          className={`${isMenuOpen ? "block" : "hidden"} m-2`}
+        >
+          <svg
+            className="h-6 w-6 cursor-pointer md:hidden block"
+            width="24px"
+            height="24px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" strokwidth="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <g id="Menu / Close_MD">
+                {" "}
+                <path
+                  id="Vector"
+                  d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18"
+                  stroke="#f3f2f2"
+                  strokwidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>{" "}
+              </g>{" "}
+            </g>
+          </svg>
         </div>
       </div>
-
     </div>
-  )
+  );
 
   // return (
 
@@ -286,8 +324,8 @@ const HomeNavbar = () => {
   //             className="
   //             pt-4
   //             text-base text-gray-700
-  //             md:flex 
-  //             md:justify-between 
+  //             md:flex
+  //             md:justify-between
   //             md:pt-0
   //             flex gap-6 "
 

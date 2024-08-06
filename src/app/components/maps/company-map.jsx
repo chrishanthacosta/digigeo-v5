@@ -2138,7 +2138,7 @@ export const CompanyMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 The Northern Miner`;
+  const copyRight = `©2024 TNM`;
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
     const colour = feature.values_.colour;

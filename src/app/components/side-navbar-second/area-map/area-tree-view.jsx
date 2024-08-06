@@ -145,8 +145,8 @@ const AreaTreeView = ({
     <div
       className={
         isOpen
-          ? `bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black overflow-y-scroll h-[75vh] pb-5 `
-          : `bg-white  max-h-[75vh] text-black overflow-y-scroll h-[75vh] pb-5`
+          ? `bg-white overflow-y-auto max-h-[${treeViewHeight}vh] text-black overflow-y-scroll h-[75vh] pb-5 px-1`
+          : `bg-white  max-h-[75vh] text-black overflow-y-scroll h-[75vh] pb-5 px-1`
         // + ` overflow-y-scroll h-[50vh] bg-red-400`
       }
     >
