@@ -870,21 +870,21 @@ export const LandingMap = () => {
     }
   }, [lmapNavigationHighlightFProps]);
 
-  useEffect(() => {
-    dispatch(setclickassetObject(assetObject));
-  }, [assetObject]);
+  // useEffect(() => {
+  //   dispatch(setclickassetObject(assetObject));
+  // }, [assetObject]);
 
   useEffect(() => {
     dispatch(setclicksyncPropertyObject(syncPropertyObject));
   }, [syncPropertyObject]);
 
-  useEffect(() => {
-    dispatch(setclickfPropertyObject(fPropertyObject));
-  }, [fPropertyObject]);
+  // useEffect(() => {
+  //   dispatch(setclickfPropertyObject(fPropertyObject));
+  // }, [fPropertyObject]);
 
-  useEffect(() => {
-    dispatch(setclickclaimObject(claimObject));
-  }, [claimObject]);
+  // useEffect(() => {
+  //   dispatch(setclickclaimObject(claimObject));
+  // }, [claimObject]);
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -1950,8 +1950,10 @@ export const LandingMap = () => {
           region,
         };
         setassetObject(assetObject1);
+        dispatch(setclickassetObject(assetObject1));
       } else {
         dispatch(setclickassetObject(undefined));
+        setassetObject(undefined);
       }
       const selFPropertyFeatures =
         fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
@@ -1970,7 +1972,8 @@ export const LandingMap = () => {
 
         const getData = async (hotplayid) => {
           const url =
-            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            // "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/getownersbyhotplayid/` +
             hotplayid;
           //load data from api - changed to return array
 
@@ -2028,7 +2031,9 @@ export const LandingMap = () => {
           profile,
         };
         setfPropertyObject(fPropertyObject1);
+        dispatch(setclickfPropertyObject(fPropertyObject1));
       } else {
+        setfPropertyObject(undefined);
         dispatch(setclickfPropertyObject(undefined));
       }
       // const selBoundaryFeatures =
@@ -2062,7 +2067,8 @@ export const LandingMap = () => {
         //
         const getClinkData = async (propid) => {
           const url =
-            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            // "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncclaimlink_details/` +
             propid;
           //load data from api - changed to return array
 
@@ -2132,8 +2138,12 @@ export const LandingMap = () => {
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
         const claimObject1 = { ownerref, claimno };
         setclaimObject(claimObject1);
+        dispatch(setclickclaimObject(claimObject1));
+        console.log("claimObject1", claimObject1);
       } else {
+        setclaimObject(undefined);
         dispatch(setclickclaimObject(undefined));
+        console.log("claimObject1 e");
       }
     };
 

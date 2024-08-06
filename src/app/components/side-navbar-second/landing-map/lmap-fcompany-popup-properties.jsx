@@ -142,7 +142,9 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   ) => {
     const getData = async (hotplayid) => {
       const url =
-        "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
+        // "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/getownersbyhotplayid/` +
+        hotplayid;
       //load data from api - changed to return array
 
       let sponsors = await fetch(url, {

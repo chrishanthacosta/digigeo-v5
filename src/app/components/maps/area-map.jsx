@@ -1769,6 +1769,7 @@ export const AreaMap = () => {
         };
         setassetObject(assetObject1);
       } else {
+        setassetObject(undefined);
         dispatch(setclickassetObject(undefined));
       }
       const selFPropertyFeatures =
@@ -1788,7 +1789,8 @@ export const AreaMap = () => {
 
         const getData = async (hotplayid) => {
           const url =
-            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            // "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/getownersbyhotplayid/` +
             hotplayid;
           //load data from api - changed to return array
 
@@ -1847,6 +1849,8 @@ export const AreaMap = () => {
         };
         setfPropertyObject(fPropertyObject1);
       } else {
+        setfPropertyObject(undefined);
+
         dispatch(setclickfPropertyObject(undefined));
       }
       // const selBoundaryFeatures =
@@ -1880,7 +1884,8 @@ export const AreaMap = () => {
         //
         const getClinkData = async (propid) => {
           const url =
-            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            // "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/syncclaimlink_details/` +
             propid;
           //load data from api - changed to return array
 
@@ -1954,6 +1959,7 @@ export const AreaMap = () => {
         const claimObject1 = { ownerref, claimno };
         setclaimObject(claimObject1);
       } else {
+        setclaimObject(undefined);
         dispatch(setclickclaimObject(undefined));
       }
     };

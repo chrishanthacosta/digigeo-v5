@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
@@ -6,13 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
-import { setamapNavigationExtent, setamapNavigationHighlightFProps, setareaFlyToLocation, setnavigatedFPropId } from "@/store/area-map/area-map-slice";
+import {
+  setamapNavigationExtent,
+  setamapNavigationHighlightFProps,
+  setareaFlyToLocation,
+  setnavigatedFPropId,
+} from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
-import DialogComponent from './../../../utils/dialog/dialog';
+import DialogComponent from "./../../../utils/dialog/dialog";
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 import { areaMApPropertyVectorRendererFuncV2Highlight } from "../../maps/area-map-styles/area-map-styles";
-import { boundingExtent } from 'ol/extent';
-import { getCenter } from 'ol/extent';
+import { boundingExtent } from "ol/extent";
+import { getCenter } from "ol/extent";
 
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -20,8 +25,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
   const [loadData, setloadData] = useState(false);
-  const blocknoRef = useRef(0)
-  const pidRef = useRef(0)
+  const blocknoRef = useRef(0);
+  const pidRef = useRef(0);
 
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
@@ -31,17 +36,15 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
-
   useEffect(() => {
     setunNamedFeatureObjects([]);
-    setloadData((t) => !t)
-
-  }, [companyid])
+    setloadData((t) => !t);
+  }, [companyid]);
 
   //set unnmaed props
   useEffect(() => {
     //console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
-    const unNamedPropsTmp = []
+    const unNamedPropsTmp = [];
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
       let b = 0;
@@ -49,16 +52,15 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         const element = e[index];
         if (!element.get("propertyid")) {
           pidRef.current = pidRef.current - 1;
-          element.set("propertyid", pidRef.current)
+          element.set("propertyid", pidRef.current);
         }
-
 
         if (!element.get("prop_name")) {
           if (companyid == element.get("companyid")) {
             b++;
             element.set("prop_name_empty", "Block-" + b);
 
-            unNamedPropsTmp.push(element)
+            unNamedPropsTmp.push(element);
 
             //setunNamedFeatureObjects((p) => [...p, element]);
             // console.log("b",b)
@@ -69,17 +71,13 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
       setfeaturesObjects(e);
     } else {
-      console.log("lop2")
+      console.log("lop2");
     }
-
-
   }, [loadData]);
 
   //flyto
 
   const flytoHandler = (feature) => {
-
-
     const polygon = feature.getGeometry();
     let loc = [];
     if (polygon) {
@@ -101,33 +99,24 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
     //  console.log("fSelected",fSelected)
     //  fSelected?.setStyle(selectStyle);
-
   };
 
   const flytoMultipleHandler = (features) => {
-   
-    // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
-    const coords = []
+    // const coords = features.map((f) => f.values_.geometry.flatCoordinates)
+    const coords = [];
     for (const f of features) {
       const polygon = f.getGeometry();
 
       if (polygon) {
         const c = polygon.getCoordinates();
-      
-        coords.push(...c[0][0])
+
+        coords.push(...c[0][0]);
         // c.forEach((i)=> coords.push(i[0]))
-
       }
-
-
-
-
     }
 
+    const bounds = boundingExtent(coords);
 
-  
-    const bounds = boundingExtent(coords)
- 
     //   console.log("bounds",bounds,)
     //  // const polygon = feature.getGeometry();
     //   let loc = [];
@@ -139,7 +128,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     //flyTo
     // dispatch(setareaFlyToLocation(loc));
     dispatch(setamapNavigationExtent(bounds));
-    dispatch(setamapNavigationHighlightFProps(features.map(f => f.get("id"))));
+    dispatch(
+      setamapNavigationHighlightFProps(features.map((f) => f.get("id")))
+    );
 
     //set style
     //dispatch(setnavigatedFPropId(features[0].get("id")));
@@ -153,14 +144,19 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
     //  console.log("fSelected",fSelected)
     //  fSelected?.setStyle(selectStyle);
-
   };
 
-  const showProperties = async (e, companyid, propertyid, prop_name, hotplayid) => {
-
+  const showProperties = async (
+    e,
+    companyid,
+    propertyid,
+    prop_name,
+    hotplayid
+  ) => {
     const getData = async (hotplayid) => {
       const url =
-        "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+        // "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/getownersbyhotplayid/` +
         hotplayid;
       //load data from api - changed to return array
 
@@ -188,9 +184,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       return sponsors;
     };
     //console.log("hotplayid",hotplayid)
-    const dd = await getData(hotplayid)
-   
-    const d = dd?.[0]
+    const dd = await getData(hotplayid);
+
+    const d = dd?.[0];
 
     const sponsoredowners = d?.sponsor ?? "";
     let commo_ref = d?.commo_ref ?? "";
@@ -201,7 +197,6 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     let prop_exturl = d?.prop_exturl ?? "";
     let sale_name = d?.sale_name ?? "";
     let profile = d?.profile ?? "";
-
 
     const fPropertyObject1 = {
       sponsoredowners,
@@ -214,27 +209,29 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       prop_exturl,
       sale_name,
       propertyid,
-      profile
+      profile,
     };
 
-
-    setfpropObj(fPropertyObject1)
-    setshowDlg("y")
-  }
+    setfpropObj(fPropertyObject1);
+    setshowDlg("y");
+  };
 
   const dialogStateCallBack = () => {
     setshowDlg("n");
-  }
-
+  };
 
   const getDomElements = useMemo(() => {
+    const companyProps = featureObjects.filter(
+      (p) => p.get("companyid") == companyid
+    );
 
-    const companyProps = featureObjects.filter(p => p.get("companyid") == companyid)
+    const namedProps = companyProps.filter((p) => p.get("prop_name"));
 
-    const namedProps = companyProps.filter(p => p.get("prop_name"))
-
-
-    namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+    namedProps.sort((a, b) => {
+      return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase()
+        ? 1
+        : -1;
+    });
 
     function myCallback({ values_ }) {
       return values_.prop_name;
@@ -243,11 +240,10 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
     //for (const companyName in groupByPropName) {
     const r = Object.keys(groupByPropName).map((propName) => {
-
-      const fps = groupByPropName[propName]
-      const fp = fps[0]
+      const fps = groupByPropName[propName];
+      const fp = fps[0];
       if (fps.length == 1) {
-        const fp = fps[0]
+        const fp = fps[0];
         return (
           <div
             key={fp.get("propertyid")}
@@ -276,8 +272,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
-                //onClick={() => setIsOpenIn(true)}
-                // onClick={() => console.log("title", title)}
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
                 />
               </span>
 
@@ -309,8 +305,11 @@ const AreaFCompanyFProperties = ({ companyid }) => {
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
               <div>
-                 
-                <span>{fp.get("prop_name")}</span> <span className="text-gray-500"> {` (${fps.length} Polygons)`}</span>
+                <span>{fp.get("prop_name")}</span>{" "}
+                <span className="text-gray-500">
+                  {" "}
+                  {` (${fps.length} Polygons)`}
+                </span>
               </div>
             </div>
             <div className="flex gap-1">
@@ -345,15 +344,11 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           </div>
         );
       }
-
     });
 
     // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
 
-
-
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
-
       return (
         <div
           key={fp.get("propertyid")}
@@ -397,7 +392,6 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           </div>
         </div>
       );
-
     });
 
     //heading un named
@@ -419,7 +413,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       </div>
     );
 
-    return ([...r, h, ...unNamedProps]);
+    return [...r, h, ...unNamedProps];
   }, [featureObjects]);
 
   //const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => { propertyInfo
@@ -434,8 +428,12 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{areaName}</div>
-      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{"Featured Properties"}</div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">
+        {areaName}
+      </div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">
+        {"Featured Properties"}
+      </div>
       <div
         className="bg-slate-100"
         style={{
