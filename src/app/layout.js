@@ -6,20 +6,20 @@ import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "TNM Maps",
-  description: "Digigeodata",
-  // icons: {
-  //   icon: "/favicon.ico", // /public path
-  // },
-};
+// export const metadata = {
+//   title: "TNM Maps",
+//   description: "Digigeodata",
+//   // icons: {
+//   //   icon: "/favicon.ico", // /public path
+//   // },
+// };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
+      <head>
+        <title>TNM Maps</title>
+        <meta name="description" content="Digigeodata" />
 
         <script
           async
@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-      </Head>
+      </head>
       <body className={`${inter.className} overflow-hidden h-screen`}>
         {/* <body className={inter.className}> */}
         <LayoutClientComponent>
