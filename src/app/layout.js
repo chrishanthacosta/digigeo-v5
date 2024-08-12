@@ -3,16 +3,17 @@ import "./globals.css";
 import LayoutClientComponent from "./layout-client";
 import HomeNavbar from "./components/nav-bar/navbar-component";
 import Head from "next/head";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata = {
-//   title: "TNM Maps",
-//   description: "Digigeodata",
-//   // icons: {
-//   //   icon: "/favicon.ico", // /public path
-//   // },
-// };
+export const metadata = {
+  title: "TNM Maps",
+  description: "Digigeodata",
+  // icons: {
+  //   icon: "/favicon.ico", // /public path
+  // },
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -21,11 +22,23 @@ export default function RootLayout({ children }) {
         <title>TNM Maps</title>
         <meta name="description" content="Digigeodata" />
 
-        <script
-          async
+        <Script
+          strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-MWTV2JLXR0"
-        ></script>
-        <script
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MWTV2JLXR0');
+            `}
+        </Script>
+        {/* <script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=G-MWTV2JLXR0"
+            ></script> */}
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -34,10 +47,11 @@ export default function RootLayout({ children }) {
               gtag('config', 'G-MWTV2JLXR0');
             `,
           }}
-        />
+        /> */}
       </head>
       <body className={`${inter.className} overflow-hidden h-screen`}>
         {/* <body className={inter.className}> */}
+
         <LayoutClientComponent>
           <HomeNavbar />
           {children}
