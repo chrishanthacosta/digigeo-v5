@@ -17,6 +17,8 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
 
   console.log("syncPropObj",syncPropObj,)
 
+  console.log("fpropObj",fpropObj,)
+
 
   //clickObjects
   // const claimObj = useSelector(
@@ -124,7 +126,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
               <LandingMapClickPopupRowMultiValue
                 label={"Sponsored owners:"}
                 value={fpropObj.sponsoredowners}
-                url={fpropObj.profile}
+                // url={fpropObj.profile}
               />
               <AreaMapClickPopupRow
                 label={"Property Name:"}

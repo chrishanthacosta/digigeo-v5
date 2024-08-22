@@ -1823,7 +1823,9 @@ export const AreaMap = () => {
         const d = dd?.[0];
 
         // const sponsoredowners = d?.sponsor ?? "";
-        const sponsoredowners = dd?.map((d) => d.sponsor ?? "");
+        const sponsoredowners = dd?.map((d) => d.sponsor ?? "") ?? [];
+
+        console.log("sponsoredowners", sponsoredowners);
 
         let commo_ref = d?.commo_ref ?? "";
         let assets = d?.assets ?? "";

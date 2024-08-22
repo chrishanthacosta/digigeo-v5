@@ -1,7 +1,7 @@
+"use client";
 
- "use client"
-
-const LandingMapClickPopupRowMultiValue = ({label, value   }) => {
+const LandingMapClickPopupRowMultiValue = ({ label, value }) => {
+  console.log(value, "value");
   return (
     <div className="flex  max-w-[300px] flex-wrap sm:flex-nowrap sm:max-w-none max-sm:[&>*:nth-child(odd)]:bg-gray-200 max-sm:[&>*:nth-child(even)]:bg-gray-300">
       <span className="w-80 sm:w-48 p-1">{label}</span>
@@ -20,6 +20,6 @@ const LandingMapClickPopupRowMultiValue = ({label, value   }) => {
       </div>
     </div>
   );
-}
+};
 
-export default LandingMapClickPopupRowMultiValue
+export default LandingMapClickPopupRowMultiValue;

@@ -120,7 +120,7 @@ const LandingMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => 
                 label={"Asset List:"}
                 value={fpropObj.assets}
               />
-              <LandingMapClickPopupRowMultiValue
+              <LandingMapClickPopupRow
                 label={"Resources:"}
                 value={fpropObj.resources}
               />
