@@ -8,7 +8,7 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "TNM Maps Staging",
+  title: "TNM Maps",
   description: "Digigeodata",
   // icons: {
   //   icon: "/favicon.ico", // /public path
@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>TNM Maps Staging</title>
+        <title>TNM Maps</title>
         <meta name="description" content="Digigeodata" />
 
         <Script
