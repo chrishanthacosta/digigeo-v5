@@ -17,7 +17,7 @@ const HomeNavbar = () => {
   const [disclaimerStatus, setdisclaimerStatus] = useState(false);
   const [helpDialogStatus, sethelpDialogStatus] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  // const currentRoute = usePathname();
   //get pathname
   let pathname = "";
 
@@ -86,7 +86,9 @@ const HomeNavbar = () => {
   const onMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  if (currentRoute == "/map-link" || currentRoute == "/maplink") {
+    return null;
+  }
   return (
     <div className="flex bg-black justify-between items-center w-screen relative p-1 border-b-8  border-navbar-border h-[10vh]">
       <div id="left-tnm-logo">
