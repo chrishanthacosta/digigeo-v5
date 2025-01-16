@@ -188,9 +188,11 @@ const CMapFCompanyAddlock = ({ titleIn, companyid }) => {
       const logo = d.data[0]?.logo;
       if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
-        let urlimg =
-          `data:image/${logoext};base64,` +
-          btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+        // let urlimg =
+        //   `data:image/${logoext};base64,` +
+        //   btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+        const base64String = Buffer.from(logo.data).toString("base64");
+        let urlimg = `data:image/${logoext};base64,${base64String}`;
 
         setlogoPath(urlimg);
       } else {
