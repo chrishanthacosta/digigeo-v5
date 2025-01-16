@@ -42,8 +42,9 @@ const formatUrl = (url) => {
   return { url: res, urlPrefix };
 };
 
-const getStyledTexts = (name) => {
+const getStyledTexts = (name1) => {
   //console.log("name",name,)
+  const name = name1.trim()
   const stBracketIndex = name.indexOf("(");
   if (stBracketIndex == -1) {
     // const sp = document.createElement("SPAN");
@@ -52,9 +53,11 @@ const getStyledTexts = (name) => {
     return [{ text: "", style: {} }];
   }
   const compName = name.substr(0, stBracketIndex);
-  const addends = name.substr(stBracketIndex, name.length - stBracketIndex);
+  const addends = name.substr(stBracketIndex+1, name.length - stBracketIndex-2);
 
   const parts = addends.split(",");
+  console.log("addends", addends);
+  
   const spans = [];
   const contents = [];
   //add comp name
@@ -77,8 +80,10 @@ const getStyledTexts = (name) => {
       spans.push(sp);
       contents.push({ text: str + ",", style: {} });
     } else {
-      const stockEx = str.substr(1, indexColon - 1);
-      const stockVal = str.substr(indexColon, str.length - indexColon - 1);
+      const stockEx = str.substr(0, indexColon+1 );
+      const stockVal = str.substr(indexColon+1, str.length - indexColon - 1);
+      console.log("stockEx,stockVal",stockEx,stockVal)
+      
       //add 1
       const sp = document.createElement("SPAN");
       const sptext = document.createTextNode(stockEx);
